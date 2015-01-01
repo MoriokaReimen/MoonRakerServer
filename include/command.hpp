@@ -42,6 +42,7 @@
  * @struct CommandBytes
  * @brief wrapper for bytes array of command
 */
+#pragma pack(1)
 struct CommandBytes
 {
     const uint16_t header = 0x75AA; //! Header byte
@@ -52,6 +53,7 @@ struct CommandBytes
     int16_t right_rpm = 0;        //! Right Motor RPM Byte
     const uint16_t footer = 0x75FF; //! Footer byte
 } __attribute__((__packed__));
+#pragma pack()
 
 /*!
  * @class MotorCommand

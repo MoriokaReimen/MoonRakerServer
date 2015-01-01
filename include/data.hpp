@@ -42,6 +42,7 @@ using std::string;
  * @struct DataBytes
  * @brief wrapper for data bytes array
 */
+#pragma pack(1)
 struct DataBytes
 {
     const uint16_t header = 0x75AA; //! Header bytes
@@ -54,6 +55,7 @@ struct DataBytes
     uint32_t time = 0;         //! Time stamp Byte
     const uint16_t footter = 0x75FF; //! Footer byte
 } __attribute__((__packed__));
+#pragma pack()
 
 /*!
  * @class MotorData
