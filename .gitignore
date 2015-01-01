@@ -8,5 +8,6 @@ Makefile
 *.cmake
 CMakeCache.txt
 CMakeFiles
+bin/main
 
 
