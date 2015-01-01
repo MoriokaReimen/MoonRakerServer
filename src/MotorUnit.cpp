@@ -45,8 +45,8 @@ MotorUnit:
 connects each of the sockets.
 */
 MotorUnit::MotorUnit(zmq::context_t& context_arg, std::string robot_address,
-               std::string data_address, std::string inproc_address)
-       :Subsystem(context_arg), motor_publisher(context, ZMQ_PUB)
+                     std::string data_address, std::string inproc_address)
+    :Subsystem(context_arg), motor_publisher(context, ZMQ_PUB)
 {
     std::cout<< "Initializing Motor Unit" <<std::endl;
 
@@ -89,7 +89,8 @@ MotorUnit::MotorUnit(zmq::context_t& context_arg, std::string robot_address,
     Clean up memory by deleting all objects in memory that were
 assigned through a pointer.
 */
-MotorUnit::~MotorUnit() {
+MotorUnit::~MotorUnit()
+{
 
     return;
 }
@@ -113,7 +114,8 @@ mainExecutionLoop:
 each MotorUnit object. Any subsequent threads used by the motor object must be
 created and managed here.
 */
-void MotorUnit::mainExecutionLoop() {
+void MotorUnit::mainExecutionLoop()
+{
 
     std::cout<< "motor loop" <<std::endl;
     //Set a flag to control the loop of this thread
@@ -123,27 +125,24 @@ void MotorUnit::mainExecutionLoop() {
     int wait_time = -1;
     //0: don't wait
     //-1: wait forever
-	zmq::pollitem_t incoming_list[] = { { this->subsystem_socket,         0, ZMQ_POLLIN, 0 },
-                                        { this->data_subscription_socket, 0, ZMQ_POLLIN, 0 },
-                                        { this->command_socket,           0, ZMQ_POLLIN, 0 } };
+    zmq::pollitem_t incoming_list[] = { { this->subsystem_socket,         0, ZMQ_POLLIN, 0 },
+        { this->data_subscription_socket, 0, ZMQ_POLLIN, 0 },
+        { this->command_socket,           0, ZMQ_POLLIN, 0 }
+    };
 
 
-    while(this->loop)
-    {
+    while(this->loop) {
         zmq::poll(incoming_list, number_of_sockets, wait_time);
 
-        if(incoming_list[0].revents && ZMQ_POLLIN)
-        {
+        if(incoming_list[0].revents && ZMQ_POLLIN) {
             //this->subsystem_socket.recv(&this->incoming_message);
         }
 
-        if(incoming_list[1].revents && ZMQ_POLLIN)
-        {
+        if(incoming_list[1].revents && ZMQ_POLLIN) {
             this->handleMotorData();
         }
 
-        if(incoming_list[2].revents && ZMQ_POLLIN)
-        {
+        if(incoming_list[2].revents && ZMQ_POLLIN) {
             this->handleUICommand();
         }
     }
@@ -163,40 +162,41 @@ handleMotorData:
      This function is called by the Motor thread's main execution loop
  when a new incoming data message is detected.
 */
-void MotorUnit::handleMotorData() {
+void MotorUnit::handleMotorData()
+{
 
     //record the time
     gettimeofday(&this->recv_TS, NULL);
 
 
 
-/*
-    //Receive the data
-    this->data_subscription_socket.recv(&tag);
-
-    int messages = 0;
-
-    std::cout << "FIRST MESSAGE " << messages << ":" << tag.size() << std::endl;
-    std::string tester(static_cast<char*>(tag.data()), tag.size());
-    std::cout << tester << std::endl;
-
-        messages++;
-
-
-    bool more = 0;
-    size_t option_size = sizeof(int64_t);
-    //Check if there are more messages
-    data_subscription_socket.getsockopt(ZMQ_RCVMORE, &more, &option_size);
-    while(more)
-    {
-        std::cout << "Message " << messages << ":" << tag.size() << std::endl;
-        messages++;
-        //std::string tester(static_cast<char*>(tag.data()), tag.size());
-        //std::cout << tester << std::endl;
+    /*
+        //Receive the data
         this->data_subscription_socket.recv(&tag);
+
+        int messages = 0;
+
+        std::cout << "FIRST MESSAGE " << messages << ":" << tag.size() << std::endl;
+        std::string tester(static_cast<char*>(tag.data()), tag.size());
+        std::cout << tester << std::endl;
+
+            messages++;
+
+
+        bool more = 0;
+        size_t option_size = sizeof(int64_t);
+        //Check if there are more messages
         data_subscription_socket.getsockopt(ZMQ_RCVMORE, &more, &option_size);
-    }
-*/
+        while(more)
+        {
+            std::cout << "Message " << messages << ":" << tag.size() << std::endl;
+            messages++;
+            //std::string tester(static_cast<char*>(tag.data()), tag.size());
+            //std::cout << tester << std::endl;
+            this->data_subscription_socket.recv(&tag);
+            data_subscription_socket.getsockopt(ZMQ_RCVMORE, &more, &option_size);
+        }
+    */
 
 
 
@@ -217,68 +217,67 @@ void MotorUnit::handleMotorData() {
 
 
     //Prepare messages to be filled with motor data
-        zmq::message_t tag;
-        zmq::message_t timestamp;
-        zmq::message_t controller_clock;
-        zmq::message_t target;
-        zmq::message_t back_rpm;
-        zmq::message_t front_rpm;
-        zmq::message_t back_torque;
-        zmq::message_t front_torque;
-        zmq::message_t back_power;
-        zmq::message_t front_power;
-        zmq::message_t battery;
+    zmq::message_t tag;
+    zmq::message_t timestamp;
+    zmq::message_t controller_clock;
+    zmq::message_t target;
+    zmq::message_t back_rpm;
+    zmq::message_t front_rpm;
+    zmq::message_t back_torque;
+    zmq::message_t front_torque;
+    zmq::message_t back_power;
+    zmq::message_t front_power;
+    zmq::message_t battery;
 
 
-        this->data_subscription_socket.recv(&tag);
-        this->data_subscription_socket.recv(&timestamp);
-        this->data_subscription_socket.recv(&controller_clock);
-        this->data_subscription_socket.recv(&target);
-        this->data_subscription_socket.recv(&back_rpm);
-        this->data_subscription_socket.recv(&front_rpm);
-        this->data_subscription_socket.recv(&back_torque);
-        this->data_subscription_socket.recv(&front_torque);
-        this->data_subscription_socket.recv(&back_power);
-        this->data_subscription_socket.recv(&front_power);
-        this->data_subscription_socket.recv(&battery);
+    this->data_subscription_socket.recv(&tag);
+    this->data_subscription_socket.recv(&timestamp);
+    this->data_subscription_socket.recv(&controller_clock);
+    this->data_subscription_socket.recv(&target);
+    this->data_subscription_socket.recv(&back_rpm);
+    this->data_subscription_socket.recv(&front_rpm);
+    this->data_subscription_socket.recv(&back_torque);
+    this->data_subscription_socket.recv(&front_torque);
+    this->data_subscription_socket.recv(&back_power);
+    this->data_subscription_socket.recv(&front_power);
+    this->data_subscription_socket.recv(&battery);
 
-        struct timeval rover_TS;
-        unsigned long motor_clock;
-        signed short target_speed, back_speed, front_speed;
-        float back_motor_torque, front_motor_torque, back_motor_power, front_motor_power, battery_voltage;
+    struct timeval rover_TS;
+    unsigned long motor_clock;
+    signed short target_speed, back_speed, front_speed;
+    float back_motor_torque, front_motor_torque, back_motor_power, front_motor_power, battery_voltage;
 
-        std::string motor_tag(static_cast<char*>(tag.data()), tag.size());
-        rover_TS = *static_cast<struct timeval*>(timestamp.data());
-        motor_clock = *static_cast<unsigned long*>(controller_clock.data());
-        target_speed = *static_cast<signed short*>(target.data());
-        back_speed = *static_cast<signed short*>(back_rpm.data());
-        front_speed = *static_cast<signed short*>(front_rpm.data());
-        back_motor_torque = *static_cast<float*>(back_torque.data());
-        front_motor_torque = *static_cast<float*>(front_torque.data());
-        back_motor_power = *static_cast<float*>(back_power.data());
-        front_motor_power = *static_cast<float*>(front_power.data());
-        battery_voltage = *static_cast<float*>(battery.data());
-
-
-        motor_publisher.send(tag, ZMQ_SNDMORE);
-        motor_publisher.send(back_torque, ZMQ_SNDMORE);
-        motor_publisher.send(front_torque, ZMQ_SNDMORE);
-        motor_publisher.send(back_power, ZMQ_SNDMORE);
-        motor_publisher.send(front_power);
+    std::string motor_tag(static_cast<char*>(tag.data()), tag.size());
+    rover_TS = *static_cast<struct timeval*>(timestamp.data());
+    motor_clock = *static_cast<unsigned long*>(controller_clock.data());
+    target_speed = *static_cast<signed short*>(target.data());
+    back_speed = *static_cast<signed short*>(back_rpm.data());
+    front_speed = *static_cast<signed short*>(front_rpm.data());
+    back_motor_torque = *static_cast<float*>(back_torque.data());
+    front_motor_torque = *static_cast<float*>(front_torque.data());
+    back_motor_power = *static_cast<float*>(back_power.data());
+    front_motor_power = *static_cast<float*>(front_power.data());
+    battery_voltage = *static_cast<float*>(battery.data());
 
 
+    motor_publisher.send(tag, ZMQ_SNDMORE);
+    motor_publisher.send(back_torque, ZMQ_SNDMORE);
+    motor_publisher.send(front_torque, ZMQ_SNDMORE);
+    motor_publisher.send(back_power, ZMQ_SNDMORE);
+    motor_publisher.send(front_power);
 
-        if(this->record && this->data_file.is_open())
-        {
-            this->data_file << motor_tag << ":"
-                            << recv_TS.tv_sec << "," << recv_TS.tv_usec << ";"
-                            << rover_TS.tv_sec << "," << rover_TS.tv_usec << ";"
-                            << motor_clock << ";"
-                            << target_speed << "," << back_speed << "," << front_speed << ";"
-                            << back_motor_torque << ","<< front_motor_torque << ";"
-                            << back_motor_power << ","<< front_motor_power << ";"
-                            << battery_voltage << std::endl;
-        }
+
+
+    if(this->record && this->data_file.is_open()) {
+        this->data_file << motor_tag << ":"
+                        << recv_TS.tv_sec << "," << recv_TS.tv_usec << ";"
+                        << rover_TS.tv_sec << "," << rover_TS.tv_usec << ";"
+                        << motor_clock << ";"
+                        << target_speed << "," << back_speed << "," << front_speed << ";"
+                        << back_motor_torque << ","<< front_motor_torque << ";"
+                        << back_motor_power << ","<< front_motor_power << ";"
+                        << battery_voltage << std::endl;
+    }
 
 
 
@@ -319,7 +318,8 @@ handleUICommand:
     r1,r2,r4: change resolution (1-low,2-mid,4-high)
     ...
 */
-void MotorUnit::handleUICommand() {
+void MotorUnit::handleUICommand()
+{
 
     //The zmq::poll function has detected an incoming message,
     //first it needs to be received.
@@ -335,9 +335,7 @@ void MotorUnit::handleUICommand() {
     //QUIT
     if(command_string == "shutdown") {
         this->loop = false;
-    }
-    else if(command_string == "motor_speed")
-    {
+    } else if(command_string == "motor_speed") {
         //std::cout << "speed control" << std::endl;
 
         zmq::message_t speed_L, speed_R;
@@ -361,13 +359,10 @@ void MotorUnit::handleUICommand() {
         memcpy(mot_cmd.data(), data_packet, 4);
         this->subsystem_socket.send(mot_cmd);
 
-    }
-    else if(command_string == "") {
+    } else if(command_string == "") {
 
         std::cout << "..." << std::endl;
-    }
-    else if(command_string == "start_recording")
-    {
+    } else if(command_string == "start_recording") {
 
         zmq::message_t foldername;
         this->command_socket.recv(&foldername);
@@ -375,12 +370,9 @@ void MotorUnit::handleUICommand() {
         filename.append("/motor.txt");
 
         Subsystem::startRecording(filename);
-    }
-    else if(command_string == "stop_recording")
-    {
+    } else if(command_string == "stop_recording") {
         Subsystem::stopRecording();
-    }
-    else {
+    } else {
         std::cout << "Unrecognized Camera Command: " << command_string << std::endl;
     }
 

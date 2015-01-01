@@ -43,7 +43,7 @@ class MotorUnit : public Subsystem
 {
 public:
     MotorUnit(zmq::context_t& context_arg, std::string robot_address,
-           std::string data_address, std::string inproc_address);
+              std::string data_address, std::string inproc_address);
     ~MotorUnit();
     void join();
 protected:

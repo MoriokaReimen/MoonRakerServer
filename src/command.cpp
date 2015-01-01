@@ -43,12 +43,12 @@ using std::abs;
  */
 MotorCommand::MotorCommand(const signed short& left, const signed short& right)
 {
-  if(abs(left_rpm) > max_rpm_ || abs(right_rpm) > max_rpm_)
-    throw std::range_error("rpm is over max rpm");
+    if(abs(left_rpm) > max_rpm_ || abs(right_rpm) > max_rpm_)
+        throw std::range_error("rpm is over max rpm");
 
-  this->left_rpm  = left;
-  this->right_rpm = right;
-  return;
+    this->left_rpm  = left;
+    this->right_rpm = right;
+    return;
 }
 
 /*!
@@ -57,8 +57,8 @@ MotorCommand::MotorCommand(const signed short& left, const signed short& right)
  */
 CommandBytes MotorCommand::toByteArray() const
 {
-  CommandBytes command;
-  command.left_rpm = this->left_rpm;
-  command.right_rpm = this->right_rpm;
-  return command;
+    CommandBytes command;
+    command.left_rpm = this->left_rpm;
+    command.right_rpm = this->right_rpm;
+    return command;
 }

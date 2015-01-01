@@ -43,8 +43,7 @@ using std::string;
  * @brief wrapper for data bytes array
 */
 #pragma pack(1)
-struct DataBytes
-{
+struct DataBytes {
     const uint16_t header = 0x75AA; //! Header bytes
     uint8_t device = 0x00; //! Source device (0x11 = left, 0x12 = right)
     int16_t rear_current = 0; //! rear Current
@@ -64,13 +63,13 @@ struct DataBytes
 class MotorData
 {
 public:
-  int rear_current{0}; //! rear raw sensor output
-  int front_current{0};//! fron raw sensor output
-  int front_rpm{0};
-  int rear_rpm{0};
-  int battery_v{0};
-  long time{0};
-  string device{"O"};//! device id L/R or O
-  MotorData(const DataBytes& data);
+    int rear_current {0}; //! rear raw sensor output
+    int front_current {0}; //! fron raw sensor output
+    int front_rpm {0};
+    int rear_rpm {0};
+    int battery_v {0};
+    long time {0};
+    string device {"O"}; //! device id L/R or O
+    MotorData(const DataBytes& data);
 };
 

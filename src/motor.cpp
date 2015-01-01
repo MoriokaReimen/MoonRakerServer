@@ -43,7 +43,7 @@ using bit8 = unsigned char;
  */
 Motor::Motor()
 {
-  OpenComport(0, 115200);
+    OpenComport(0, 115200);
 }
 
 /*!
@@ -51,7 +51,7 @@ Motor::Motor()
  */
 Motor::~Motor()
 {
-  CloseComport(0);
+    CloseComport(0);
 }
 
 /*!
@@ -60,10 +60,10 @@ Motor::~Motor()
  */
 int Motor::sendCommand(const MotorCommand& command) const
 {
-  CommandBytes bytes{command.toByteArray()};
-  bit8 buffer[sizeof(bytes)];
-  memcpy(buffer, &bytes, sizeof(bytes));
-  return SendBuf(0, buffer, sizeof(bytes));
+    CommandBytes bytes {command.toByteArray()};
+    bit8 buffer[sizeof(bytes)];
+    memcpy(buffer, &bytes, sizeof(bytes));
+    return SendBuf(0, buffer, sizeof(bytes));
 }
 
 /*!
@@ -74,23 +74,20 @@ int Motor::sendCommand(const MotorCommand& command) const
  */
 MotorData Motor::getData() const
 {
-  DataBytes bytes;
-  bit8 buffer[40];
-  int read_bytes = PollComport(0, buffer, 40);
-  if (read_bytes == 0)
-  {
-    throw runtime_error("No data");//! There is no data in the buffer
-  }
-  //! Detect Headers and footers
-  for (int i = 0; i < read_bytes; ++i)
-  {
-      if ((buffer[i] == 0x75) && (buffer[i + 1] == 0xAA) &&
-          (buffer[i + 17] == 0x75) && (buffer[i + 18] == 0xFF))
-      {
-          //! motor data array
-          memcpy(&bytes, &buffer[i], sizeof(bytes));
-          return MotorData(bytes);
-      }
-  }
-  throw runtime_error("Broken data"); //! data is broken
+    DataBytes bytes;
+    bit8 buffer[40];
+    int read_bytes = PollComport(0, buffer, 40);
+    if (read_bytes == 0) {
+        throw runtime_error("No data");//! There is no data in the buffer
+    }
+    //! Detect Headers and footers
+    for (int i = 0; i < read_bytes; ++i) {
+        if ((buffer[i] == 0x75) && (buffer[i + 1] == 0xAA) &&
+            (buffer[i + 17] == 0x75) && (buffer[i + 18] == 0xFF)) {
+            //! motor data array
+            memcpy(&bytes, &buffer[i], sizeof(bytes));
+            return MotorData(bytes);
+        }
+    }
+    throw runtime_error("Broken data"); //! data is broken
 }

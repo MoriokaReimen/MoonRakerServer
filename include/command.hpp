@@ -43,8 +43,7 @@
  * @brief wrapper for bytes array of command
 */
 #pragma pack(1)
-struct CommandBytes
-{
+struct CommandBytes {
     const uint16_t header = 0x75AA; //! Header byte
     const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
     //(0x11 = left, 0x12 = right)
@@ -61,11 +60,11 @@ struct CommandBytes
 */
 class MotorCommand
 {
-  signed short left_rpm{0}; //! left motor rotation speed
-  signed short right_rpm{0}; //! right motor rotation speed
-  signed short max_rpm_{4000}; //! max motor rotation speed
+    signed short left_rpm {0}; //! left motor rotation speed
+    signed short right_rpm {0}; //! right motor rotation speed
+    signed short max_rpm_ {4000}; //! max motor rotation speed
 
 public:
-  MotorCommand(const signed short& left, const signed short& right);
-  CommandBytes toByteArray() const;
+    MotorCommand(const signed short& left, const signed short& right);
+    CommandBytes toByteArray() const;
 };

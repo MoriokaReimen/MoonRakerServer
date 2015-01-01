@@ -41,15 +41,15 @@
  */
 MotorData::MotorData(const DataBytes& data)
 {
-  if(data.device == 0x11) this->device = "L";
-  if(data.device == 0x12) this->device = "R";
-  this -> rear_current  = static_cast<signed short>(data.rear_current);
-  this -> front_current = static_cast<signed short>(data.front_current);
-  this -> rear_rpm  = static_cast<signed short>(data.rear_rpm);
-  this -> front_rpm  = static_cast<signed short>(data.front_rpm);
-  this -> battery_v  = static_cast<signed short>(data.front_rpm);
-  this -> time  = static_cast<uint32_t>(data.time);
+    if(data.device == 0x11) this->device = "L";
+    if(data.device == 0x12) this->device = "R";
+    this -> rear_current  = static_cast<signed short>(data.rear_current);
+    this -> front_current = static_cast<signed short>(data.front_current);
+    this -> rear_rpm  = static_cast<signed short>(data.rear_rpm);
+    this -> front_rpm  = static_cast<signed short>(data.front_rpm);
+    this -> battery_v  = static_cast<signed short>(data.front_rpm);
+    this -> time  = static_cast<uint32_t>(data.time);
 
-  return;
+    return;
 }
 

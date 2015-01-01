@@ -47,8 +47,8 @@ using bit8 = unsigned char;
 class Motor
 {
 public:
-  Motor();
-  ~Motor();
-  int sendCommand(const MotorCommand& command) const;
-  MotorData getData() const;
+    Motor();
+    ~Motor();
+    int sendCommand(const MotorCommand& command) const;
+    MotorData getData() const;
 };
