@@ -63,13 +63,14 @@ struct DataBytes {
 class MotorData
 {
 public:
+    string device {"O"}; //! device id L/R or O
     int rear_current {0}; //! rear raw sensor output
     int front_current {0}; //! fron raw sensor output
-    int front_rpm {0};
     int rear_rpm {0};
+    int front_rpm {0};
     int battery_v {0};
     long time {0};
-    string device {"O"}; //! device id L/R or O
     MotorData(const DataBytes& data);
+    DataBytes toByteArray() const;
 };
 

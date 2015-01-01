@@ -43,13 +43,30 @@ MotorData::MotorData(const DataBytes& data)
 {
     if(data.device == 0x11) this->device = "L";
     if(data.device == 0x12) this->device = "R";
-    this -> rear_current  = static_cast<signed short>(data.rear_current);
-    this -> front_current = static_cast<signed short>(data.front_current);
-    this -> rear_rpm  = static_cast<signed short>(data.rear_rpm);
-    this -> front_rpm  = static_cast<signed short>(data.front_rpm);
-    this -> battery_v  = static_cast<signed short>(data.front_rpm);
+    this -> rear_current  = static_cast<int16_t>(data.rear_current);
+    this -> front_current = static_cast<int16_t>(data.front_current);
+    this -> rear_rpm  = static_cast<int16_t>(data.rear_rpm);
+    this -> front_rpm  = static_cast<int16_t>(data.front_rpm);
+    this -> battery_v  = static_cast<uint16_t>(data.battery_v);
     this -> time  = static_cast<uint32_t>(data.time);
 
     return;
 }
 
+/*!
+ * @brief Generate raw bits array from private variables
+ * @return Data bits array
+ */
+DataBytes MotorData::toByteArray() const
+{
+  DataBytes data;
+  if(this->device == "L") data.device = 0x11;
+  if(this->device == "R") data.device = 0x12;
+  data.rear_current = static_cast<int>(this->rear_current);
+  data.front_current = static_cast<int>(this->front_current);
+  data.rear_rpm = static_cast<int>(this->rear_rpm);
+  data.front_rpm = static_cast<int>(this->front_rpm);
+  data.battery_v = static_cast<int>(this->battery_v);
+  data.time = static_cast<long>(this->time);
+  return data;
+}
