@@ -10,6 +10,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
-add_library(MotorTest STATIC src/rs232.cpp src/command.cpp src/data.cpp)
-add_executable(main src/main.cpp src/rs232.cpp src/command.cpp src/data.cpp)
+add_library(MotorTest STATIC src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp)
+add_executable(main src/main.cpp src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp)
 target_link_libraries(main zmq pthread)
