@@ -71,6 +71,7 @@ public:
     int battery_v {0};
     long time {0};
     MotorData(const DataBytes& data);
+    void set(const DataBytes& data);
     DataBytes toByteArray() const;
 };
 

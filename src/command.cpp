@@ -52,6 +52,33 @@ MotorCommand::MotorCommand(const signed short& left, const signed short& right)
 }
 
 /*!
+ * @brief set internal variables
+ * @param[in] left left motr rotation velocity in rpm
+ * @param[in] right left motr rotation velocity in rpm
+ */
+void MotorCommand::set(const signed short& left, const signed short& right)
+{
+    if(abs(left_rpm) > max_rpm_ || abs(right_rpm) > max_rpm_)
+        throw std::range_error("rpm is over max rpm");
+
+    this->left_rpm  = left;
+    this->right_rpm = right;
+    return;
+}
+
+/*!
+ * @brief set internal variables
+ * @param[in] bytes array of command
+ */
+void MotorCommand::set(const CommandBytes& command)
+{
+    signed short left = static_cast<int16_t>(command.left_rpm);
+    signed short right = static_cast<int16_t>(command.right_rpm);
+    this->set(left, right);
+    return;
+}
+
+/*!
  * @brief generate Bytes array of command
  * @return bytes array of command
  */

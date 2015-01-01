@@ -9,5 +9,7 @@ Makefile
 CMakeCache.txt
 CMakeFiles
 bin/main
+Testing/
+*.exe
 
 

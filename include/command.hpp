@@ -66,5 +66,7 @@ class MotorCommand
 
 public:
     MotorCommand(const signed short& left, const signed short& right);
+    void set(const signed short& left, const signed short& right);
+    void set(const CommandBytes& command);
     CommandBytes toByteArray() const;
 };
