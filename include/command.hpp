@@ -36,19 +36,20 @@
 */
 #include <stdexcept>
 #include <cmath>
+#include <cstdint>
 
 struct CommandBytes
 {
-    const unsigned char head_base = 0x75; //! Header/Footer base byte
-    const unsigned char header = 0xAA; //! Header byte
-    const unsigned char device = 0x13; //! Source device 0x13 = PCBoard
+    const uint8_t head_base = 0x75; //! Header/Footer base byte
+    const uint8_t header = 0xAA; //! Header byte
+    const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
     //(0x11 = left, 0x12 = right)
-    const signed short boost_flag = 0x00;
-    signed short left_rpm = 0;        //Left Motor RPM Byte
-    signed short right_rpm = 0;        //Right Motor RPM Byte
-    const unsigned char foot_base = 0x75; //Header/Footer base byte
-    const unsigned char footer = 0xFF; //Footer byte
-} __attribute__((__packed___));
+    const int16_t boost_flag = 0x00;
+    int16_t left_rpm = 0;        //! Left Motor RPM Byte
+    int16_t right_rpm = 0;        //! Right Motor RPM Byte
+    const uint8_t foot_base = 0x75; //! Header/Footer base byte
+    const uint8_t footer = 0xFF; //! Footer byte
+} __attribute__((__packed__));
 
 class MotorCommand
 {
