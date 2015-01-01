@@ -37,7 +37,7 @@
 using std::abs;
 
 /*!
- * Constructor for MotorCommand class
+ * @brief Constructor for MotorCommand class
  * @param[in] left left motr rotation velocity in rpm
  * @param[in] right left motr rotation velocity in rpm
  */
@@ -52,10 +52,10 @@ MotorCommand::MotorCommand(const signed short& left, const signed short& right)
 }
 
 /*!
- * generate Bytes array of command
+ * @brief generate Bytes array of command
  * @return bytes array of command
  */
-CommandBytes MotorCommand::toByteArray()
+CommandBytes MotorCommand::toByteArray() const
 {
   CommandBytes command;
   command.left_rpm = this->left_rpm;

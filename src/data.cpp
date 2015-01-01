@@ -36,7 +36,7 @@
 #include "data.hpp"
 
 /*!
- * Constructor for MotorData class
+ * @brief Constructor for MotorData class
  * @param[in] raw bits array from serial port.
  */
 MotorData::MotorData(const DataBytes& data)

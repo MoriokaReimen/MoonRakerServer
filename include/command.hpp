@@ -1,4 +1,3 @@
-#pragma once
 /*!
 -----------------------------------------------------------------------------
 @file    command.hpp
@@ -34,30 +33,37 @@
 @brief command manipulation class
 -----------------------------------------------------------------------------
 */
+#pragma once
 #include <stdexcept>
 #include <cmath>
 #include <cstdint>
 
+/*!
+ * @struct CommandBytes
+ * @brief wrapper for bytes array of command
+*/
 struct CommandBytes
 {
-    const uint8_t head_base = 0x75; //! Header/Footer base byte
-    const uint8_t header = 0xAA; //! Header byte
+    const uint16_t header = 0x75AA; //! Header byte
     const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
     //(0x11 = left, 0x12 = right)
     const int16_t boost_flag = 0x00;
     int16_t left_rpm = 0;        //! Left Motor RPM Byte
     int16_t right_rpm = 0;        //! Right Motor RPM Byte
-    const uint8_t foot_base = 0x75; //! Header/Footer base byte
-    const uint8_t footer = 0xFF; //! Footer byte
+    const uint16_t footer = 0x75FF; //! Footer byte
 } __attribute__((__packed__));
 
+/*!
+ * @class MotorCommand
+ * @brief wrapper class for bytes array of command
+*/
 class MotorCommand
 {
-  signed short left_rpm{0};
-  signed short right_rpm{0};
-  signed short max_rpm_{4000};
+  signed short left_rpm{0}; //! left motor rotation speed
+  signed short right_rpm{0}; //! right motor rotation speed
+  signed short max_rpm_{4000}; //! max motor rotation speed
 
 public:
   MotorCommand(const signed short& left, const signed short& right);
-  CommandBytes toByteArray();
+  CommandBytes toByteArray() const;
 };

@@ -38,10 +38,13 @@
 #include <string>
 using std::string;
 
+/*!
+ * @struct DataBytes
+ * @brief wrapper for data bytes array
+*/
 struct DataBytes
 {
-    const uint8_t head_base = 0x75; //! Header/Footer base byte
-    const uint8_t header = 0xAA; //! Header byte
+    const uint16_t header = 0x75AA; //! Header bytes
     uint8_t device = 0x00; //! Source device (0x11 = left, 0x12 = right)
     int16_t rear_current = 0; //! rear Current
     int16_t front_current = 0; //! front Current
@@ -49,20 +52,23 @@ struct DataBytes
     int16_t front_rpm = 0; //! front Motor RPM
     uint16_t battery_v = 0;        //! Battery Level milliVolts
     uint32_t time = 0;         //! Time stamp Byte
-    const uint8_t foot_base = 0x75; //! Header/Footer base byte
-    const uint8_t footer = 0xFF; //! Footer byte
+    const uint16_t footter = 0x75FF; //! Footer byte
 } __attribute__((__packed__));
 
+/*!
+ * @class MotorData
+ * @brief wrapper class for data bytes array
+*/
 class MotorData
 {
 public:
-  int rear_current{0};
-  int front_current{0};
+  int rear_current{0}; //! rear raw sensor output
+  int front_current{0};//! fron raw sensor output
   int front_rpm{0};
   int rear_rpm{0};
   int battery_v{0};
   long time{0};
-  string device{"O"};
+  string device{"O"};//! device id L/R or O
   MotorData(const DataBytes& data);
 };
 
