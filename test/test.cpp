@@ -15,7 +15,7 @@ TEST(DataTest,General){
   DataBytes data_bytes;
   MotorData data(data_bytes);
   EXPECT_EQ(19, sizeof(data_bytes));
-  //EXPECT_STR_EQ("O", data.device);
+  EXPECT_EQ("O", data.device);
   EXPECT_EQ(0, (int) static_cast<int16_t>(data_bytes.rear_rpm));
   EXPECT_EQ(0, (int) static_cast<int16_t>(data_bytes.front_rpm));
 }
