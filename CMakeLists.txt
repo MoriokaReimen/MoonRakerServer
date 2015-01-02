@@ -12,13 +12,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
-add_library(moon_server STATIC src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp)
-add_executable(MoonServer.exe src/main.cpp src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp)
-target_link_libraries(MoonServer.exe zmq pthread)
+add_library(moon_server STATIC src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp)
+add_executable(MoonServer.exe src/main.cpp src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp)
+target_link_libraries(MoonServer.exe zmq pthread zmqpp-static)
 
 enable_testing()
 add_executable(test.exe test/test.cpp)
 target_link_libraries(test.exe gtest gtest_main pthread)
-target_link_libraries(test.exe moon_server)
+target_link_libraries(test.exe moon_server zmqpp-static)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 

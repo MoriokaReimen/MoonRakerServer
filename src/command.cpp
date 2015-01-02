@@ -52,6 +52,16 @@ MotorCommand::MotorCommand(const signed short& left, const signed short& right)
 }
 
 /*!
+ * @brief Constructor for MotorCommand class
+ * @param[in] bytes array of command
+ */
+MotorCommand::MotorCommand(const CommandBytes& command)
+{
+  this->set(command);
+  return;
+}
+
+/*!
  * @brief set internal variables
  * @param[in] left left motr rotation velocity in rpm
  * @param[in] right left motr rotation velocity in rpm

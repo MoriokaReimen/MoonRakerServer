@@ -1,6 +1,6 @@
 /*!
 -----------------------------------------------------------------------------
-@file    command.hpp
+@file    zmqserver.hpp
 ----------------------------------------------------------------------------
          @@
        @@@@@@
@@ -30,44 +30,37 @@
           %%%%%
            %%%
 -----------------------------------------------------------------------------
-@brief command manipulation class
+@brief zmq manipulation class for moonraker server
 -----------------------------------------------------------------------------
 */
 #pragma once
-#include <stdexcept>
-#include <cmath>
 #include <cstdint>
+#include <cstdlib>
+#include <zmqpp/zmqpp.hpp>
+#include <string>
+
+#include "command.hpp"
+#include "data.hpp"
+#include "zmqdata.hpp"
+using std::string;
 
 /*!
- * @struct CommandBytes
- * @brief wrapper for bytes array of command
+ * @class ZMQServer
+ * @brief wrapper class for zmq manupulation
 */
-#pragma pack(1)
-struct CommandBytes {
-    const uint16_t header = 0x75AA; //! Header byte
-    const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
-    //(0x11 = left, 0x12 = right)
-    const int16_t boost_flag = 0x00;
-    int16_t left_rpm = 0;        //! Left Motor RPM Byte
-    int16_t right_rpm = 0;        //! Right Motor RPM Byte
-    const uint16_t footer = 0x75FF; //! Footer byte
-} __attribute__((__packed__));
-#pragma pack()
-
-/*!
- * @class MotorCommand
- * @brief wrapper class for bytes array of command
-*/
-class MotorCommand
+class ZMQServer
 {
-    signed short left_rpm {0}; //! left motor rotation speed
-    signed short right_rpm {0}; //! right motor rotation speed
-    signed short max_rpm_ {4000}; //! max motor rotation speed
+  /*! private variables for sending data */
+  zmqpp::socket publish_socket_; //! zmq socket
+  zmqpp::context publish_context_; //! zmq socket context
+  zmqpp::socket_type publish_type_{zmqpp::socket_type::push}; //! zmq socket type
 
+  /*! private variables for receiving command */
+  zmqpp::socket subscribe_socket_; //! zmq socket
+  zmqpp::context subscribe_context_; //! zmq socket context
+  zmqpp::socket_type subscribe_type_{zmqpp::socket_type::pull}; //! zmq socket type
 public:
-    MotorCommand(const signed short& left, const signed short& right);
-    MotorCommand(const CommandBytes& command);
-    void set(const signed short& left, const signed short& right);
-    void set(const CommandBytes& command);
-    CommandBytes toByteArray() const;
+  ZMQServer(const string& data_address, const string& command_address);
+  MotorCommand getCommand();
+  void sendData(const ZMQData& data);
 };
