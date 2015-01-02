@@ -82,8 +82,8 @@ void MotorCommand::set(const signed short& left, const signed short& right)
  */
 void MotorCommand::set(const CommandBytes& command)
 {
-    signed short left = static_cast<int16_t>(command.left_rpm);
-    signed short right = static_cast<int16_t>(command.right_rpm);
+    signed short left = static_cast<int16_t>(be16toh(command.left_rpm));
+    signed short right = static_cast<int16_t>(be16toh(command.right_rpm));
     this->set(left, right);
     return;
 }
@@ -95,7 +95,7 @@ void MotorCommand::set(const CommandBytes& command)
 CommandBytes MotorCommand::toByteArray() const
 {
     CommandBytes command;
-    command.left_rpm = this->left_rpm;
-    command.right_rpm = this->right_rpm;
+    command.left_rpm = htobe16(this->left_rpm);
+    command.right_rpm = htobe16(this->right_rpm);
     return command;
 }

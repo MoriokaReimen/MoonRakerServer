@@ -36,7 +36,7 @@
 #pragma once
 #include <stdexcept>
 #include <cmath>
-#include <cstdint>
+#include <portable_endian.h>
 
 /*!
  * @struct CommandBytes
@@ -44,13 +44,13 @@
 */
 #pragma pack(1)
 struct CommandBytes {
-    const uint16_t header = 0x75AA; //! Header byte
+    const uint16_t header = 0xaa75; //! Header byte
     const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
     //(0x11 = left, 0x12 = right)
-    const int16_t boost_flag = 0x00;
+    const int16_t boost_flag = htole16(0x00);
     int16_t left_rpm = 0;        //! Left Motor RPM Byte
     int16_t right_rpm = 0;        //! Right Motor RPM Byte
-    const uint16_t footer = 0x75FF; //! Footer byte
+    const uint16_t footer = 0xff75; //! Footer byte
 } __attribute__((__packed__));
 #pragma pack()
 
