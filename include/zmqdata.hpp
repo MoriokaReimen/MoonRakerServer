@@ -35,6 +35,7 @@
 */
 #pragma once
 #include <cstdint>
+#include <portable_endian.h>
 
 /*!
  * @struct ZMQBytes
