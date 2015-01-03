@@ -95,6 +95,7 @@ public:
     int right_front_current = 0; //! front Current
     int battery_v = 0;        //! Battery Level milliVolts
     ZMQData() = default;
+    ZMQData& operator=(const ZMQData&) = default;
     ZMQData(const ZMQBytes& data);
     void set(const ZMQBytes& data);
     ZMQBytes toByteArray() const;

@@ -82,3 +82,25 @@ TEST(DataTest, FromByteArray)
     EXPECT_EQ(500, data.battery_v);
     EXPECT_EQ(600, data.time);
 }
+
+TEST(DataTest, COPY)
+{
+    DataBytes bytes;
+    bytes.rear_rpm = htobe16(100);
+    bytes.front_rpm = htobe16(200);
+    bytes.rear_current = htobe16(300);
+    bytes.front_current = htobe16(400);
+    bytes.battery_v = htobe16(500);
+    bytes.time = htobe32(600);
+
+    MotorData data(bytes);
+    MotorData datb;
+    datb = data;
+
+    EXPECT_EQ(100, datb.rear_rpm);
+    EXPECT_EQ(200, datb.front_rpm);
+    EXPECT_EQ(300, datb.rear_current);
+    EXPECT_EQ(400, datb.front_current);
+    EXPECT_EQ(500, datb.battery_v);
+    EXPECT_EQ(600, datb.time);
+}

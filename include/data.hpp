@@ -88,6 +88,7 @@ public:
     int battery_v {0};
     long time {0};
     MotorData() = default;
+    MotorData& operator=(const MotorData&) = default;
     MotorData(const DataBytes& data);
     void set(const DataBytes& data);
     DataBytes toByteArray() const;

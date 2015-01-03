@@ -83,3 +83,14 @@ TEST(CommandTest, FromByteArray)
     EXPECT_EQ(100, command.left_rpm);
     EXPECT_EQ(-120, command.right_rpm);
 }
+
+TEST(CommandTest, COPY)
+{
+    MotorCommand commanda(100, -120);
+    MotorCommand commandb;
+    commandb = commanda;
+    commanda.set(120, 100);
+
+    EXPECT_EQ(100, commandb.left_rpm);
+    EXPECT_EQ(-120, commandb.right_rpm);
+}

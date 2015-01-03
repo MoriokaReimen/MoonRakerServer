@@ -78,6 +78,9 @@ public:
     signed short left_rpm {0}; //! left motor rotation speed
     signed short right_rpm {0}; //! right motor rotation speed
     signed short max_rpm_ {4000}; //! max motor rotation speed
+    MotorCommand() = default;
+    MotorCommand& operator=(const MotorCommand& command) = default;
+
     MotorCommand(const signed short& left, const signed short& right);
     MotorCommand(const CommandBytes& command);
     void set(const signed short& left, const signed short& right);
