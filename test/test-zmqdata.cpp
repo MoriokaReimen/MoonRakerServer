@@ -41,11 +41,11 @@ TEST(ZMQDataTest,General)
 {
     ZMQBytes data_bytesA;
     char* binary = reinterpret_cast<char *>(&data_bytesA);
-    EXPECT_EQ(26, sizeof(data_bytesA));
+    EXPECT_EQ(30, sizeof(data_bytesA));
     EXPECT_EQ('\x75', binary[0]);
     EXPECT_EQ('\xAA', binary[1]);
-    EXPECT_EQ('\x75', binary[24]);
-    EXPECT_EQ('\xFF', binary[25]);
+    EXPECT_EQ('\x75', binary[28]);
+    EXPECT_EQ('\xFF', binary[29]);
 
     ZMQData data;
     data.left_front_rpm = 100;
@@ -67,7 +67,7 @@ TEST(ZMQDataTest,General)
     EXPECT_EQ(700, data.right_front_current);
     EXPECT_EQ(800, data.right_rear_current);
     EXPECT_EQ(900, data.battery_v);
-    EXPECT_EQ(1000,data.time);
+    EXPECT_EQ(1000, data.time);
 
     ZMQBytes data_bytesB = data.toByteArray();
     binary = reinterpret_cast<char *>(&data_bytesB);
@@ -80,9 +80,9 @@ TEST(ZMQDataTest,General)
     EXPECT_EQ(700, (int) static_cast<int16_t>(be16toh(data_bytesB.right_front_current)));
     EXPECT_EQ(800, (int) static_cast<int16_t>(be16toh(data_bytesB.right_rear_current)));
     EXPECT_EQ(900, (int) static_cast<int16_t>(be16toh(data_bytesB.battery_v)));
-    EXPECT_EQ(1000, (int) static_cast<int32_t>(be32toh(data_bytesB.time)));
+    EXPECT_EQ(1000, (int) static_cast<int64_t>(be64toh(data_bytesB.time)));
     EXPECT_EQ('\x75', binary[0]);
     EXPECT_EQ('\xAA', binary[1]);
-    EXPECT_EQ('\x75', binary[24]);
-    EXPECT_EQ('\xFF', binary[25]);
+    EXPECT_EQ('\x75', binary[28]);
+    EXPECT_EQ('\xFF', binary[29]);
 }
