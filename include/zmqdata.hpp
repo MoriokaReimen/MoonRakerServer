@@ -42,8 +42,7 @@
  * @brief wrapper for data excheanged through zmq socket bytes array
 */
 #pragma pack(1)
-struct ZMQBytes
-{
+struct ZMQBytes {
     const uint16_t header = 0xAA75; //! Header byte
     uint32_t time = 0;         //! Time stamp Byte
     int16_t left_front_rpm = 0; //! front Motor RPM
@@ -66,18 +65,18 @@ struct ZMQBytes
 class ZMQData
 {
 public:
-  long time = 0;         //! Time stamp Byte
-  int left_rear_rpm = 0; //! rear Motor RPM
-  int left_front_rpm = 0; //! front Motor RPM
-  int right_rear_rpm = 0; //! rear Motor RPM
-  int right_front_rpm = 0; //! front Motor RPM
-  int left_rear_current = 0; //! rear Current
-  int left_front_current = 0; //! front Current
-  int right_rear_current = 0; //! rear Current
-  int right_front_current = 0; //! front Current
-  int battery_v = 0;        //! Battery Level milliVolts
-  ZMQData() = default;
-  ZMQData(const ZMQBytes& data);
-  void set(const ZMQBytes& data);
-  ZMQBytes toByteArray() const;
+    long time = 0;         //! Time stamp Byte
+    int left_rear_rpm = 0; //! rear Motor RPM
+    int left_front_rpm = 0; //! front Motor RPM
+    int right_rear_rpm = 0; //! rear Motor RPM
+    int right_front_rpm = 0; //! front Motor RPM
+    int left_rear_current = 0; //! rear Current
+    int left_front_current = 0; //! front Current
+    int right_rear_current = 0; //! rear Current
+    int right_front_current = 0; //! front Current
+    int battery_v = 0;        //! Battery Level milliVolts
+    ZMQData() = default;
+    ZMQData(const ZMQBytes& data);
+    void set(const ZMQBytes& data);
+    ZMQBytes toByteArray() const;
 };

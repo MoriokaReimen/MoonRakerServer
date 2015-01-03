@@ -57,8 +57,8 @@ MotorCommand::MotorCommand(const signed short& left, const signed short& right)
  */
 MotorCommand::MotorCommand(const CommandBytes& command)
 {
-  this->set(command);
-  return;
+    this->set(command);
+    return;
 }
 
 /*!
