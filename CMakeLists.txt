@@ -17,8 +17,8 @@ add_executable(MoonServer.exe src/main.cpp src/rs232.cpp src/command.cpp src/dat
 target_link_libraries(MoonServer.exe zmq pthread zmqpp-static)
 
 enable_testing()
-add_executable(test.exe test/test-data.cpp test/test-command.cpp test/test-zmqdata.cpp)
+add_executable(test.exe test/test-data.cpp test/test-command.cpp test/test-zmqdata.cpp test/test-zmq.cpp)
 target_link_libraries(test.exe gtest gtest_main pthread)
-target_link_libraries(test.exe moon_server zmqpp-static)
+target_link_libraries(test.exe moon_server zmqpp-static zmq)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 
