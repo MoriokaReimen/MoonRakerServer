@@ -36,7 +36,6 @@
 #include <gtest/gtest.h>
 
 #include "command.hpp"
-#include "data.hpp"
 #include <portable_endian.h>
 
 TEST(CommandTest,General){
