@@ -38,10 +38,26 @@
 #include "command.hpp"
 #include <portable_endian.h>
 
-TEST(CommandTest,General){
+TEST(CommandTest, Construct){
+  MotorCommand command(100, -120);
+
+  EXPECT_EQ(100, command.left_rpm);
+  EXPECT_EQ(-120, command.right_rpm);
+}
+
+TEST(CommandTest, SetRPM){
+  MotorCommand command(100, -120);
+  command.set(2000, 3000);
+
+  EXPECT_EQ(2000, command.left_rpm);
+  EXPECT_EQ(3000, command.right_rpm);
+}
+
+TEST(CommandTest, ToByteArray){
   MotorCommand command(100, -120);
   CommandBytes command_bytesA = command.toByteArray();
   char* binary = reinterpret_cast<char *>(&command_bytesA);
+
   EXPECT_EQ(11, sizeof(command_bytesA));
   EXPECT_EQ(100, (int) static_cast<int16_t>(be16toh(command_bytesA.left_rpm)));
   EXPECT_EQ(-120, (int) static_cast<int16_t>(be16toh(command_bytesA.right_rpm)));
@@ -52,13 +68,14 @@ TEST(CommandTest,General){
   EXPECT_EQ('\x00', binary[4]);
   EXPECT_EQ('\x75', binary[9]);
   EXPECT_EQ('\xFF', binary[10]);
+}
 
-  command.set(3000, -3000);
-  CommandBytes command_bytesB = command.toByteArray();
-  EXPECT_EQ(3000, (int) static_cast<int16_t>(be16toh(command_bytesB.left_rpm)));
-  EXPECT_EQ(-3000, (int) static_cast<int16_t>(be16toh(command_bytesB.right_rpm)));
+TEST(CommandTest, FromByteArray){
+  CommandBytes bytes;
+  bytes.left_rpm = static_cast<int16_t>(htobe16(100));
+  bytes.right_rpm = static_cast<int16_t>(htobe16(-120));
+  MotorCommand command(bytes);
 
-  command.set(command_bytesA);
   EXPECT_EQ(100, command.left_rpm);
   EXPECT_EQ(-120, command.right_rpm);
 }
