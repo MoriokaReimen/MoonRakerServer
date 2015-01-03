@@ -50,17 +50,17 @@ using std::string;
 */
 class ZMQClient
 {
-  /*! private variables for sending data */
-  zmqpp::context publish_context_; //! zmq socket context
-  zmqpp::socket_type publish_type_{zmqpp::socket_type::push}; //! zmq socket type
-  zmqpp::socket publish_socket_; //! zmq socket (initialized last)
+    /*! private variables for sending data */
+    zmqpp::context publish_context_; //! zmq socket context
+    zmqpp::socket_type publish_type_ {zmqpp::socket_type::push}; //! zmq socket type
+    zmqpp::socket publish_socket_; //! zmq socket (initialized last)
 
-  /*! private variables for receiving command */
-  zmqpp::context subscribe_context_; //! zmq socket context
-  zmqpp::socket_type subscribe_type_{zmqpp::socket_type::pull}; //! zmq socket type
-  zmqpp::socket subscribe_socket_; //! zmq socket (initialized last)
+    /*! private variables for receiving command */
+    zmqpp::context subscribe_context_; //! zmq socket context
+    zmqpp::socket_type subscribe_type_ {zmqpp::socket_type::pull}; //! zmq socket type
+    zmqpp::socket subscribe_socket_; //! zmq socket (initialized last)
 public:
-  ZMQClient(const string& data_address, const string& command_address);
-  void sendCommand(const MotorCommand& command);
-  ZMQData getData();
+    ZMQClient(const string& data_address, const string& command_address);
+    void sendCommand(const MotorCommand& command);
+    ZMQData getData();
 };

@@ -41,8 +41,8 @@
  */
 ZMQData::ZMQData(const ZMQBytes& data)
 {
-  this->set(data);
-  return;
+    this->set(data);
+    return;
 }
 
 /*!
@@ -51,18 +51,18 @@ ZMQData::ZMQData(const ZMQBytes& data)
  */
 void ZMQData::set(const ZMQBytes& data)
 {
-  this -> time  = static_cast<uint32_t>(be32toh(data.time));
-  this -> left_rear_current  = static_cast<int16_t>(be16toh(data.left_rear_current));
-  this -> left_front_current = static_cast<int16_t>(be16toh(data.left_front_current));
-  this -> right_rear_current  = static_cast<int16_t>(be16toh(data.right_rear_current));
-  this -> right_front_current = static_cast<int16_t>(be16toh(data.right_front_current));
-  this -> left_rear_rpm  = static_cast<int16_t>(be16toh(data.left_rear_rpm));
-  this -> left_front_rpm  = static_cast<int16_t>(be16toh(data.left_front_rpm));
-  this -> right_rear_rpm  = static_cast<int16_t>(be16toh(data.right_rear_rpm));
-  this -> right_front_rpm  = static_cast<int16_t>(be16toh(data.right_front_rpm));
-  this -> battery_v  = static_cast<uint16_t>(be16toh(data.battery_v));
+    this -> time  = static_cast<uint32_t>(be32toh(data.time));
+    this -> left_rear_current  = static_cast<int16_t>(be16toh(data.left_rear_current));
+    this -> left_front_current = static_cast<int16_t>(be16toh(data.left_front_current));
+    this -> right_rear_current  = static_cast<int16_t>(be16toh(data.right_rear_current));
+    this -> right_front_current = static_cast<int16_t>(be16toh(data.right_front_current));
+    this -> left_rear_rpm  = static_cast<int16_t>(be16toh(data.left_rear_rpm));
+    this -> left_front_rpm  = static_cast<int16_t>(be16toh(data.left_front_rpm));
+    this -> right_rear_rpm  = static_cast<int16_t>(be16toh(data.right_rear_rpm));
+    this -> right_front_rpm  = static_cast<int16_t>(be16toh(data.right_front_rpm));
+    this -> battery_v  = static_cast<uint16_t>(be16toh(data.battery_v));
 
-  return;
+    return;
 }
 
 /*!
@@ -71,16 +71,16 @@ void ZMQData::set(const ZMQBytes& data)
  */
 ZMQBytes ZMQData::toByteArray() const
 {
-  ZMQBytes data;
-  data.time = static_cast<long>(htobe32(this->time));
-  data.left_rear_current = static_cast<int>(htobe16(this->left_rear_current));
-  data.left_front_current = static_cast<int>(htobe16(this->left_front_current));
-  data.right_rear_current = static_cast<int>(htobe16(this->right_rear_current));
-  data.right_front_current = static_cast<int>(htobe16(this->right_front_current));
-  data.left_rear_rpm = static_cast<int>(htobe16(this->left_rear_rpm));
-  data.left_front_rpm = static_cast<int>(htobe16(this->left_front_rpm));
-  data.right_rear_rpm = static_cast<int>(htobe16(this->right_rear_rpm));
-  data.right_front_rpm = static_cast<int>(htobe16(this->right_front_rpm));
-  data.battery_v = static_cast<int>(htobe16(this->battery_v));
-  return data;
+    ZMQBytes data;
+    data.time = static_cast<long>(htobe32(this->time));
+    data.left_rear_current = static_cast<int>(htobe16(this->left_rear_current));
+    data.left_front_current = static_cast<int>(htobe16(this->left_front_current));
+    data.right_rear_current = static_cast<int>(htobe16(this->right_rear_current));
+    data.right_front_current = static_cast<int>(htobe16(this->right_front_current));
+    data.left_rear_rpm = static_cast<int>(htobe16(this->left_rear_rpm));
+    data.left_front_rpm = static_cast<int>(htobe16(this->left_front_rpm));
+    data.right_rear_rpm = static_cast<int>(htobe16(this->right_rear_rpm));
+    data.right_front_rpm = static_cast<int>(htobe16(this->right_front_rpm));
+    data.battery_v = static_cast<int>(htobe16(this->battery_v));
+    return data;
 }
