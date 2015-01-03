@@ -40,8 +40,8 @@
 #include <portable_endian.h>
 
 TEST(ZMQServerTest,General){
-  ZMQServer server("ipc://testA","ipc://testA");
-  //ZMQClient client("tcp://localhost:4041","tcp://localhost:4040");
+  ZMQServer server("tcp://*:4242","tcp://*:4243");
+  //ZMQClient client("tcp://localhost:4242","tcp://localhost:4243");
   //MotorCommand command_send(100, 2800);
   //ZMQData data_send;
   //ZMQData data_recv;
