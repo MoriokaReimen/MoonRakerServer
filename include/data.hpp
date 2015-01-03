@@ -36,7 +36,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
-#include <endian.h>
+#include <portable_endian.h>
 using std::string;
 
 /*!
@@ -71,6 +71,7 @@ public:
     int front_rpm {0};
     int battery_v {0};
     long time {0};
+    MotorData() = default;
     MotorData(const DataBytes& data);
     void set(const DataBytes& data);
     DataBytes toByteArray() const;

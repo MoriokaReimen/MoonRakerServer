@@ -45,10 +45,10 @@ ZMQServer::ZMQServer(const string& data_address, const string& command_address) 
     publish_socket_(publish_context_, publish_type_), subscribe_socket_(subscribe_context_, subscribe_type_)
 {
     /* Initialize socket for receiving command */
-    this -> subscribe_socket_.connect(command_address);
+    this -> subscribe_socket_.bind(command_address);
 
     /* Initialize socket for publishing motor data */
-    this -> publish_socket_.connect(data_address);
+    this -> publish_socket_.bind(data_address);
 
     return;
 }

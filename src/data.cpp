@@ -78,6 +78,6 @@ DataBytes MotorData::toByteArray() const
   data.rear_rpm = static_cast<int>(htobe16(this->rear_rpm));
   data.front_rpm = static_cast<int>(htobe16(this->front_rpm));
   data.battery_v = static_cast<int>(htobe16(this->battery_v));
-  data.time = static_cast<long>(htobe16(this->time));
+  data.time = static_cast<long>(htobe32(this->time));
   return data;
 }
