@@ -42,7 +42,7 @@
  * @struct CommandBytes
  * @brief wrapper for bytes array of command
 */
-#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#if __BYTE_ORDER == __BIG_ENDIAN
 #pragma pack(1)
 struct CommandBytes {
     const uint16_t header = 0x75aa; //! Header byte
@@ -54,7 +54,7 @@ struct CommandBytes {
     const uint16_t footer = 0x75ff; //! Footer byte
 } __attribute__((__packed__));
 #pragma pack()
-#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#elif __BYTE_ORDER == __LITTLE_ENDIAN
 #pragma pack(1)
 struct CommandBytes {
     const uint16_t header = 0xaa75; //! Header byte

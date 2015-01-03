@@ -41,7 +41,7 @@
  * @struct ZMQBytes
  * @brief wrapper for data excheanged through zmq socket bytes array
 */
-#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#if __BYTE_ORDER == __BIG_ENDIAN
 #pragma pack(1)
 struct ZMQBytes {
     const uint16_t header = 0x75aa; //! Header byte
@@ -58,7 +58,7 @@ struct ZMQBytes {
     const uint16_t footer = 0x75ff; //! Footer byte
 } __attribute__((__packed__));
 #pragma pack()
-#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#elif __BYTE_ORDER == __LITTLE_ENDIAN
 #pragma pack(1)
 struct ZMQBytes {
     const uint16_t header = 0xaa75; //! Header byte

@@ -43,7 +43,7 @@ using std::string;
  * @struct DataBytes
  * @brief wrapper for data bytes array
 */
-#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#if __BYTE_ORDER == __BIG_ENDIAN
 #pragma pack(1)
 struct DataBytes {
     const uint16_t header = 0x75AA; //! Header bytes
@@ -57,7 +57,7 @@ struct DataBytes {
     const uint16_t footter = 0x75FF; //! Footer byte
 } __attribute__((__packed__));
 #pragma pack()
-#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#elif __BYTE_ORDER == __LITTLE_ENDIAN
 #pragma pack(1)
 struct DataBytes {
     const uint16_t header = 0xAA75; //! Header bytes
