@@ -51,7 +51,7 @@ ZMQData::ZMQData(const ZMQBytes& data)
  */
 void ZMQData::set(const ZMQBytes& data)
 {
-    this -> time  = static_cast<uint32_t>(be32toh(data.time));
+    this -> time  = static_cast<double>(be64toh(data.time));
     this -> left_rear_current  = static_cast<int16_t>(be16toh(data.left_rear_current));
     this -> left_front_current = static_cast<int16_t>(be16toh(data.left_front_current));
     this -> right_rear_current  = static_cast<int16_t>(be16toh(data.right_rear_current));
@@ -66,13 +66,35 @@ void ZMQData::set(const ZMQBytes& data)
 }
 
 /*!
+ * @brief set internal variables
+ * @param[in] left motor data
+ * @param[in] right motor data
+ */
+void ZMQData::set(const MotorData& left, const MotorData& right)
+{
+    double now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    this -> time  = now;
+    this -> left_rear_current  = left.front_current;
+    this -> left_front_current = left.rear_current;
+    this -> right_rear_current  = right.front_current;
+    this -> right_front_current = right.rear_current;
+    this -> left_rear_rpm  = left.front_rpm;
+    this -> left_front_rpm = left.rear_rpm;
+    this -> right_rear_rpm  = right.front_rpm;
+    this -> right_front_rpm = right.rear_rpm;
+    this -> battery_v  = (left.battery_v + right.battery_v) / 2;
+
+    return;
+}
+
+/*!
  * @brief Generate raw bits array from private variables
  * @return Data bits array
  */
 ZMQBytes ZMQData::toByteArray() const
 {
     ZMQBytes data;
-    data.time = static_cast<long>(htobe32(this->time));
+    data.time = static_cast<double>(htobe64(this->time));
     data.left_rear_current = static_cast<int>(htobe16(this->left_rear_current));
     data.left_front_current = static_cast<int>(htobe16(this->left_front_current));
     data.right_rear_current = static_cast<int>(htobe16(this->right_rear_current));

@@ -35,7 +35,9 @@
 */
 #pragma once
 #include <cstdint>
+#include "motor.hpp"
 #include <portable_endian.h>
+#include <chrono>
 
 /*!
  * @struct ZMQBytes
@@ -45,7 +47,7 @@
 #pragma pack(1)
 struct ZMQBytes {
     const uint16_t header = 0x75aa; //! Header byte
-    uint32_t time = 0;         //! Time stamp Byte
+    uint64_t time = 0;         //! Time stamp Byte
     int16_t left_front_rpm = 0; //! front Motor RPM
     int16_t left_rear_rpm = 0; //! rear Motor RPM
     int16_t right_front_rpm = 0; //! front Motor RPM
@@ -62,7 +64,7 @@ struct ZMQBytes {
 #pragma pack(1)
 struct ZMQBytes {
     const uint16_t header = 0xaa75; //! Header byte
-    uint32_t time = 0;         //! Time stamp Byte
+    uint64_t time = 0;         //! Time stamp Byte
     int16_t left_front_rpm = 0; //! front Motor RPM
     int16_t left_rear_rpm = 0; //! rear Motor RPM
     int16_t right_front_rpm = 0; //! front Motor RPM
@@ -84,7 +86,7 @@ struct ZMQBytes {
 class ZMQData
 {
 public:
-    long time = 0;         //! Time stamp Byte
+    double time = 0;         //! Time stamp Byte
     int left_rear_rpm = 0; //! rear Motor RPM
     int left_front_rpm = 0; //! front Motor RPM
     int right_rear_rpm = 0; //! rear Motor RPM
@@ -98,5 +100,6 @@ public:
     ZMQData& operator=(const ZMQData&) = default;
     ZMQData(const ZMQBytes& data);
     void set(const ZMQBytes& data);
+    void set(const MotorData& left, const MotorData& right);
     ZMQBytes toByteArray() const;
 };
