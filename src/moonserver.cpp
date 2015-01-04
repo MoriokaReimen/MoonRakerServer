@@ -33,113 +33,78 @@
 @brief moonraker server main class
 -----------------------------------------------------------------------------
 */
-#include <chrono>
-#include "zmqserver.hpp"
-#include "motor.hpp"
+#include "moonserver.hpp"
 using std::string;
-using std::chrono;
 
-class MoonServer
-{
-  MotorCommand command_;
-  MotorData data_;
-  ZMQServer zmq_;
-  Motor motor_;
-public:
-  MoonServer(const string& rover_address, const string& console_address);
-  void doRoutine()
-  {
-    auto start_time = high_resolution_clock::now();
-    MotorCommand command;
-    MotorData r_motor_data; //! wrapper class for right motor data
-    MotorData l_motor_data; //! wrapper class for left motor data
-    ZMQData zmq_data;
-    while(true)
-    {
-      try
-      {
-        command = this->zmq_.getCommand();
-        break;
-      } catch(...) {}
-    }
-    this->motor_.sendCommand(command);
-    while(true)
-    {
-      try
-      {
-        l_motor_data = this->motor_.getData();
-        if(l_motor_data.device == "L") break;
-      } catch(...) {}
-    }
-    while(true)
-    {
-      try
-      {
-        r_motor_data = this->motor_.getData();
-        if(r_motor_data.device == "R") break;
-      } catch(...) {}
-    }
-    auto finish_time = high_resolution_clock::now();
-    if(std::chrono::duration_cast<milliseconds>(finish_time - start_time).count > 50) return;
-    this->zmq_.sendData(zmq_data);
-    return;
-  }
-
-  void run()
-  {
-    while(true) this->doRoutine();
-  }
-
-  void run(double seconds)
-  {
-    auto start_time = high_resolution_clock::now();
-    while(true)
-    {
-      this->doRoutine();
-      auto finish_time = high_resolution_clock::now();
-      if(std::chrono::duration_cast<seconds>(finish_time - start_time).count > seconds) return;
-    }
-  }
-};
 /*!
- * @brief Constructor for ZMQServer class
+ * @brief rover main routine
+*/
+void MoonServer::doRoutine()
+{
+  auto start_time = std::chrono::high_resolution_clock::now();
+  MotorCommand command;
+  MotorData r_motor_data; //! wrapper class for right motor data
+  MotorData l_motor_data; //! wrapper class for left motor data
+  ZMQData zmq_data;
+  while(true)
+  {
+    try
+    {
+      command = this->zmq_.getCommand();
+      break;
+    } catch(...) {}
+  }
+  this->motor_.sendCommand(command);
+  while(true)
+  {
+    try
+    {
+      l_motor_data = this->motor_.getData();
+      if(l_motor_data.device == "L") break;
+    } catch(...) {}
+  }
+  while(true)
+  {
+    try
+    {
+      r_motor_data = this->motor_.getData();
+      if(r_motor_data.device == "R") break;
+    } catch(...) {}
+  }
+  auto finish_time = std::chrono::high_resolution_clock::now();
+  if(std::chrono::duration_cast<std::chrono::milliseconds>(finish_time - start_time).count() > 50) return;
+  this->zmq_.sendData(zmq_data);
+  return;
+}
+
+/*!
+ * @brief Constructor for MoonServer class
  * @param[in] address to publish data like ""
  * @param[in] address to subscribe command like ""
 */
-ZMQServer::ZMQServer(const string& data_address, const string& command_address) :
-    publish_socket_(publish_context_, publish_type_), subscribe_socket_(subscribe_context_, subscribe_type_)
+MoonServer::MoonServer(const string& rover_address, const string& console_address)
+  : zmq_(rover_address, console_address)
+{}
+
+/*!
+ * @brief do routine
+*/
+void MoonServer::run()
 {
-    /* Initialize socket for receiving command */
-    this -> subscribe_socket_.bind(command_address);
-
-    /* Initialize socket for publishing motor data */
-    this -> publish_socket_.bind(data_address);
-
-    return;
+  while(true) this->doRoutine();
 }
 
 /*!
- * @brief subscribe command through zmq socket.
- * @return Motor command
+ * @brief do routine for specified seconds
+ * @param[in] time for activate rover
 */
-MotorCommand ZMQServer::getCommand()
+void MoonServer::run(double seconds)
 {
-    CommandBytes  bytes;
-    zmqpp::message message;
-    this->subscribe_socket_.receive(message);
-    memcpy(&bytes, message.raw_data(0), sizeof(bytes));
-    return MotorCommand(bytes);
-}
-
-/*!
- * @brief publish Motor data through zmq socket
- * @param[in] motor data
-*/
-void ZMQServer::sendData(const ZMQData& data)
-{
-    ZMQBytes bytes = data.toByteArray();
-    zmqpp::message message;
-    message.add_raw(&bytes, sizeof(bytes));
-    this->publish_socket_.send(message);
-    return;
+  auto start_time = std::chrono::high_resolution_clock::now();
+  while(true)
+  {
+    this->doRoutine();
+    auto finish_time = std::chrono::high_resolution_clock::now();
+    if(std::chrono::duration_cast<std::chrono::seconds>(finish_time - start_time).count() > seconds) return;
+  }
 }
