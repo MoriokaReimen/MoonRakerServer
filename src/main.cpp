@@ -37,10 +37,14 @@
 
 int main ()
 {
-  const string rover_address{""};
-  const string console_address{""};
-  MoonServer server(rover_address, console_address);
-  server.run();
+    const string rover_address {
+        ""
+    };
+    const string console_address {
+        ""
+    };
+    MoonServer server(rover_address, console_address);
+    server.run();
 
-  return 0;
+    return 0;
 }

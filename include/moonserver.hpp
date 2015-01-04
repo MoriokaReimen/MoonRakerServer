@@ -45,11 +45,11 @@ using std::string;
 */
 class MoonServer
 {
-  ZMQServer zmq_; //! zmq handling class
-  Motor motor_; //! serial communication for motor handling class
-  void doRoutine();
+    ZMQServer zmq_; //! zmq handling class
+    Motor motor_; //! serial communication for motor handling class
+    void doRoutine();
 public:
-  MoonServer(const string& rover_address, const string& console_address);
-  void run();
-  void run(double seconds);
+    MoonServer(const string& rover_address, const string& console_address);
+    void run();
+    void run(double seconds);
 };

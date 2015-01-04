@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(MotorTest)
+project(MoonServer)
 add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(bin)
@@ -21,4 +21,3 @@ add_executable(test.exe test/test-data.cpp test/test-command.cpp test/test-zmqda
 target_link_libraries(test.exe gtest gtest_main pthread)
 target_link_libraries(test.exe moon_server zmqpp-static zmq)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
-
