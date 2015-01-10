@@ -37,13 +37,13 @@
 
 int main ()
 {
-    const string rover_address {
-        ""
+    const string data_address {
+        "tcp://192.168.11.99:5555"
     };
-    const string console_address {
-        ""
+    const string command_address {
+        "tcp://192.168.11.99:5556"
     };
-    MoonServer server(rover_address, console_address);
+    MoonServer server(data_address, command_address);
     server.run();
 
     return 0;
