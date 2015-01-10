@@ -21,3 +21,6 @@ add_executable(test.exe test/test-data.cpp test/test-command.cpp test/test-zmqda
 target_link_libraries(test.exe gtest gtest_main pthread)
 target_link_libraries(test.exe moon_server zmqpp-static zmq)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
+
+add_executable(SerialTest.exe test/SerialTest.cpp src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp)
+target_link_libraries(SerialTest.exe zmq pthread zmqpp-static)
