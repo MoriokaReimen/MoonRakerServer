@@ -1,6 +1,6 @@
 #include <iostream>
-#include <thread>
-#include <chrono>
+#include <cstdio>
+#include <ncurses.h>
 #include "motor.hpp"
 #include "data.hpp"
 using std::cout;
@@ -8,23 +8,34 @@ using std::endl;
 
 int main()
 {
-  const auto wait_time = std::chrono::milliseconds(1000);
+	int ch = 0;
+  int line = 0;
+
+	initscr();
+	cbreak();
+	noecho();
+	timeout(1000);
+
   Motor motor;
   MotorData data;
-  while(true)
-  {
+	while ((ch = getch()) != 'q') {
     try {
     data = motor.getData();
     } catch(...){}
-    cout << data.device << ",";
-    cout << data.rear_current << ",";
-    cout << data.front_current << ",";
-    cout << data.rear_rpm << ",";
-    cout << data.front_rpm << ",";
-    cout << data.battery_v << ",";
-    cout << data.time << endl;
-    std::this_thread::sleep_for(wait_time);
+    move(8, 0);
+		printw("Rear Current\tFront Current\tRear RPM\tFront RPM");
+    move(9 + line, 0);
+		printw("%5f\t%5f\t%5f\t%5f",
+        data.rear_current, data.front_current,
+        data.rear_rpm, data.front_rpm);
+
+		move(6, 0);
+		printw("press (q) to quit");
+    line++;
+    if(line > 20) line = 0;
+		refresh();
   }
 
+	endwin();
   return 0;
 }
