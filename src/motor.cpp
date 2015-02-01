@@ -75,8 +75,8 @@ int Motor::sendCommand(const MotorCommand& command) const
 MotorData Motor::getData() const
 {
     DataBytes bytes;
-    bit8 buffer[40];
-    int read_bytes = PollComport(0, buffer, 40);
+    bit8 buffer[sizeof(bytes)];
+    int read_bytes = PollComport(0, buffer, sizeof(bytes));
     if (read_bytes == 0) {
         throw runtime_error("No data");//! There is no data in the buffer
     }

@@ -36,7 +36,7 @@ int main()
     move(8, 0);
 		printw("Device\tRear Current\tFront Current\tRear RPM\tFront RPM");
     move(9 + line, 0);
-		printw("%s\t%5f\t%5f\t%5f\t%5f",
+		printw("%s\t%5d\t%5d\t%5d\t%5d",
         data.device.c_str(), data.rear_current, data.front_current,
         data.rear_rpm, data.front_rpm);
 
@@ -46,6 +46,7 @@ int main()
     if(line > 30) break;
 		refresh();
   }
+  motor.sendCommand(MotorCommand(0, 0));
   motor.sendCommand(MotorCommand(0, 0));
 
 	endwin();
