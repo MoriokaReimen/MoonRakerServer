@@ -31,6 +31,8 @@ int main()
 	while ((ch = getch()) != 'q') {
     try {
     data = motor.getData();
+      move(1, 0);
+      clrtoeol();
     } catch(...)
     {
       move(1, 0);
@@ -40,17 +42,17 @@ int main()
     }
     motor.sendCommand(MotorCommand(left_rpm, right_rpm));
     move(8, 0);
-		printw("%1s%10s%10s%10s%10s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
+		printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 
     move(9, 0);
     attron(COLOR_PAIR(1));
-		printw("%1s%10d%10d%10d%10d",
+		printw("%1s%15d%15d%15d%15d",
         data.device.c_str(), data.rear_current, data.front_current,
         data.rear_rpm, data.front_rpm);
     attroff(COLOR_PAIR(1));
 
     move(10 + line, 0);
-		printw("%1s%10d%10d%10d%10d",
+		printw("%1s%15d%15d%15d%15d",
         data.device.c_str(), data.rear_current, data.front_current,
         data.rear_rpm, data.front_rpm);
 
