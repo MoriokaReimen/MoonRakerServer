@@ -20,6 +20,8 @@ int main()
 	initscr();
 	cbreak();
 	noecho();
+  start_color();
+  init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	timeout(1000);
 
   Motor motor;
@@ -35,15 +37,23 @@ int main()
     motor.sendCommand(MotorCommand(left_rpm, right_rpm));
     move(8, 0);
 		printw("Device\tRear Current\tFront Current\tRear RPM\tFront RPM");
-    move(9 + line, 0);
-		printw("%s\t%5d\t%5d\t%5d\t%5d",
+
+    move(9, 0);
+    attron(COLOR_PAIR(1));
+		printw("CURRENT:%s\t%d\t%d\t%d\t%d",
+        data.device.c_str(), data.rear_current, data.front_current,
+        data.rear_rpm, data.front_rpm);
+    attroff(COLOR_PAIR(1));
+
+    move(10 + line, 0);
+		printw("%s\t%d\t%d\t%d\t%d",
         data.device.c_str(), data.rear_current, data.front_current,
         data.rear_rpm, data.front_rpm);
 
 		move(6, 0);
 		printw("press (q) to quit");
     line++;
-    if(line > 30) break;
+    if(line > 30) line = 0;
 		refresh();
   }
   motor.sendCommand(MotorCommand(0, 0));
