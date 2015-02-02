@@ -53,7 +53,7 @@ int main()
 		move(6, 0);
 		printw("press (q) to quit");
     line++;
-    if(line > 30) line = 0;
+    if(line > 15) line = 0;
 		refresh();
   }
   motor.sendCommand(MotorCommand(0, 0));
