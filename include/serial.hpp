@@ -54,7 +54,7 @@ public:
     Serial(unsigned int speed, std::string comnum);
     ~Serial();
     bool sendData(const char* bytes, size_t n);
-    std::shared_ptr<char> getData(std::string footter);
+    std::vector<char> getData(std::string footter);
     int setBaudrate(const int& bps);
     int flush();
 };

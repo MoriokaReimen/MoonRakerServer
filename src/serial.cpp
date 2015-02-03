@@ -103,15 +103,14 @@ bool Serial::sendData(const char* bytes, size_t n)
 * @param command sending command in string
 * @return data in string or constant string EMPTY
 */
-std::shared_ptr<char> Serial::getData(std::string footter)
+std::vector<char> Serial::getData(std::string footter)
 {
-  std::shared_ptr<char> data(new char[40]);
   boost::asio::streambuf buf;
   auto len = boost::asio::read_until(serialport, buf, footter);
-  auto p = boost::asio::buffer_cast<const char*>(buf.data());
-  memcpy(reinterpret_cast<void*>(data.get()), p, std::min((int) len, 40));
+  const char* p = boost::asio::buffer_cast<const char *>(buf.data());
+  std::vector<char> data(p, p+len);
 
-    return data;
+  return data;
 }
 
 /**

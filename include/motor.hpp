@@ -34,7 +34,7 @@
 -----------------------------------------------------------------------------
 */
 #pragma once
-#include "rs232.hpp"
+#include "serial.hpp"
 #include "command.hpp"
 #include "data.hpp"
 #include <stdexcept>
@@ -46,9 +46,10 @@ using bit8 = unsigned char;
 */
 class Motor
 {
+    Serial serial;
 public:
     Motor();
-    ~Motor();
-    int sendCommand(const MotorCommand& command) const;
-    MotorData getData() const;
+    ~Motor() = default;
+    int sendCommand(const MotorCommand& command);
+    MotorData getData();
 };
