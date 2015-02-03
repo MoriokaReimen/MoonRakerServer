@@ -53,8 +53,8 @@ class Serial
 public:
     Serial(unsigned int speed, std::string comnum);
     ~Serial();
-    bool sendData(const char* bytes, size_t n);
-    int getData(char* data, int size);
+    bool sendData(const unsigned char* bytes, size_t n);
+    int getData(unsigned char* data, int size);
     int setBaudrate(const int& bps);
     int flush();
 };

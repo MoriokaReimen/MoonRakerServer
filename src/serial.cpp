@@ -93,7 +93,7 @@ Serial::~Serial()
 * @param message sending message in string
 * @return true when success, else false
 */
-bool Serial::sendData(const char* bytes, size_t n)
+bool Serial::sendData(const unsigned char* bytes, size_t n)
 {
         return serialport.write_some(boost::asio::buffer(bytes, n));
 }

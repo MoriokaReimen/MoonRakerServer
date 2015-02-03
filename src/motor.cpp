@@ -35,7 +35,6 @@
 */
 #include "motor.hpp"
 using std::runtime_error;
-using bit8 = unsigned char;
 
 
 /*!
@@ -53,7 +52,7 @@ Motor::Motor() : serial(115200, "/dev/ttyS0")
 int Motor::sendCommand(const MotorCommand& command)
 {
     CommandBytes bytes {command.toByteArray()};
-    char buffer[sizeof(bytes)];
+    unsigned char buffer[sizeof(bytes)];
     memcpy(buffer, &bytes, sizeof(bytes));
     serial.sendData(buffer, sizeof(bytes));
     return EXIT_SUCCESS;
