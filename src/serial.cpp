@@ -118,15 +118,15 @@ bool Serial::sendData(const unsigned char* bytes, size_t n)
 */
 int Serial::getData(unsigned char* data, int size)
 {
-  unsigned char ch;
+  unsigned char ch, old;
 
   while(true)
   {
     serialport.read_some(boost::asio::buffer(&ch, 1));
-    if(ch == 0xAA) break;
+    if(ch == 0xAA && old = 0x75) break;
+    old = ch;
   }
   int c = 0;
-  data[0] = 0x75;
   while(true)
   {
       data[c] = ch;
