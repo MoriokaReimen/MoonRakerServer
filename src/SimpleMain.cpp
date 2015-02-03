@@ -29,8 +29,8 @@ int main()
   Motor motor;
   MotorData data;
 	while ((ch = getch()) != 'q') {
-    try {
     data = motor.getData();
+    try {
       move(1, 0);
       clrtoeol();
     } catch(...)

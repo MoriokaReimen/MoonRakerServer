@@ -68,7 +68,7 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    auto data = serial.getData("0x750xFF");
+    auto data = serial.getData("0xFF0x75");
     throw runtime_error("Get data"); //! data is broken
     decltype(data) buff[data.size()];
 
