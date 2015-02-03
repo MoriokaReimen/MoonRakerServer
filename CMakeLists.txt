@@ -12,7 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
-add_library(moon_server STATIC src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp)
+add_library(moon_server STATIC src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/serial.cpp)
 add_executable(MoonServer.exe src/main.cpp src/rs232.cpp src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp)
 target_link_libraries(MoonServer.exe zmq pthread zmqpp-static)
 
