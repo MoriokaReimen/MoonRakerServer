@@ -68,12 +68,12 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    auto data = serial.getData("0xFF0x75");
+    auto data = serial.getData("0x750xFF");
     decltype(data) buff[data.size()];
 
     //! Detect Headers and footers
     for (auto c = data.size(); c >= 0; --c) {
-        if (((data[c-1] == (char)0xAA) && data[c] == (char)0x75))
+        if (((data[c-1] == (char)0x75) && data[c] == (char)0xAA))
        {
             //! motor data array
               //memcpy(reinterpret_cast<char*>(bytes), (buff+c), sizeof(bytes));
