@@ -118,22 +118,9 @@ bool Serial::sendData(const unsigned char* bytes, size_t n)
 */
 int Serial::getData(unsigned char* data, int size)
 {
-  unsigned char ch, old;
-
-  while(true)
-  {
-    serialport.read_some(boost::asio::buffer(&ch, 1));
-    if(ch == 0xAA && old = 0x75) break;
-    old = ch;
-  }
-  int c = 0;
-  while(true)
-  {
-      data[c] = ch;
-      serialport.read_some(boost::asio::buffer(&ch, 1));
-      ++c;
-      if(c > size) return EXIT_SUCCESS;
-  }
+  unsigned char ch[size];
+  boost::asio::read(serialport, boost::asio::buffer(ch, size));
+  return EXIT_SUCCESS;
 }
 
 /**

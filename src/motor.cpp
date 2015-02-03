@@ -67,16 +67,17 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    unsigned char buff[sizeof(bytes)];
-    serial.getData(buff, sizeof(bytes));
+    unsigned char buffer[sizeof(bytes)];
+    serial.getData(buffer, sizeof(bytes));
 
     //! Detect Headers and footers
-    if ((buff[0] == 0x75) && (buff[1] == 0xAA) && (buff[17] == 0x75) && (buff[18] == 0xFF))
-   {
-        //! motor data array
-        memcpy(&bytes, buff, sizeof(bytes));
-        return MotorData(bytes);
+    for (int i = 0; i < sizeof(bytes); ++i) {
+        if ((buffer[i] == 0x75) && (buffer[i + 1] == 0xAA) &&
+            (buffer[i + 17] == 0x75) && (buffer[i + 18] == 0xFF)) {
+            //! motor data array
+            memcpy(&bytes, &buffer[i], sizeof(bytes));
+            return MotorData(bytes);
+        }
     }
-
     throw runtime_error("Broken data"); //! data is broken
 }
