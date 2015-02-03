@@ -29,6 +29,7 @@ int main()
   Motor motor;
   MotorData data;
 	while ((ch = getch()) != 'q') {
+    motor.sendCommand(MotorCommand(left_rpm, right_rpm));
     data = motor.getData();
     try {
       move(1, 0);
@@ -40,7 +41,6 @@ int main()
       printw("Error !!");
       attroff(COLOR_PAIR(2));
     }
-    motor.sendCommand(MotorCommand(left_rpm, right_rpm));
     move(8, 0);
 		printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 
