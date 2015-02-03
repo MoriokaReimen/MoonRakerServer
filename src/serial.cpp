@@ -130,10 +130,8 @@ int Serial::getData(char* data, int size)
       data[c] = ch;
       ++c;
     }
-    if(c > size) break;
+    if(c > size) return EXIT_SUCCESS;
   }
-
-  return EXIT_SUCCESS;
 }
 
 /**
