@@ -40,16 +40,6 @@ using namespace std;
  */
 class BoostComPort
 {
-public:
-	BoostComPort();
-	~BoostComPort();
-	int open(std::string port, int baud);
-	int close();
-	bool isOpended();
-	int write(char* Data, unsigned int Length);
-	int read(char* data, int length, bool blocking=false, int timeout=-1 /* timeout in ms */);
-	boost::system::error_code& getLastError();
-
 private:
 	void onPortRead(const boost::system::error_code& error, std::size_t bytes_transferred);
 
@@ -61,8 +51,20 @@ private:
 	boost::asio::serial_port serialPort;
 	boost::system::error_code ec;
 	boost::system::error_code lastError;
-protected:
 
+public:
+	BoostComPort();
+	~BoostComPort();
+	int open(std::string port, int baud);
+  void clear();
+	int close();
+	bool isOpended();
+	int write(char* Data, unsigned int Length);
+	int read(char* data, int length, bool blocking=false, int timeout=-1 /* timeout in ms */);
+  int readUntil(char* data, int maxLength, char* searchValue, int searchSize, bool blocking = false, int timeout = -1/* time out in ms */);
+  void poll();
+  void clearBuffers();
+	boost::system::error_code& getLastError();
 };
 
 #endif /* BOOSTCOMPORT_HPP_ */

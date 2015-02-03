@@ -1,5 +1,5 @@
 /*
-Copyright 2010 by Fabian Schwartau
+Copyright 2010-2011 by Fabian Schwartau
 E-Mail: fabian@opencode.eu
 
 This file is part of BoostComPort.
@@ -46,20 +46,33 @@ BoostComPort::~BoostComPort()
  */
 int BoostComPort::open(std::string port, int baud)
 {
-	if(serialPort.is_open())
-		close();
-	serialPort.open(port);
-	boost::asio::serial_port_base::baud_rate baudRate(baud);
-	serialPort.set_option(baudRate);
-	serialPort.async_read_some(boost::asio::buffer(eventBuffer, EVENTBUFFER_SIZE), boost::bind(&BoostComPort::onPortRead, this, _1, _2));
+	try
+	{
+		if(serialPort.is_open())
+			close();
+		serialPort.open(port);
+		boost::asio::serial_port_base::baud_rate baudRate(baud);
+		serialPort.set_option(baudRate);
+		io_service.reset();
+		serialPort.async_read_some(boost::asio::buffer(eventBuffer, EVENTBUFFER_SIZE), boost::bind(&BoostComPort::onPortRead, this, _1, _2));
+		clear();
+		return 0;
+	}
+	catch(...)
+	{
+		return -1;
+	}
+}
+
+void BoostComPort::clear()
+{
 	char* tmp=new char[100]; // 100Bytes of temporary buffer to clean the system buffers
 	int read;
-	do  // I think here is missing a timeout or something like that
+	do  // TODO: I think here is missing a timeout or something like that
 	{
 		read=this->read(tmp, 100, false);
 	} while(read>0);
 	delete[] tmp;
-	return 0;
 }
 
 /*
@@ -78,9 +91,15 @@ boost::system::error_code& BoostComPort::getLastError()
  */
 int BoostComPort::close()
 {
-	serialPort.cancel();  // make shure all pending operations are stopped
-	serialPort.close();
-	io_service.reset();  // don't know why this is needed but without it's not working
+	//serialPort.cancel();  // make shure all pending operations are stopped
+	boost::system::error_code ec;
+	serialPort.close(ec);
+	if(ec)
+	{
+		currentContent=0;
+		return -1;
+	}
+	//io_service.reset();  // don't know why this is needed but without it's not working
 	currentContent=0;
 	return 0;
 }
@@ -94,7 +113,11 @@ int BoostComPort::write(char* data, unsigned int length)
 {
 	size_t written=boost::asio::write(serialPort, boost::asio::buffer(data, length), boost::asio::transfer_all(), ec);
 	if(written!=length)
+	{
+		lastError=ec;
+		cerr<<"Failed to write all data to serial port!"<<endl;
 		return -1;
+	}
 	return 0;
 }
 
@@ -115,10 +138,7 @@ int BoostComPort::read(char* data, int length, bool blocking, int timeout)
 	boost::timer time;
 	do
 	{
-		executed=false;
 		io_service.poll(); // read new data
-		if(executed)
-			serialPort.async_read_some(boost::asio::buffer(eventBuffer, EVENTBUFFER_SIZE), boost::bind(&BoostComPort::onPortRead, this, _1, _2));
 		if(timeout>0)
 		{
 			if((int)(time.elapsed()*1000)>timeout || !serialPort.is_open())
@@ -126,6 +146,7 @@ int BoostComPort::read(char* data, int length, bool blocking, int timeout)
 		}
 	} while(blocking && currentContent<length);
 	int toCopy;
+	//cout<<"Received "<<toCopy<<" bytes"<<endl;
 	if(length<currentContent)
 		toCopy=length;
 	else
@@ -137,6 +158,49 @@ int BoostComPort::read(char* data, int length, bool blocking, int timeout)
 }
 
 /*
+ * Read until a specific sequence of data
+ * Reads like the read method data from the serial port by
+ * polling the io service of boost.
+ */
+int BoostComPort::readUntil(char* data, int maxLength, char* searchValue, int searchSize, bool blocking, int timeout)
+{
+	boost::timer time;
+	do
+	{
+		io_service.poll(); // read new data
+		if(timeout>0)
+		{
+			if((int)(time.elapsed()*1000)>timeout)
+				return -1;
+		}
+		if(!serialPort.is_open())
+			return -1;
+		for(int start=0; start<=currentContent-searchSize; start++)
+		{
+			bool fits=true;
+			for(int pos=0; pos<searchSize; pos++)
+			{
+				if(buffer[start+pos]!=searchValue[pos])
+				{
+					fits=false;
+					break;
+				}
+			}
+			if(start+searchSize>=maxLength)
+				return -2;  // the answer will not fit in the user buffer
+			if(fits)
+			{
+				memcpy(data, buffer, start+searchSize);
+				memcpy(buffer, buffer+start+searchSize, currentContent-start-searchSize);
+				currentContent-=start+searchSize;
+				return start+searchSize;
+			}
+		}
+	} while(blocking);
+	return -3;  // the searched string was not found
+}
+
+/*
  * Internal asynchronous method for read events.
  * It is "called" by the io_service.poll() call in the
  * read method.
@@ -145,9 +209,9 @@ void BoostComPort::onPortRead(const boost::system::error_code& error, std::size_
 {
 	if(error==0)
 	{
-		cout<<"Read some bytes: "<<bytes_transferred<<endl;
 		memcpy(buffer+currentContent, eventBuffer, bytes_transferred);
 		currentContent+=bytes_transferred;
+		//cout<<"Received "<<bytes_transferred<<" bytes"<<endl;
 	}
 	else if(error!=boost::asio::error::operation_aborted)  // not cancelled
 	{
@@ -156,5 +220,22 @@ void BoostComPort::onPortRead(const boost::system::error_code& error, std::size_
 		cerr<<"BoostComPort::onPortRead():   Error code: "<<error<<endl;
 		lastError=ec;
 	}
+	serialPort.async_read_some(boost::asio::buffer(eventBuffer, EVENTBUFFER_SIZE), boost::bind(&BoostComPort::onPortRead, this, _1, _2));
 	executed=true;
+}
+
+/*
+ * Poll the serial port
+ * This method gives boost the ability to read data from the serial port
+ * system buffer. Make shure this method or one of the read methods is called
+ * frequently enough. Otherwise the system buffers may overflow.
+ */
+void BoostComPort::poll()
+{
+	io_service.poll();
+}
+
+void BoostComPort::clearBuffers()
+{
+	currentContent=0;
 }
