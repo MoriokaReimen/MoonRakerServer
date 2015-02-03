@@ -68,19 +68,16 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    auto data = serial.getData("0xFF0x75");
-    throw runtime_error("Get data"); //! data is broken
+    auto data = serial.getData(sizeof(bytes));
     decltype(data) buff[data.size()];
 
     //! Detect Headers and footers
-    for (auto c = data.size(); c >= 0; --c) {
-        if (((data[c-1] == (char)0x75) && data[c] == (char)0xAA))
-       {
-            //! motor data array
-              //memcpy(reinterpret_cast<char*>(bytes), (buff+c), sizeof(bytes));
-              memcpy(&bytes, (buff+c), sizeof(bytes));
-              return MotorData(bytes);
-      }
+    if ((data[0] == 0x75) && (data[1] == 0xAA) && (data[17] == 0x75) && (data[18] == 0xFF))
+   {
+        //! motor data array
+        memcpy(&bytes, buff, sizeof(bytes));
+        return MotorData(bytes);
     }
+
     throw runtime_error("Broken data"); //! data is broken
 }
