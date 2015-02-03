@@ -103,9 +103,35 @@ bool Serial::sendData(const char* bytes, size_t n)
 * @param command sending command in string
 * @return data in string or constant string EMPTY
 */
-int Serial::getData(char* data, int size)
+/*int Serial::getData(char* data, int size)
 {
   serialport.read_some(boost::asio::buffer(data, size));
+
+  return EXIT_SUCCESS;
+}
+*/
+
+/**
+* @brief Serial class method to get data
+* @param command sending command in string
+* @return data in string or constant string EMPTY
+*/
+int Serial::getData(char* data, int size)
+{
+  char ch;
+  bool is_match = false;
+  int c = 0;
+  while(true)
+  {
+    serialport.read_some(boost::asio::buffer(&ch, 1));
+    if(ch == 0x77) is_match = true;
+    if(is_match)
+    {
+      data[c] = ch;
+      ++c;
+    }
+    if(c > size) break;
+  }
 
   return EXIT_SUCCESS;
 }
