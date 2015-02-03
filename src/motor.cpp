@@ -72,7 +72,7 @@ MotorData Motor::getData()
     decltype(data) buff[data.size()];
 
     //! Detect Headers and footers
-    if ((data[0] == 0x75) && (data[1] == 0xAA) && (data[sizeof(bytes) -2 ] == 0x75) && (data[sizeof(bytes) - 1] == 0xFF))
+    if ((data[0] == 0x75) && (data[1] == 0xAA) && (data[17] == 0x75) && (data[18] == 0xFF))
    {
         //! motor data array
         memcpy(&bytes, buff, sizeof(bytes));
