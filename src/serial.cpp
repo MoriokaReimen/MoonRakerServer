@@ -116,16 +116,17 @@ bool Serial::sendData(const char* bytes, size_t n)
 * @param command sending command in string
 * @return data in string or constant string EMPTY
 */
-int Serial::getData(char* data, int size)
+int Serial::getData(unsigned char* data, int size)
 {
-  char ch;
+  unsigned char ch;
 
   while(true)
   {
     serialport.read_some(boost::asio::buffer(&ch, 1));
-    if(ch == 0x77) break;
+    if(ch == 0xAA) break;
   }
   int c = 0;
+  data[0] = 0x75;
   while(true)
   {
       data[c] = ch;
