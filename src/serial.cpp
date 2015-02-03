@@ -119,18 +119,19 @@ bool Serial::sendData(const char* bytes, size_t n)
 int Serial::getData(char* data, int size)
 {
   char ch;
-  bool is_match = false;
-  int c = 0;
+
   while(true)
   {
     serialport.read_some(boost::asio::buffer(&ch, 1));
-    if(ch == 0x77) is_match = true;
-    if(is_match)
-    {
+    if(ch == 0x77) break;
+  }
+  int c = 0;
+  while(true)
+  {
       data[c] = ch;
+      serialport.read_some(boost::asio::buffer(&ch, 1));
       ++c;
-    }
-    if(c > size) return EXIT_SUCCESS;
+      if(c > size) return EXIT_SUCCESS;
   }
 }
 
