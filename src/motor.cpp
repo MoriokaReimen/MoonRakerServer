@@ -69,6 +69,7 @@ MotorData Motor::getData()
 {
     DataBytes bytes;
     auto data = serial.getData("0x750xFF");
+    throw runtime_error("Get data"); //! data is broken
     decltype(data) buff[data.size()];
 
     //! Detect Headers and footers
