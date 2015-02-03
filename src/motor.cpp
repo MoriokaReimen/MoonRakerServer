@@ -40,8 +40,9 @@ using std::runtime_error;
 /*!
  * @brief Constructor for MotorData class
  */
-Motor::Motor() : serial(115200, "/dev/ttyS0")
+Motor::Motor()
 {
+  serial.open("/dev/ttyS0", 115200);
 }
 
 
@@ -52,9 +53,9 @@ Motor::Motor() : serial(115200, "/dev/ttyS0")
 int Motor::sendCommand(const MotorCommand& command)
 {
     CommandBytes bytes {command.toByteArray()};
-    unsigned char buffer[sizeof(bytes)];
+    char buffer[sizeof(bytes)];
     memcpy(buffer, &bytes, sizeof(bytes));
-    serial.sendData(buffer, sizeof(bytes));
+    serial.write(buffer, sizeof(bytes));
     return EXIT_SUCCESS;
 }
 
@@ -67,8 +68,8 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    unsigned char buffer[sizeof(bytes)];
-    serial.getData(buffer, sizeof(bytes));
+    char buffer[sizeof(bytes)];
+    serial.read(buffer, sizeof(bytes), true);
 
     //! Detect Headers and footers
     for (int i = 0; i < sizeof(bytes); ++i) {
