@@ -30,8 +30,8 @@ int main()
   MotorData data;
 	while ((ch = getch()) != 'q') {
     motor.sendCommand(MotorCommand(left_rpm, right_rpm));
-    data = motor.getData();
     try {
+      data = motor.getData();
       move(1, 0);
       clrtoeol();
     } catch(...)
