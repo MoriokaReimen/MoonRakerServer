@@ -103,13 +103,11 @@ bool Serial::sendData(const char* bytes, size_t n)
 * @param command sending command in string
 * @return data in string or constant string EMPTY
 */
-std::vector<char> Serial::getData(int size)
+int Serial::getData(char* data, int size)
 {
-  char buf[size];
-  serialport.read_some(boost::asio::buffer(buf, size));
-  std::vector<char> data(buf, buf + size);
+  serialport.read_some(boost::asio::buffer(data, size));
 
-  return data;
+  return EXIT_SUCCESS;
 }
 
 /**
