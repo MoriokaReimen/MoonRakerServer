@@ -42,7 +42,7 @@ using std::runtime_error;
  */
 Motor::Motor()
 {
-  serial.open("/dev/ttyS0", 38400);
+  serial.open("/dev/ttyS0", 115200);
 }
 
 
@@ -70,7 +70,13 @@ MotorData Motor::getData()
     DataBytes bytes;
     unsigned char buffer[40];
     unsigned char pattern[1] = {0xFF};
-    serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1, true, 1000);
+    try{
+      serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1, true, 1000);
+    }(...)
+    {
+      serial.close();
+      serial.open("/dev/ttyS0", 115200);
+    }
     //serial.read(buffer, sizeof(bytes), true, 1000);
     serial.poll();
     serial.clear();
@@ -85,7 +91,5 @@ MotorData Motor::getData()
             return MotorData(bytes);
         }
     }
-    serial.close();
-    serial.open("/dev/ttyS0", 38400);
     throw runtime_error("Broken data"); //! data is broken
 }
