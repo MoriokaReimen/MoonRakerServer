@@ -69,15 +69,15 @@ MotorData Motor::getData()
 {
     DataBytes bytes;
     char buffer[40];
-    char pattern[2] = {0x75, 0xFF};
+    //char pattern[2] = {0x75, 0xFF};
     //serial.readUntil(reinterpret_cast<char*>(buffer), 40, pattern, 2);
     serial.read(buffer, 40, true, 100);
     serial.poll();
 
     //! Detect Headers and footers
     for (int i = 0; i < 40; ++i) {
-        if (((unsigned char)buffer[i] == 0x75) && ((unsigned char)buffer[i + 1] == 0xAA) &&
-            ((unsigned char)buffer[i + 17] == 0x75) && ((unsigned char)buffer[i + 18] == 0xFF)) {
+        if ((buffer[i] == (unsigned char)0x75) && (buffer[i + 1] == (unsigned char)0xAA) &&
+            (buffer[i + 17] == (unsigned char)0x75) && (buffer[i + 18] == (unsigned char)0xFF)) {
             //! motor data array
             memcpy(&bytes, &buffer[i], sizeof(bytes));
             return MotorData(bytes);
