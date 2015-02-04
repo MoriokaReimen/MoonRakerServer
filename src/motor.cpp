@@ -42,7 +42,7 @@ using std::runtime_error;
  */
 Motor::Motor()
 {
-  serial.open("/dev/ttyS0", 115200);
+  serial.open("/dev/ttyS0", 115400);
 }
 
 
@@ -71,16 +71,14 @@ MotorData Motor::getData()
     unsigned char buffer[40];
     unsigned char pattern[1] = {0xFF};
     try{
-      serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1, true, 1000);
+      serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1);
     }catch(...)
     {
-      serial.close();
-      serial.open("/dev/ttyS0", 115200);
     }
     //serial.read(buffer, sizeof(bytes), true, 1000);
-    serial.poll();
-    serial.clear();
-    serial.clearBuffers();
+    //serial.poll();
+    //serial.clear();
+    //serial.clearBuffers();
 
     //! Detect Headers and footers
     for (int i = 0; i < 40; ++i) {
