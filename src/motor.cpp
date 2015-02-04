@@ -72,7 +72,7 @@ MotorData Motor::getData()
     unsigned char pattern[1] = {0xFF};
     try{
       serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1, true, 1000);
-    }(...)
+    }catch(...)
     {
       serial.close();
       serial.open("/dev/ttyS0", 115200);
