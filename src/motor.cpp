@@ -69,12 +69,12 @@ MotorData Motor::getData()
 {
     DataBytes bytes;
     char buffer[40];
-    serial.readUntil(buffer, 40, "\x75\xFF", 2);
+    serial.readUntil(buffer, 40, "\x75\xFF", 2, true);
 
     //! Detect Headers and footers
     for (int i = 0; i < sizeof(bytes); ++i) {
-        if (((unsigned char)buffer[i] == 0x75) && ((unsigned char)buffer[i + 1] == 0xAA) &&
-            ((unsigned char)buffer[i + 17] == 0x75) && ((unsigned char)buffer[i + 18] == 0xFF)) {
+        if ((buffer[i] == "\x75") && (buffer[i + 1] == "\xAA") &&
+            (buffer[i + 17] == "\x75") && (buffer[i + 18] == "\xFF")) {
             //! motor data array
             memcpy(&bytes, &buffer[i], sizeof(bytes));
             return MotorData(bytes);
