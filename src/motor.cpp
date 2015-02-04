@@ -68,14 +68,14 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    char buffer[40];
+    unsigned char buffer[40];
     //serial.readUntil(buffer, 40, "\x75\xFF", 2, true, 50);
-    serial.read(buffer, 40);
+    serial.read(reinterpret_cast<char*>(buffer), 40, true);
 
     //! Detect Headers and footers
-    for (int i = 0; i < sizeof(bytes); ++i) {
-        if (((unsigned char)buffer[i] == '\x75') && ((unsigned char)buffer[i + 1] == '\xAA') &&
-            ((unsigned char)buffer[i + 17] == '\x75') && ((unsigned char)buffer[i + 18] == '\xFF')) {
+    for (int i = 0; i < 40; ++i) {
+        if ((buffer[i] == 0x75) && (buffer[i + 1] == 0xAA) &&
+            (buffer[i + 17] == 0x75) && (buffer[i + 18] == 0xFF)) {
             //! motor data array
             memcpy(&bytes, &buffer[i], sizeof(bytes));
             return MotorData(bytes);
