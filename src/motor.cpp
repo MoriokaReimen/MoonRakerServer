@@ -68,9 +68,9 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    char buffer[40];
+    unsigned char buffer[40];
     //serial.readUntil(buffer, 40, "\x75\xFF", 2, true, 50);
-    serial.read(buffer, 40, true);
+    serial.read(buffer, 40);
 
     //! Detect Headers and footers
     for (int i = 0; i < sizeof(bytes); ++i) {
