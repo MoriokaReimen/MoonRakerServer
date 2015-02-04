@@ -53,7 +53,7 @@ Motor::Motor()
 int Motor::sendCommand(const MotorCommand& command)
 {
     CommandBytes bytes {command.toByteArray()};
-    char buffer[sizeof(bytes)];
+    unsigned char buffer[sizeof(bytes)];
     memcpy(buffer, &bytes, sizeof(bytes));
     serial.write(buffer, sizeof(bytes));
     return EXIT_SUCCESS;
@@ -68,15 +68,15 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    char buffer[40];
-    //char pattern[2] = {0x75, 0xFF};
+    unsigned char buffer[40];
+    unsigned char pattern[2] = {0x75, 0xFF};
     //serial.readUntil(reinterpret_cast<char*>(buffer), 40, pattern, 2);
     serial.read(buffer, 30, true, 1000);
 
     //! Detect Headers and footers
     for (int i = 0; i < 40; ++i) {
-        if ( (memcmp(&buffer[i], "0x75", 1) == 0) && (memcmp(&buffer[i+1], "0xAA", 1) == 0) &&
-             (memcmp(&buffer[i+17], "0x75", 1) == 0) && (memcmp(&buffer[i+18], "0xFF", 1) == 0))
+        if ( (buffer[i] == 0x75) && (buffer[i+1]== 0xAA) &&
+             (buffer[i+17] == 0x75) && (buffer[i+18] == 0xFF) )
         {
             //! motor data array
             memcpy(&bytes, &buffer[i], sizeof(bytes));

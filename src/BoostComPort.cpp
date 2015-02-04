@@ -26,8 +26,8 @@ currentContent(0),
 serialPort(io_service)
 {
 	lastError.clear();
-	buffer=new char[BUFFER_SIZE];
-	eventBuffer=new char[EVENTBUFFER_SIZE];
+	buffer=new unsigned char[BUFFER_SIZE];
+	eventBuffer=new unsigned char[EVENTBUFFER_SIZE];
 }
 
 BoostComPort::~BoostComPort()
@@ -66,7 +66,7 @@ int BoostComPort::open(std::string port, int baud)
 
 void BoostComPort::clear()
 {
-	char* tmp=new char[100]; // 100Bytes of temporary buffer to clean the system buffers
+	unsigned char* tmp=new unsigned char[100]; // 100Bytes of temporary buffer to clean the system buffers
 	int read;
 	do  // TODO: I think here is missing a timeout or something like that
 	{
@@ -109,7 +109,7 @@ bool BoostComPort::isOpended()
 	return serialPort.is_open();
 }
 
-int BoostComPort::write(char* data, unsigned int length)
+int BoostComPort::write(unsigned char* data, unsigned int length)
 {
 	size_t written=boost::asio::write(serialPort, boost::asio::buffer(data, length), boost::asio::transfer_all(), ec);
 	if(written!=length)
@@ -133,7 +133,7 @@ int BoostComPort::write(char* data, unsigned int length)
  * method is called frequently enough to get all the data from the
  * system buffers without loosing something.
  */
-int BoostComPort::read(char* data, int length, bool blocking, int timeout)
+int BoostComPort::read(unsigned char* data, int length, bool blocking, int timeout)
 {
 	boost::timer time;
 	do
@@ -162,7 +162,7 @@ int BoostComPort::read(char* data, int length, bool blocking, int timeout)
  * Reads like the read method data from the serial port by
  * polling the io service of boost.
  */
-int BoostComPort::readUntil(char* data, int maxLength, char* searchValue, int searchSize, bool blocking, int timeout)
+int BoostComPort::readUntil(unsigned char* data, int maxLength, unsigned char* searchValue, int searchSize, bool blocking, int timeout)
 {
 	boost::timer time;
 	do

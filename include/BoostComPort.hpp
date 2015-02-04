@@ -43,8 +43,8 @@ class BoostComPort
 private:
 	void onPortRead(const boost::system::error_code& error, std::size_t bytes_transferred);
 
-	char* buffer;
-	char* eventBuffer;
+	unsigned char* buffer;
+	unsigned char* eventBuffer;
 	int currentContent;
 	bool executed;
 	boost::asio::io_service io_service;
@@ -59,9 +59,9 @@ public:
   void clear();
 	int close();
 	bool isOpended();
-	int write(char* Data, unsigned int Length);
-	int read(char* data, int length, bool blocking=false, int timeout=-1 /* timeout in ms */);
-  int readUntil(char* data, int maxLength, char* searchValue, int searchSize, bool blocking = false, int timeout = -1/* time out in ms */);
+	int write(unsigned char* Data, unsigned int Length);
+	int read(unsigned char* data, int length, bool blocking=false, int timeout=-1 /* timeout in ms */);
+  int readUntil(unsigned char* data, int maxLength, unsigned char* searchValue, int searchSize, bool blocking = false, int timeout = -1/* time out in ms */);
   void poll();
   void clearBuffers();
 	boost::system::error_code& getLastError();
