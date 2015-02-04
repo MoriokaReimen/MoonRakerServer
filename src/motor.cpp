@@ -42,7 +42,7 @@ using std::runtime_error;
  */
 Motor::Motor()
 {
-  serial.open("/dev/ttyS0", 115200);
+  serial.open("/dev/ttyS0", 38400);
 }
 
 
@@ -86,6 +86,6 @@ MotorData Motor::getData()
         }
     }
     serial.close();
-    serial.open("/dev/ttyS0", 115200);
+    serial.open("/dev/ttyS0", 38400);
     throw runtime_error("Broken data"); //! data is broken
 }
