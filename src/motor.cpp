@@ -70,8 +70,9 @@ MotorData Motor::getData()
     DataBytes bytes;
     unsigned char buffer[40];
     unsigned char pattern[1] = {0xFF};
-    serial.readUntil(buffer, 40, pattern, 1, true, 1000);
+    serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1, true, 1000);
     //serial.read(buffer, sizeof(bytes), true, 1000);
+    serial.poll();
 
     //! Detect Headers and footers
     for (int i = 0; i < 40; ++i) {
