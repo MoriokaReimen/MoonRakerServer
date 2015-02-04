@@ -73,6 +73,7 @@ MotorData Motor::getData()
     serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1, true, 1000);
     //serial.read(buffer, sizeof(bytes), true, 1000);
     serial.poll();
+    serial.clear();
     serial.clearBuffers();
 
     //! Detect Headers and footers
@@ -84,5 +85,7 @@ MotorData Motor::getData()
             return MotorData(bytes);
         }
     }
+    serial.close();
+    serial.open("/dev/ttyS0", 115200);
     throw runtime_error("Broken data"); //! data is broken
 }
