@@ -75,8 +75,9 @@ MotorData Motor::getData()
 
     //! Detect Headers and footers
     for (int i = 0; i < 40; ++i) {
-        if (((unsigned char)buffer[i] == 0x75) && ((unsigned char)buffer[i + 1] == 0xAA) &&
-            ((unsigned char)buffer[i + 17] == 0x75) && ((unsigned char)buffer[i + 18] == 0xFF)) {
+        if ( (memcmp(&buffer[i], "0x75", 1) == 0) && (memcmp(&buffer[i+1], "0xAA", 1) == 0) &&
+             (memcmp(&buffer[i+17], "0x75", 1) == 0) && (memcmp(&buffer[i+18], "0xFF", 1) == 0))
+        {
             //! motor data array
             memcpy(&bytes, &buffer[i], sizeof(bytes));
             return MotorData(bytes);

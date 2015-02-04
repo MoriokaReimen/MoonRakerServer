@@ -38,6 +38,7 @@
 #include "command.hpp"
 #include "data.hpp"
 #include <stdexcept>
+#include <cstring>
 using std::runtime_error;
 using bit8 = unsigned char;
 /*! @class Motor
