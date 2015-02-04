@@ -73,8 +73,8 @@ MotorData Motor::getData()
 
     //! Detect Headers and footers
     for (int i = 0; i < sizeof(bytes); ++i) {
-        if ((buffer[i] == "\x75") && (buffer[i + 1] == "\xAA") &&
-            (buffer[i + 17] == "\x75") && (buffer[i + 18] == "\xFF")) {
+        if ((buffer[i] == '\x75') && (buffer[i + 1] == '\xAA') &&
+            (buffer[i + 17] == '\x75') && (buffer[i + 18] == '\xFF')) {
             //! motor data array
             memcpy(&bytes, &buffer[i], sizeof(bytes));
             return MotorData(bytes);
