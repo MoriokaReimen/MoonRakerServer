@@ -24,12 +24,12 @@ int main()
   start_color();
   init_pair(1, COLOR_GREEN, COLOR_BLACK);
   init_pair(2, COLOR_RED, COLOR_BLACK);
-	timeout(100);
+	timeout(50);
 
   Motor motor;
   MotorData data;
+  motor.sendCommand(MotorCommand(left_rpm, right_rpm));
 	while ((ch = getch()) != 'q') {
-    motor.sendCommand(MotorCommand(left_rpm, right_rpm));
     try {
       data = motor.getData();
       move(1, 0);

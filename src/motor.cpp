@@ -42,7 +42,7 @@ using std::runtime_error;
  */
 Motor::Motor()
 {
-  serial.open("/dev/ttyS0", 115400);
+  serial.open("/dev/ttyS0", 115200);
 }
 
 
@@ -58,7 +58,6 @@ int Motor::sendCommand(const MotorCommand& command)
     serial.write(buffer, sizeof(bytes));
     return EXIT_SUCCESS;
 }
-
 /*!
  * @brief get data from the motor
  * @return data as MotorData class
@@ -70,12 +69,8 @@ MotorData Motor::getData()
     DataBytes bytes;
     unsigned char buffer[40];
     unsigned char pattern[1] = {0xFF};
-    try{
-      serial.readUntil(buffer, 2 * sizeof(bytes), pattern, 1);
-    }catch(...)
-    {
-    }
-    //serial.read(buffer, sizeof(bytes), true, 1000);
+    serial.readUntil(buffer, 3 * sizeof(bytes) / 2, pattern, 1);
+    serial.read(buffer, 3 * sizeof(bytes) / 2, true, 1000);
     //serial.poll();
     //serial.clear();
     //serial.clearBuffers();
