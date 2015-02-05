@@ -3,19 +3,24 @@
 #include <ncurses.h>
 #include "motor.hpp"
 #include "data.hpp"
+#include "Logger.hpp"
+#include <string>
 using std::cout;
 using std::cin;
 using std::endl;
 
 int main()
 {
+  std::string file_name;
+  cout << "input file name:" << endl;
+  cin >> file_name;
+  Logger logger(file_name);
 	int ch = 0;
   int line = 0;
+  int norm_rpm;
   int left_rpm, right_rpm;
-  cout << "Enter Left RPM" << endl;
-  cin >> left_rpm;
-  cout << "Enter Right RPM" << endl;
-  cin >> right_rpm;
+  cout << "Nominal RPM" << endl;
+  cin >> norm_rpm;
 
 	initscr();
 	cbreak();
@@ -28,7 +33,15 @@ int main()
 
   Motor motor;
   MotorData left, right;
-	while ((ch = getch()) != 'q') {
+	while (true) {
+    ch = getch();
+    if(ch == 'q') break;
+
+    if(ch == 'k') left_rpm = norm_rpm, right_rpm = norm_rpm;
+    if(ch == 'j') left_rpm = - norm_rpm, right_rpm = - norm_rpm;
+    if(ch == 'h') left_rpm = - norm_rpm, right_rpm = norm_rpm;
+    if(ch == 'l') left_rpm = norm_rpm, right_rpm = - norm_rpm;
+    if(ch == 's') left_rpm = right_rpm = 0;
     try {
       motor.work(MotorCommand(left_rpm, right_rpm), left, right);
       move(1, 0);
@@ -40,6 +53,8 @@ int main()
       printw("Error !!");
       attroff(COLOR_PAIR(2));
     }
+    logger.log(left);
+    logger.log(right);
     move(6, 0);
 		printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 
