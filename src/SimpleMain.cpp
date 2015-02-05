@@ -27,11 +27,10 @@ int main()
 	timeout(50);
 
   Motor motor;
-  MotorData data;
-  motor.sendCommand(MotorCommand(left_rpm, right_rpm));
+  MotorData left, right;
 	while ((ch = getch()) != 'q') {
     try {
-      data = motor.getData();
+      motor.work(MotorCommand(left_rpm, right_rpm), left, right);
       move(1, 0);
       clrtoeol();
     } catch(...)
@@ -41,29 +40,39 @@ int main()
       printw("Error !!");
       attroff(COLOR_PAIR(2));
     }
-    move(8, 0);
+    move(6, 0);
 		printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 
-    move(9, 0);
+    move(7, 0);
     attron(COLOR_PAIR(1));
 		printw("%1s%15d%15d%15d%15d",
-        data.device.c_str(), data.rear_current, data.front_current,
-        data.rear_rpm, data.front_rpm);
+        left.device.c_str(), left.rear_current, left.front_current,
+        left.rear_rpm, left.front_rpm);
     attroff(COLOR_PAIR(1));
 
-    move(10 + line, 0);
+    move(8, 0);
+    attron(COLOR_PAIR(1));
 		printw("%1s%15d%15d%15d%15d",
-        data.device.c_str(), data.rear_current, data.front_current,
-        data.rear_rpm, data.front_rpm);
+        left.device.c_str(), left.rear_current, left.front_current,
+        left.rear_rpm, left.front_rpm);
+    attroff(COLOR_PAIR(1));
 
-		move(6, 0);
+    move(9 + line, 0);
+		printw("%1s%15d%15d%15d%15d",
+        left.device.c_str(), left.rear_current, left.front_current,
+        left.rear_rpm, left.front_rpm);
+
+    move(21 + line, 0);
+		printw("%1s%15d%15d%15d%15d",
+        right.device.c_str(), right.rear_current, right.front_current,
+        right.rear_rpm, right.front_rpm);
+
+		move(4, 0);
 		printw("press (q) to quit");
     line++;
-    if(line > 15) line = 0;
+    if(line > 10) line = 0;
 		refresh();
   }
-  motor.sendCommand(MotorCommand(0, 0));
-  motor.sendCommand(MotorCommand(0, 0));
 
 	endwin();
   return 0;

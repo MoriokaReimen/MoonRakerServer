@@ -46,25 +46,7 @@ void MoonServer::doRoutine()
     MotorData r_motor_data; //! wrapper class for right motor data
     MotorData l_motor_data; //! wrapper class for left motor data
     ZMQData zmq_data;
-    while(true) {
-        try {
-            command = this->zmq_.getCommand();
-            break;
-        } catch(...) {}
-    }
-    this->motor_.sendCommand(command);
-    while(true) {
-        try {
-            l_motor_data = this->motor_.getData();
-            if(l_motor_data.device == "L") break;
-        } catch(...) {}
-    }
-    while(true) {
-        try {
-            r_motor_data = this->motor_.getData();
-            if(r_motor_data.device == "R") break;
-        } catch(...) {}
-    }
+    this->motor_.work(command, l_motor_data, r_motor_data);
     auto finish_time = std::chrono::high_resolution_clock::now();
     if(std::chrono::duration_cast<std::chrono::milliseconds>(finish_time - start_time).count() > 50) return;
     this->zmq_.sendData(zmq_data);

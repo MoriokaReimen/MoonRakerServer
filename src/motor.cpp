@@ -70,10 +70,6 @@ MotorData Motor::getData()
     unsigned char buffer[40];
     unsigned char pattern[1] = {0xFF};
     serial.readUntil(buffer, 3 * sizeof(bytes) / 2, pattern, 1);
-    serial.read(buffer, 3 * sizeof(bytes) / 2, true, 1000);
-    //serial.poll();
-    //serial.clear();
-    //serial.clearBuffers();
 
     //! Detect Headers and footers
     for (int i = 0; i < 40; ++i) {
@@ -85,4 +81,22 @@ MotorData Motor::getData()
         }
     }
     throw runtime_error("Broken data"); //! data is broken
+}
+
+bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
+{
+  /* initialize sleep function */
+  std::chrono::milliseconds interval(5);
+
+  this->sendCommand(command);
+  std::this_thread::sleep_for(interval);
+  left = this->getData();
+  std::this_thread::sleep_for(interval);
+  right = this ->getData();
+  return true;
+}
+void Motor::halt()
+{
+  this->sendCommand(MotorCommand(0, 0));
+  return;
 }

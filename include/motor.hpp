@@ -39,6 +39,8 @@
 #include "data.hpp"
 #include <stdexcept>
 #include <cstring>
+#include <thread>
+#include <chrono>
 using std::runtime_error;
 using bit8 = unsigned char;
 /*! @class Motor
@@ -48,9 +50,12 @@ using bit8 = unsigned char;
 class Motor
 {
     BoostComPort serial;
+
+    int sendCommand(const MotorCommand& command);
+    MotorData getData();
 public:
     Motor();
     ~Motor() = default;
-    int sendCommand(const MotorCommand& command);
-    MotorData getData();
+    bool work(const MotorCommand& command, MotorData& left, MotorData& right);
+    void halt();
 };
