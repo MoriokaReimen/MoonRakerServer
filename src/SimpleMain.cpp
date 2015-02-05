@@ -53,8 +53,8 @@ int main()
     move(8, 0);
     attron(COLOR_PAIR(1));
 		printw("%1s%15d%15d%15d%15d",
-        left.device.c_str(), left.rear_current, left.front_current,
-        left.rear_rpm, left.front_rpm);
+        right.device.c_str(), right.rear_current, right.front_current,
+        right.rear_rpm, right.front_rpm);
     attroff(COLOR_PAIR(1));
 
     move(9 + line, 0);
@@ -73,6 +73,7 @@ int main()
     if(line > 10) line = 0;
 		refresh();
   }
+  motor.halt();
 
 	endwin();
   return 0;
