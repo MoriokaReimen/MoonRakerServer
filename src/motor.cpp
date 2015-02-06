@@ -93,7 +93,7 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
   left = this->getData();
   std::this_thread::sleep_for(interval);
   right = this ->getData();
-  serial.clearBuffers();
+  serial.clear();
   return true;
 }
 void Motor::halt()
