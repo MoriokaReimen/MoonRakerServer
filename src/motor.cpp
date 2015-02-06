@@ -89,12 +89,12 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
   std::chrono::milliseconds interval(5);
 
   this->sendCommand(command);
+  serial.poll();
   std::this_thread::sleep_for(interval);
   left = this->getData();
   std::this_thread::sleep_for(interval);
   right = this ->getData();
   serial.clear();
-  serial.clearBuffers();
   return true;
 }
 void Motor::halt()
