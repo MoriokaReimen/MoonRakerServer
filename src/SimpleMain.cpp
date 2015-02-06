@@ -18,7 +18,7 @@ int main()
 	int ch = 0;
   int line = 0;
   int norm_rpm;
-  int left_rpm, right_rpm;
+  int left_rpm(0), right_rpm(0);
   cout << "Nominal RPM" << endl;
   cin >> norm_rpm;
 
