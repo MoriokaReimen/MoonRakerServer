@@ -29,26 +29,25 @@ Filename:    Logger.cpp
           %%%%%
            %%%
 -----------------------------------------------------------------------------
-
+@brief class for logging MotorData to file
 -----------------------------------------------------------------------------
 */
 #include "Logger.hpp"
 
 
-/*CONSTRUCTOR
-*/
+/*!
+ * @brief Constructor for Logger class
+ * @param[in] file name to logging
+ */
 Logger::Logger(const std::string& file_name)
 {
     file_.open(file_name);
     return;
 }
 
-
-/*DESTRUCTOR
-~MotorUnit:
-    Clean up memory by deleting all objects in memory that were
-assigned through a pointer.
-*/
+/*!
+ * @brief Destructor for Logger class
+ */
 Logger::~Logger()
 {
     file_.close();
@@ -56,6 +55,11 @@ Logger::~Logger()
     return;
 }
 
+/*!
+ * @brief function to log one line
+ * @param[in] command sended to motor
+ * @param[in] data from motor
+ */
 bool Logger::log(const MotorCommand& command, const MotorData& data)
 {
     long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -70,9 +74,15 @@ bool Logger::log(const MotorCommand& command, const MotorData& data)
     return true;
 }
 
+/*!
+ * @brief function to log data
+ * @param[in] command sended to motor
+ * @param[in] data from left motor
+ * @param[in] data from right motor
+ */
 bool Logger::log(const MotorCommand& command, const MotorData& left, const MotorData& right)
 {
-  this -> log(command, left);
-  this -> log(command, right);
-  return true;
+    this -> log(command, left);
+    this -> log(command, right);
+    return true;
 }

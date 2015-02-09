@@ -1,3 +1,38 @@
+/*!
+-----------------------------------------------------------------------------
+@file    SimpleMain.cpp
+----------------------------------------------------------------------------
+         @@
+       @@@@@@
+      @```@@@@
+     @`  `@@@@@@
+   @@`   `@@@@@@@@
+  @@`    `@@@@@@@@@           Tohoku University
+  @` `   `@@@@@@@@@       SPACE ROBOTICS LABORATORY
+  @`` ## `@@@@@@@@@    http://www.astro.mech.tohoku.ac.jp/
+  @` #..#`@@@@@@@@@        Planetary Robotics Group
+  @` #..#`@@@@@@@@@
+  @` ### `@@@@@@@@@          Professor Kazuya Yoshida
+  @` ###``@@@@@@@@@      Associate Professor Keiji Nagatani
+   @### ``@@@@@@@@
+   ###  ` @@@@@@@
+  ###  @  @@@@@                 Creation Date:
+ ###    @@@@@               @date Jan. 1. 2015
+ /-\     @@
+|   |      %%                      Authors:
+ \-/##    %%%%%             @author Kei Nakata
+   #### %%%                  menschenjager.mark.neun@gmail.com
+     ###%%       *
+      ##%%     *****
+       #%%      ***
+        %%     *   *
+         %%
+          %%%%%
+           %%%
+-----------------------------------------------------------------------------
+@brief Simple Console for controling MoonRaker
+-----------------------------------------------------------------------------
+*/
 #include <iostream>
 #include <cstdio>
 #include <ncurses.h>
@@ -11,18 +46,25 @@ using std::endl;
 
 int main()
 {
+    /*! set up log file */
     std::string file_name;
     cout << "log file name:" << endl;
     cin >> file_name;
     file_name = file_name + ".mlog";
     Logger logger(file_name);
-    int ch = 0;
-    int line = 0;
+
+    /*! set up MoonRaker */
     int norm_rpm;
     short left_rpm(0), right_rpm(0);
+    Motor motor;
+    MotorData left, right;
+    MotorCommand command(0, 0);
     cout << "Nominal RPM" << endl;
     cin >> norm_rpm;
 
+    /*! set up curses*/
+    int ch = 0;
+    int line = 0;
     initscr();
     cbreak();
     noecho();
@@ -32,9 +74,6 @@ int main()
     init_pair(2, COLOR_RED, COLOR_BLACK);
     timeout(0);
 
-    Motor motor;
-    MotorData left, right;
-    MotorCommand command(0, 0);
     while (true) {
         ch = getch();
         if(ch == 'q') break;
@@ -46,6 +85,7 @@ int main()
         if(ch == 's') left_rpm = right_rpm = 0;
         command.set(left_rpm, right_rpm);
 
+        /*! send command and get data */
         try {
             motor.work(command, left, right);
             move(1, 0);
@@ -58,6 +98,7 @@ int main()
         }
         logger.log(command, left, right);
 
+        /*! show data to console */
         move(6, 0);
         printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 
@@ -91,8 +132,10 @@ int main()
         if(line > 10) line = 0;
         refresh();
     }
-    motor.halt();
 
+    /*! stop motor and clean up curses */
+    motor.halt();
     endwin();
+
     return 0;
 }

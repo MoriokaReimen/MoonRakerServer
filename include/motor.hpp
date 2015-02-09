@@ -43,9 +43,9 @@
 #include <chrono>
 using std::runtime_error;
 using bit8 = unsigned char;
+
 /*! @class Motor
  *  @brief handles serial communication between motor
- *
 */
 class Motor
 {

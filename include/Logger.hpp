@@ -29,7 +29,7 @@ Filename:    Logger.hpp
           %%%%%
            %%%
 -----------------------------------------------------------------------------
-
+@brief class for logging MotorData to file
 -----------------------------------------------------------------------------
 */
 #pragma once
@@ -40,12 +40,15 @@ Filename:    Logger.hpp
 #include "data.hpp"
 #include "command.hpp"
 
+/*! @class Logger
+ *  @brief handles log routine
+*/
 class Logger
 {
-  std::ofstream file_;
+    std::ofstream file_;
 public:
-  Logger(const std::string& filne_name);
-  ~Logger();
-  bool log(const MotorCommand& command, const MotorData& data);
-  bool log(const MotorCommand& command, const MotorData& left, const MotorData& right);
+    Logger(const std::string& filne_name);
+    ~Logger();
+    bool log(const MotorCommand& command, const MotorData& data);
+    bool log(const MotorCommand& command, const MotorData& left, const MotorData& right);
 };

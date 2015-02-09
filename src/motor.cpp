@@ -68,7 +68,7 @@ MotorData Motor::getData()
 {
     DataBytes bytes;
     unsigned char buffer[40];
-    unsigned char pattern[1] = {0xFF};
+    //unsigned char pattern[1] = {0xFF};
 
     /*! read 19 bytes from serial */
     serial.read(buffer, sizeof(bytes) + 1, true, 20);

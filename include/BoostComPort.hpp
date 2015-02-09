@@ -41,30 +41,30 @@ using namespace std;
 class BoostComPort
 {
 private:
-	void onPortRead(const boost::system::error_code& error, std::size_t bytes_transferred);
+    void onPortRead(const boost::system::error_code& error, std::size_t bytes_transferred);
 
-	unsigned char* buffer;
-	unsigned char* eventBuffer;
-	int currentContent;
-	bool executed;
-	boost::asio::io_service io_service;
-	boost::asio::serial_port serialPort;
-	boost::system::error_code ec;
-	boost::system::error_code lastError;
+    unsigned char* buffer;
+    unsigned char* eventBuffer;
+    int currentContent;
+    bool executed;
+    boost::asio::io_service io_service;
+    boost::asio::serial_port serialPort;
+    boost::system::error_code ec;
+    boost::system::error_code lastError;
 
 public:
-	BoostComPort();
-	~BoostComPort();
-	int open(std::string port, int baud);
-  void clear();
-	int close();
-	bool isOpended();
-	int write(unsigned char* Data, unsigned int Length);
-	int read(unsigned char* data, int length, bool blocking=false, int timeout=-1 /* timeout in ms */);
-  int readUntil(unsigned char* data, int maxLength, unsigned char* searchValue, int searchSize, bool blocking = false, int timeout = -1/* time out in ms */);
-  void poll();
-  void clearBuffers();
-	boost::system::error_code& getLastError();
+    BoostComPort();
+    ~BoostComPort();
+    int open(std::string port, int baud);
+    void clear();
+    int close();
+    bool isOpended();
+    int write(unsigned char* Data, unsigned int Length);
+    int read(unsigned char* data, int length, bool blocking=false, int timeout=-1 /* timeout in ms */);
+    int readUntil(unsigned char* data, int maxLength, unsigned char* searchValue, int searchSize, bool blocking = false, int timeout = -1/* time out in ms */);
+    void poll();
+    void clearBuffers();
+    boost::system::error_code& getLastError();
 };
 
 #endif /* BOOSTCOMPORT_HPP_ */
