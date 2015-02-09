@@ -42,13 +42,13 @@ using std::runtime_error;
  */
 Motor::Motor()
 {
-  serial.open("/dev/ttyS0", 115200);
+    serial.open("/dev/ttyS0", 115200);
 }
 
 
 /*!
  * @brief send command to the motor
- * @param command[in] command for the motor
+ * @param[in] command command for the motor
  */
 int Motor::sendCommand(const MotorCommand& command)
 {
@@ -69,12 +69,13 @@ MotorData Motor::getData()
     DataBytes bytes;
     unsigned char buffer[40];
     unsigned char pattern[1] = {0xFF};
-    serial.readUntil(buffer, sizeof(bytes) + 1, pattern, 1, true, 20);
 
-    //! Detect Headers and footers
+    /*! read 19 bytes from serial */
+    serial.read(buffer, sizeof(bytes) + 1, true, 20);
+
+    /*! Detect Headers and footers */
     for (int i = 0; i < 40; ++i) {
-        if ( (buffer[i+1]== 0xAA) && (buffer[i+18] == 0xFF) )
-        {
+        if ( (buffer[i+1]== 0xAA) && (buffer[i+18] == 0xFF) ) {
             //! motor data array
             memcpy(&bytes, &buffer[i], sizeof(bytes));
             return MotorData(bytes);
@@ -83,23 +84,41 @@ MotorData Motor::getData()
     throw runtime_error("Broken data"); //! data is broken
 }
 
+/*!
+ * @brief send command and get data from the motor
+ * @param[in] command to be send to motor controller
+ * @param[out] left motor data
+ * @param[out] right motor data
+ * @return true
+ */
 bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 {
-  /* initialize sleep function */
-  std::chrono::milliseconds interval(5);
+    /*! initialize sleep function */
+    std::chrono::milliseconds interval(5);
 
-  this->sendCommand(command);
-  serial.poll();
-  std::this_thread::sleep_for(interval);
-  left = this->getData();
-  std::this_thread::sleep_for(interval);
-  right = this ->getData();
-  serial.clear();
-  return true;
+    /*! send command */
+    this->sendCommand(command);
+    serial.poll();
+
+    /*! get left motor data */
+    std::this_thread::sleep_for(interval);
+    left = this->getData();
+
+    /*! get right motor data */
+    std::this_thread::sleep_for(interval);
+    right = this ->getData();
+
+    /*! clear serial port buffer */
+    serial.clear();
+    return true;
 }
+
+/*!
+ * @brief halt motor without getting motor data
+ */
 void Motor::halt()
 {
-  this->sendCommand(MotorCommand(0, 0));
-  this->sendCommand(MotorCommand(0, 0));
-  return;
+    this->sendCommand(MotorCommand(0, 0));
+    this->sendCommand(MotorCommand(0, 0));
+    return;
 }

@@ -47,4 +47,5 @@ public:
   Logger(const std::string& filne_name);
   ~Logger();
   bool log(const MotorCommand& command, const MotorData& data);
+  bool log(const MotorCommand& command, const MotorData& left, const MotorData& right);
 };

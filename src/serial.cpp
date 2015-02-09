@@ -46,16 +46,15 @@ Serial::Serial(unsigned int speed, std::string comnum)
     : io(),
       serialport(io)
 {
-    try{
+    try {
         serialport.open(comnum);
-    }
-    catch (boost::system::system_error& e) {
+    } catch (boost::system::system_error& e) {
         std::cout << "Failed to Open Serial Port" << std::endl;
         std::cout << e.what() << std::endl;
     }
     /* set baud rate */
     boost::asio::serial_port_base::baud_rate
-        baudrate(speed);
+    baudrate(speed);
     serialport.set_option(baudrate);
 
     /* set character size */
@@ -64,17 +63,17 @@ Serial::Serial(unsigned int speed, std::string comnum)
 
     /* disable flow control */
     boost::asio::serial_port_base::flow_control
-        flow_control(boost::asio::serial_port_base::flow_control::none);
+    flow_control(boost::asio::serial_port_base::flow_control::none);
     serialport.set_option(flow_control);
 
     /* disable parity */
     boost::asio::serial_port_base::parity
-        parity(boost::asio::serial_port_base::parity::none);
+    parity(boost::asio::serial_port_base::parity::none);
     serialport.set_option(parity);
 
     /* set one stop bits */
     boost::asio::serial_port_base::stop_bits
-        stop_bits(boost::asio::serial_port_base::stop_bits::one);
+    stop_bits(boost::asio::serial_port_base::stop_bits::one);
     serialport.set_option(stop_bits);
 }
 
@@ -95,7 +94,7 @@ Serial::~Serial()
 */
 bool Serial::sendData(const unsigned char* bytes, size_t n)
 {
-        return serialport.write_some(boost::asio::buffer(bytes, n));
+    return serialport.write_some(boost::asio::buffer(bytes, n));
 }
 
 /**
@@ -118,9 +117,9 @@ bool Serial::sendData(const unsigned char* bytes, size_t n)
 */
 int Serial::getData(unsigned char* data, int size)
 {
-  unsigned char ch[size];
-  boost::asio::read(serialport, boost::asio::buffer(ch, size));
-  return EXIT_SUCCESS;
+    unsigned char ch[size];
+    boost::asio::read(serialport, boost::asio::buffer(ch, size));
+    return EXIT_SUCCESS;
 }
 
 /**
@@ -132,7 +131,7 @@ int Serial::setBaudrate(const int& bps)
 {
     /* set baud rate */
     boost::asio::serial_port_base::baud_rate
-        baudrate(bps);
+    baudrate(bps);
     serialport.set_option(baudrate);
     return EXIT_SUCCESS;
 }
