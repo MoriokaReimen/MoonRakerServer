@@ -86,4 +86,5 @@ public:
     void set(const signed short& left, const signed short& right);
     void set(const CommandBytes& command);
     CommandBytes toByteArray() const;
+    short getTargetSpeed(const std::string& device_id) const;
 };

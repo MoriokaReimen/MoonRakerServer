@@ -99,3 +99,15 @@ CommandBytes MotorCommand::toByteArray() const
     command.right_rpm = htobe16(this->right_rpm);
     return command;
 }
+
+/*!
+ * @brief get Target speed from device id L/R
+ * @param[in] device id L/R
+ * @return left/right target speed
+ */
+short MotorCommand::getTargetSpeed(const std::string& device_id) const
+{
+    if(device_id == "R") return this->right_rpm;
+    if(device_id == "L") return this->left_rpm;
+    return 0;
+}

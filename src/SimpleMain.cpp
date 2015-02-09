@@ -33,6 +33,7 @@ int main()
 
   Motor motor;
   MotorData left, right;
+  MotorCommand command(0, 0);
 	while (true) {
     ch = getch();
     if(ch == 'q') break;
@@ -42,8 +43,10 @@ int main()
     if(ch == 'h') left_rpm = - norm_rpm, right_rpm = norm_rpm;
     if(ch == 'l') left_rpm = norm_rpm, right_rpm = - norm_rpm;
     if(ch == 's') left_rpm = right_rpm = 0;
+    command.set(left_rpm, right_rpm);
+
     try {
-      motor.work(MotorCommand(left_rpm, right_rpm), left, right);
+      motor.work(command, left, right);
       move(1, 0);
       clrtoeol();
     } catch(...)
@@ -53,8 +56,8 @@ int main()
       printw("Error !!");
       attroff(COLOR_PAIR(2));
     }
-    logger.log(left);
-    logger.log(right);
+    logger.log(command, left);
+    logger.log(command, right);
     move(6, 0);
 		printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 
