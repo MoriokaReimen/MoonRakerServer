@@ -13,7 +13,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
 add_library(moon_server STATIC  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp)
-add_executable(MoonServer.exe src/main.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp)
+add_executable(MoonServer.exe src/ServerMain.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp)
 target_link_libraries(MoonServer.exe zmq pthread zmqpp-static boost_system)
 
 enable_testing()

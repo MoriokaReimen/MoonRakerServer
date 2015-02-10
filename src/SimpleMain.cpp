@@ -58,9 +58,14 @@ int main()
     short left_rpm(0), right_rpm(0);
     Motor motor;
     MotorData left, right;
+    bool constant = false;
     MotorCommand command(0, 0);
-    cout << "Nominal RPM" << endl;
+    cout << "Input Nominal RPM:" << endl;
     cin >> norm_rpm;
+    cout << "Input left RPM:" << endl;
+    cin >> left_rpm;
+    cout << "Input right RPM:" << endl;
+    cin >> right_rpm;
 
     /*! set up curses*/
     int ch = 0;
@@ -77,12 +82,15 @@ int main()
     while (true) {
         ch = getch();
         if(ch == 'q') break;
-
-        if(ch == 'k') left_rpm = norm_rpm, right_rpm = norm_rpm;
-        if(ch == 'j') left_rpm = - norm_rpm, right_rpm = - norm_rpm;
-        if(ch == 'h') left_rpm = - norm_rpm, right_rpm = norm_rpm;
-        if(ch == 'l') left_rpm = norm_rpm, right_rpm = - norm_rpm;
-        if(ch == 's') left_rpm = right_rpm = 0;
+        if(ch == 'c') constant = !constant;
+        if(constant)
+        {
+          if(ch == 'k') left_rpm = norm_rpm, right_rpm = norm_rpm;
+          if(ch == 'j') left_rpm = - norm_rpm, right_rpm = - norm_rpm;
+          if(ch == 'h') left_rpm = - norm_rpm, right_rpm = norm_rpm;
+          if(ch == 'l') left_rpm = norm_rpm, right_rpm = - norm_rpm;
+          if(ch == 's') left_rpm = right_rpm = 0;
+        }
         command.set(left_rpm, right_rpm);
 
         /*! send command and get data */
