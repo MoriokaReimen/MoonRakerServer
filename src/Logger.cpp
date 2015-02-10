@@ -34,6 +34,13 @@ Filename:    Logger.cpp
 */
 #include "Logger.hpp"
 
+namespace MOTOR
+{
+  const double GEAR_RATIO = 690.0f;
+  const double GEAR_EFFICIENCY = 0.49f;
+  const double TORQUE_CONSTANT = 0.00902f * GEAR_RATIO * GEAR_EFFICIENCY; //! in [mNm/mA]
+  const double PI = 3.14159265359;
+};
 
 /*!
  * @brief Constructor for Logger class
@@ -62,16 +69,27 @@ Logger::~Logger()
  */
 bool Logger::log(const MotorCommand& command, const MotorData& data)
 {
-    long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    std::string device = data.device;
-    file_ << device << ","; //! device id 'L' or 'R'
-    file_ << now << ","; //! rover pc board time in [ms]
-    file_ << data.time << ","; //! motor controler's time
-    file_ << command.getTargetSpeed(device) << ","; //! target speed in RPM
-    file_ << data.front_rpm << "," << data.rear_rpm << ","; //! current motor RPM
-    file_ << data.front_current << "," << data.rear_current << ","; //! current in mA
-    file_ << data.battery_v << std::endl;
-    return true;
+  long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+  std::string device = data.device;
+
+  /*! calculate torque [mNm] */
+  auto back_torque = MOTOR::TORQUE_CONSTANT * data.front_current;
+  auto front_torque = MOTOR::TORQUE_CONSTANT * data.rear_current;
+
+  /*! calculate power [mW] */
+  auto back_power = (back_torque * (data.rear_rpm / MOTOR::GEAR_RATIO)) * 2 * MOTOR::PI / 60;
+  auto front_power = (front_torque * (data.front_rpm / MOTOR::GEAR_RATIO)) * 2 * MOTOR::PI / 60;
+
+  file_ << device << ":" //! device id 'L' or 'R'
+        << now / 1000 << "," << (now % 1000) * 1000 << ";" //! rover pc board time in [ms]
+        << now / 1000 << "," << (now % 1000) * 1000 << ";" //! rover pc board time in [ms]
+        << data.time << ";" //! motor controler's time
+        << command.getTargetSpeed(device) << "," << data.front_rpm << "," << data.rear_rpm << ";"
+        << back_torque << ","<< front_torque << ";"
+        << back_power << ","<< front_power << ";"
+        << data.battery_v << std::endl;
+
+  return true;
 }
 
 /*!
