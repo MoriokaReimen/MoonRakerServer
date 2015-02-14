@@ -24,3 +24,6 @@ add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 
 add_executable(TheSimple.exe src/SimpleMain.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp) 
 target_link_libraries(TheSimple.exe zmq pthread zmqpp-static curses c m boost_system)
+
+add_executable(TimerRunner.exe src/TimerRunner.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp) 
+target_link_libraries(TimerRunner.exe zmq pthread zmqpp-static curses c m boost_system)
