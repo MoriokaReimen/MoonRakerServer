@@ -44,6 +44,8 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+const short GEAR_RATIO = 690;
+
 int main()
 {
         /*! set up log file */
@@ -62,6 +64,10 @@ int main()
         cin >> left_rpm;
         cout << "Input right RPM:" << endl;
         cin >> right_rpm;
+
+        /* refer gear reduction */
+        left_rpm *= GEAR_RATIO;
+        right_rpm *= GEAR_RATIO;
 
         /*! set up curses*/
         int ch = 0;
@@ -83,15 +89,13 @@ int main()
                 auto current_time = std::chrono::high_resolution_clock::now();
                 auto ellapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
                 command.set(0,0);
-                if(ellapsed_time > 5.0) command.set(left_rpm, right_rpm);
-                if(ellapsed_time > 20.0) command.set(0, 0);
-                if(ellapsed_time > 25.0) break;
+                if(ellapsed_time > 5.0)  command.set(left_rpm, right_rpm);
+                if(ellapsed_time > 35.0) command.set(0, 0);
+                if(ellapsed_time > 40.0) break;
 
                 /*! send command and get data */
                 try {
                         motor.work(command, left, right);
-                        move(1, 0);
-                        clrtoeol();
                 } catch(...) {
                         move(1, 0);
                         attron(COLOR_PAIR(2));
