@@ -37,14 +37,14 @@
 
 int main ()
 {
-    const string data_address {
-        "tcp://192.168.11.99:5555"
-    };
-    const string command_address {
-        "tcp://192.168.11.99:5556"
-    };
-    MoonServer server(data_address, command_address);
-    server.run();
+        const string data_address {
+                "tcp://192.168.11.99:5555"
+        };
+        const string command_address {
+                "tcp://192.168.11.99:5556"
+        };
+        MoonServer server(data_address, command_address);
+        server.run();
 
-    return 0;
+        return 0;
 }

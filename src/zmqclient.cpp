@@ -42,15 +42,15 @@ using std::string;
  * @param[in] address to subscribe command like ""
 */
 ZMQClient::ZMQClient(const string& data_address, const string& command_address) :
-    publish_socket_(publish_context_, publish_type_), subscribe_socket_(subscribe_context_, subscribe_type_)
+        publish_socket_(publish_context_, publish_type_), subscribe_socket_(subscribe_context_, subscribe_type_)
 {
-    /* Initialize socket for receiving data */
-    this -> subscribe_socket_.connect(data_address);
+        /* Initialize socket for receiving data */
+        this -> subscribe_socket_.connect(data_address);
 
-    /* Initialize socket for publishing motor command */
-    this -> publish_socket_.connect(command_address);
+        /* Initialize socket for publishing motor command */
+        this -> publish_socket_.connect(command_address);
 
-    return;
+        return;
 }
 
 /*!
@@ -59,11 +59,11 @@ ZMQClient::ZMQClient(const string& data_address, const string& command_address) 
 */
 void ZMQClient::sendCommand(const MotorCommand& command)
 {
-    CommandBytes  bytes = command.toByteArray();
-    zmqpp::message message;
-    message.add_raw(&bytes, sizeof(bytes));
-    this->publish_socket_.send(message);
-    return;
+        CommandBytes  bytes = command.toByteArray();
+        zmqpp::message message;
+        message.add_raw(&bytes, sizeof(bytes));
+        this->publish_socket_.send(message);
+        return;
 
 }
 
@@ -73,9 +73,9 @@ void ZMQClient::sendCommand(const MotorCommand& command)
 */
 ZMQData ZMQClient::getData()
 {
-    ZMQBytes bytes;
-    zmqpp::message message;
-    this->subscribe_socket_.receive(message);
-    memcpy(&bytes, message.raw_data(0), sizeof(bytes));
-    return ZMQData(bytes);
+        ZMQBytes bytes;
+        zmqpp::message message;
+        this->subscribe_socket_.receive(message);
+        memcpy(&bytes, message.raw_data(0), sizeof(bytes));
+        return ZMQData(bytes);
 }

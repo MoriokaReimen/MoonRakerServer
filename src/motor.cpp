@@ -42,7 +42,7 @@ using std::runtime_error;
  */
 Motor::Motor()
 {
-    serial.open("/dev/ttyS0", 115200);
+        serial.open("/dev/ttyS0", 115200);
 }
 
 
@@ -52,11 +52,11 @@ Motor::Motor()
  */
 int Motor::sendCommand(const MotorCommand& command)
 {
-    CommandBytes bytes {command.toByteArray()};
-    unsigned char buffer[sizeof(bytes)];
-    memcpy(buffer, &bytes, sizeof(bytes));
-    serial.write(buffer, sizeof(bytes));
-    return EXIT_SUCCESS;
+        CommandBytes bytes {command.toByteArray()};
+        unsigned char buffer[sizeof(bytes)];
+        memcpy(buffer, &bytes, sizeof(bytes));
+        serial.write(buffer, sizeof(bytes));
+        return EXIT_SUCCESS;
 }
 /*!
  * @brief get data from the motor
@@ -66,22 +66,22 @@ int Motor::sendCommand(const MotorCommand& command)
  */
 MotorData Motor::getData()
 {
-    DataBytes bytes;
-    unsigned char buffer[40];
-    //unsigned char pattern[1] = {0xFF};
+        DataBytes bytes;
+        unsigned char buffer[40];
+        //unsigned char pattern[1] = {0xFF};
 
-    /*! read 19 bytes from serial */
-    serial.read(buffer, sizeof(bytes), true, 20);
+        /*! read 19 bytes from serial */
+        serial.read(buffer, sizeof(bytes), true, 20);
 
-    /*! Detect Headers and footers */
-    for (int i = 0; i < 40; ++i) {
-        if ( (buffer[i+1]== 0xAA) && (buffer[i+18] == 0xFF) ) {
-            //! motor data array
-            memcpy(&bytes, &buffer[i], sizeof(bytes));
-            return MotorData(bytes);
+        /*! Detect Headers and footers */
+        for (int i = 0; i < 40; ++i) {
+                if ( (buffer[i+1]== 0xAA) && (buffer[i+18] == 0xFF) ) {
+                        //! motor data array
+                        memcpy(&bytes, &buffer[i], sizeof(bytes));
+                        return MotorData(bytes);
+                }
         }
-    }
-    throw runtime_error("Broken data"); //! data is broken
+        throw runtime_error("Broken data"); //! data is broken
 }
 
 /*!
@@ -93,24 +93,24 @@ MotorData Motor::getData()
  */
 bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 {
-    /*! initialize sleep function */
-    std::chrono::milliseconds interval(5);
+        /*! initialize sleep function */
+        std::chrono::milliseconds interval(5);
 
-    /*! send command */
-    this->sendCommand(command);
-    serial.poll();
+        /*! send command */
+        this->sendCommand(command);
+        serial.poll();
 
-    /*! get left motor data */
-    std::this_thread::sleep_for(interval);
-    left = this->getData();
+        /*! get left motor data */
+        std::this_thread::sleep_for(interval);
+        left = this->getData();
 
-    /*! get right motor data */
-    std::this_thread::sleep_for(interval);
-    right = this ->getData();
+        /*! get right motor data */
+        std::this_thread::sleep_for(interval);
+        right = this ->getData();
 
-    /*! clear serial port buffer */
-    serial.clear();
-    return true;
+        /*! clear serial port buffer */
+        serial.clear();
+        return true;
 }
 
 /*!
@@ -118,7 +118,7 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
  */
 void Motor::halt()
 {
-    this->sendCommand(MotorCommand(0, 0));
-    this->sendCommand(MotorCommand(0, 0));
-    return;
+        this->sendCommand(MotorCommand(0, 0));
+        this->sendCommand(MotorCommand(0, 0));
+        return;
 }
