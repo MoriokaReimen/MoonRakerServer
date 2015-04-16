@@ -35,6 +35,7 @@
 */
 #include <iostream>
 #include <cstdio>
+#include <cstdlib>
 #include <ncurses.h>
 #include "motor.hpp"
 #include "data.hpp"
@@ -88,16 +89,23 @@ int main()
                 if(ch == 's') left_rpm = right_rpm = 0;
 
                 /* gear ratio */
-                left_rpm  *= GEAR_RATIO;
-                right_rpm *= GEAR_RATIO;
-                command.set(left_rpm, right_rpm);
+                command.set(left_rpm * GEAR_RATIO, right_rpm * GEAR_RATIO);
 
                 /*! send command and get data */
                 try {
                         motor.work(command, left, right);
                         move(1, 0);
                         clrtoeol();
-                } catch(...) {
+                }
+                catch(const range_error& error) {
+                        motor.halt();
+                        attron(COLOR_PAIR(2));
+                        printw("norm_rpm: %d", norm_rpm);
+                        printw("Error !!");
+                        attroff(COLOR_PAIR(2));
+                        std::exit(0);
+                }
+                catch(...) {
                         move(1, 0);
                         attron(COLOR_PAIR(2));
                         printw("Error !!");
