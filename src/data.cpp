@@ -41,9 +41,9 @@
  */
 MotorData::MotorData(const DataBytes& data)
 {
-    this->set(data);
+        this->set(data);
 
-    return;
+        return;
 }
 
 /*!
@@ -52,16 +52,16 @@ MotorData::MotorData(const DataBytes& data)
  */
 void MotorData::set(const DataBytes& data)
 {
-    if(data.device == 0x11) this->device = "L";
-    if(data.device == 0x12) this->device = "R";
-    this -> rear_current  = static_cast<int16_t>(be16toh(data.rear_current));
-    this -> front_current = static_cast<int16_t>(be16toh(data.front_current));
-    this -> rear_rpm  = static_cast<int16_t>(be16toh(data.rear_rpm));
-    this -> front_rpm  = static_cast<int16_t>(be16toh(data.front_rpm));
-    this -> battery_v  = static_cast<uint16_t>(be16toh(data.battery_v));
-    this -> time  = static_cast<uint32_t>(be32toh(data.time));
+        if(data.device == 0x11) this->device = "L";
+        if(data.device == 0x12) this->device = "R";
+        this -> rear_current  = static_cast<int16_t>(be16toh(data.rear_current));
+        this -> front_current = static_cast<int16_t>(be16toh(data.front_current));
+        this -> rear_rpm  = static_cast<int16_t>(be16toh(data.rear_rpm));
+        this -> front_rpm  = static_cast<int16_t>(be16toh(data.front_rpm));
+        this -> battery_v  = static_cast<uint16_t>(be16toh(data.battery_v));
+        this -> time  = static_cast<uint32_t>(be32toh(data.time));
 
-    return;
+        return;
 }
 
 /*!
@@ -70,14 +70,14 @@ void MotorData::set(const DataBytes& data)
  */
 DataBytes MotorData::toByteArray() const
 {
-    DataBytes data;
-    if(this->device == "L") data.device = 0x11;
-    if(this->device == "R") data.device = 0x12;
-    data.rear_current = static_cast<int>(htobe16(this->rear_current));
-    data.front_current = static_cast<int>(htobe16(this->front_current));
-    data.rear_rpm = static_cast<int>(htobe16(this->rear_rpm));
-    data.front_rpm = static_cast<int>(htobe16(this->front_rpm));
-    data.battery_v = static_cast<int>(htobe16(this->battery_v));
-    data.time = static_cast<long>(htobe32(this->time));
-    return data;
+        DataBytes data;
+        if(this->device == "L") data.device = 0x11;
+        if(this->device == "R") data.device = 0x12;
+        data.rear_current = static_cast<int>(htobe16(this->rear_current));
+        data.front_current = static_cast<int>(htobe16(this->front_current));
+        data.rear_rpm = static_cast<int>(htobe16(this->rear_rpm));
+        data.front_rpm = static_cast<int>(htobe16(this->front_rpm));
+        data.battery_v = static_cast<int>(htobe16(this->battery_v));
+        data.time = static_cast<long>(htobe32(this->time));
+        return data;
 }

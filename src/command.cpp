@@ -43,12 +43,12 @@ using std::abs;
  */
 MotorCommand::MotorCommand(const signed short& left, const signed short& right)
 {
-    if(abs(left_rpm) > max_rpm_ || abs(right_rpm) > max_rpm_)
-        throw std::range_error("rpm is over max rpm");
+        if(abs(left_rpm) > max_rpm_ || abs(right_rpm) > max_rpm_)
+                throw std::range_error("rpm is over max rpm");
 
-    this->left_rpm  = left;
-    this->right_rpm = right;
-    return;
+        this->left_rpm  = left;
+        this->right_rpm = right;
+        return;
 }
 
 /*!
@@ -57,8 +57,8 @@ MotorCommand::MotorCommand(const signed short& left, const signed short& right)
  */
 MotorCommand::MotorCommand(const CommandBytes& command)
 {
-    this->set(command);
-    return;
+        this->set(command);
+        return;
 }
 
 /*!
@@ -68,12 +68,12 @@ MotorCommand::MotorCommand(const CommandBytes& command)
  */
 void MotorCommand::set(const signed short& left, const signed short& right)
 {
-    if(abs(left_rpm) > max_rpm_ || abs(right_rpm) > max_rpm_)
-        throw std::range_error("rpm is over max rpm");
+        if(abs(left_rpm) > max_rpm_ || abs(right_rpm) > max_rpm_)
+                throw std::range_error("rpm is over max rpm");
 
-    this->left_rpm  = left;
-    this->right_rpm = right;
-    return;
+        this->left_rpm  = left;
+        this->right_rpm = right;
+        return;
 }
 
 /*!
@@ -82,10 +82,10 @@ void MotorCommand::set(const signed short& left, const signed short& right)
  */
 void MotorCommand::set(const CommandBytes& command)
 {
-    signed short left = static_cast<int16_t>(be16toh(command.left_rpm));
-    signed short right = static_cast<int16_t>(be16toh(command.right_rpm));
-    this->set(left, right);
-    return;
+        signed short left = static_cast<int16_t>(be16toh(command.left_rpm));
+        signed short right = static_cast<int16_t>(be16toh(command.right_rpm));
+        this->set(left, right);
+        return;
 }
 
 /*!
@@ -94,10 +94,10 @@ void MotorCommand::set(const CommandBytes& command)
  */
 CommandBytes MotorCommand::toByteArray() const
 {
-    CommandBytes command;
-    command.left_rpm = htobe16(this->left_rpm);
-    command.right_rpm = htobe16(this->right_rpm);
-    return command;
+        CommandBytes command;
+        command.left_rpm = htobe16(this->left_rpm);
+        command.right_rpm = htobe16(this->right_rpm);
+        return command;
 }
 
 /*!
@@ -107,7 +107,7 @@ CommandBytes MotorCommand::toByteArray() const
  */
 short MotorCommand::getTargetSpeed(const std::string& device_id) const
 {
-    if(device_id == "R") return this->right_rpm;
-    if(device_id == "L") return this->left_rpm;
-    return 0;
+        if(device_id == "R") return this->right_rpm;
+        if(device_id == "L") return this->left_rpm;
+        return 0;
 }
