@@ -11,14 +11,21 @@ LINK_DIRECTORIES("/opt/cross/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-set(CMAKE_CXX_COMPILER "i686-linux-gnu-g++")
-set(CMAKE_C_COMPILER "i686-linux-gnu-gcc")
+#set(CMAKE_CXX_COMPILER "i686-linux-gnu-g++")
+#set(CMAKE_C_COMPILER "i686-linux-gnu-gcc")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -m32")
 set(CMAKE_C_FLAGS "-std=c++11 -Wall -m32")
 
 add_library(moon_server STATIC  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp)
+
 add_executable(MoonServer.exe src/ServerMain.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp)
 target_link_libraries(MoonServer.exe zmq-static pthread zmqpp-static boost_system rt)
+
+add_executable(TheSimple.exe src/SimpleMain.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp) 
+target_link_libraries(TheSimple.exe zmq-static pthread zmqpp-static curses c m boost_system rt)
+
+add_executable(TimerRunner.exe src/TimerRunner.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp) 
+target_link_libraries(TimerRunner.exe zmq-static pthread zmqpp-static curses c m boost_system rt)
 
 enable_testing()
 add_executable(test.exe test/test-data.cpp test/test-command.cpp test/test-zmqdata.cpp test/test-zmq.cpp)
@@ -26,8 +33,3 @@ target_link_libraries(test.exe gtest gtest_main pthread rt)
 target_link_libraries(test.exe moon_server zmqpp-static zmq-static boost_system rt)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 
-add_executable(TheSimple.exe src/SimpleMain.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp) 
-target_link_libraries(TheSimple.exe zmq-static pthread zmqpp-static curses c m boost_system rt)
-
-add_executable(TimerRunner.exe src/TimerRunner.cpp  src/command.cpp src/data.cpp src/motor.cpp src/zmqdata.cpp src/zmqserver.cpp src/zmqclient.cpp src/moonserver.cpp src/BoostComPort.cpp src/Logger.cpp) 
-target_link_libraries(TimerRunner.exe zmq-static pthread zmqpp-static curses c m boost_system rt)
