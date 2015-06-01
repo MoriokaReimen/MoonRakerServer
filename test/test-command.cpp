@@ -42,8 +42,8 @@ TEST(CommandTest, Construct)
 {
     MotorCommand command(100, -120);
 
-    EXPECT_EQ(100, command.left_rpm);
-    EXPECT_EQ(-120, command.right_rpm);
+    EXPECT_EQ(100, command.left_front_rpm);
+    EXPECT_EQ(-120, command.right_front_rpm);
 }
 
 TEST(CommandTest, SetRPM)
@@ -51,8 +51,8 @@ TEST(CommandTest, SetRPM)
     MotorCommand command(100, -120);
     command.set(2000, 3000);
 
-    EXPECT_EQ(2000, command.left_rpm);
-    EXPECT_EQ(3000, command.right_rpm);
+    EXPECT_EQ(2000, command.left_front_rpm);
+    EXPECT_EQ(3000, command.right_front_rpm);
 }
 
 TEST(CommandTest, ToByteArray)
@@ -61,27 +61,27 @@ TEST(CommandTest, ToByteArray)
     CommandBytes command_bytesA = command.toByteArray();
     char* binary = reinterpret_cast<char *>(&command_bytesA);
 
-    EXPECT_EQ(11, sizeof(command_bytesA));
-    EXPECT_EQ(100, (int) static_cast<int16_t>(be16toh(command_bytesA.left_rpm)));
-    EXPECT_EQ(-120, (int) static_cast<int16_t>(be16toh(command_bytesA.right_rpm)));
+    EXPECT_EQ(15, sizeof(command_bytesA));
+    EXPECT_EQ(100, (int) static_cast<int16_t>(be16toh(command_bytesA.left_front_rpm)));
+    EXPECT_EQ(-120, (int) static_cast<int16_t>(be16toh(command_bytesA.right_front_rpm)));
     EXPECT_EQ('\x75', binary[0]);
     EXPECT_EQ('\xAA', binary[1]);
     EXPECT_EQ('\x13', binary[2]);
     EXPECT_EQ('\x00', binary[3]);
     EXPECT_EQ('\x00', binary[4]);
-    EXPECT_EQ('\x75', binary[9]);
-    EXPECT_EQ('\xFF', binary[10]);
+    EXPECT_EQ('\x75', binary[13]);
+    EXPECT_EQ('\xFF', binary[14]);
 }
 
 TEST(CommandTest, FromByteArray)
 {
     CommandBytes bytes;
-    bytes.left_rpm = static_cast<int16_t>(htobe16(100));
-    bytes.right_rpm = static_cast<int16_t>(htobe16(-120));
+    bytes.left_front_rpm = static_cast<int16_t>(htobe16(100));
+    bytes.right_front_rpm = static_cast<int16_t>(htobe16(-120));
     MotorCommand command(bytes);
 
-    EXPECT_EQ(100, command.left_rpm);
-    EXPECT_EQ(-120, command.right_rpm);
+    EXPECT_EQ(100, command.left_front_rpm);
+    EXPECT_EQ(-120, command.right_front_rpm);
 }
 
 TEST(CommandTest, COPY)
@@ -91,6 +91,6 @@ TEST(CommandTest, COPY)
     commandb = commanda;
     commanda.set(120, 100);
 
-    EXPECT_EQ(100, commandb.left_rpm);
-    EXPECT_EQ(-120, commandb.right_rpm);
+    EXPECT_EQ(100, commandb.left_front_rpm);
+    EXPECT_EQ(-120, commandb.right_front_rpm);
 }

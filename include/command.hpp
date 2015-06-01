@@ -47,10 +47,12 @@
 struct CommandBytes {
     const uint16_t header = 0x75aa; //! Header byte
     const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
+    const int16_t reserved = 0x00;
     //(0x11 = left, 0x12 = right)
-    const int16_t boost_flag = htole16(0x00);
-    int16_t left_rpm = 0;        //! Left Motor RPM Byte
-    int16_t right_rpm = 0;        //! Right Motor RPM Byte
+    int16_t left_front_rpm = 0;        //! Left Motor RPM Byte
+    int16_t left_rear_rpm = 0;        //! Left Motor RPM Byte
+    int16_t right_front_rpm = 0;        //! Left Motor RPM Byte
+    int16_t right_rear_rpm = 0;        //! Left Motor RPM Byte
     const uint16_t footer = 0x75ff; //! Footer byte
 } __attribute__((__packed__));
 #pragma pack()
@@ -58,11 +60,12 @@ struct CommandBytes {
 #pragma pack(1)
 struct CommandBytes {
     const uint16_t header = 0xaa75; //! Header byte
-    const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
-    //(0x11 = left, 0x12 = right)
-    const int16_t boost_flag = htole16(0x00);
-    int16_t left_rpm = 0;        //! Left Motor RPM Byte
-    int16_t right_rpm = 0;        //! Right Motor RPM Byte
+    const uint8_t device = 0x13; //! Source device 0x13 = PCBoard(0x11 = left, 0x12 = right)
+    const int16_t reserved = 0x00;
+    int16_t left_front_rpm = 0;        //! Left Motor RPM Byte
+    int16_t left_rear_rpm = 0;        //! Left Motor RPM Byte
+    int16_t right_front_rpm = 0;        //! Left Motor RPM Byte
+    int16_t right_rear_rpm = 0;        //! Left Motor RPM Byte
     const uint16_t footer = 0xff75; //! Footer byte
 } __attribute__((__packed__));
 #pragma pack()
@@ -75,8 +78,10 @@ struct CommandBytes {
 class MotorCommand
 {
 public:
-    signed short left_rpm {0}; //! left motor rotation speed
-    signed short right_rpm {0}; //! right motor rotation speed
+    signed short left_front_rpm {0}; //! left motor rotation speed
+    signed short left_rear_rpm {0}; //! left motor rotation speed
+    signed short right_front_rpm {0}; //! left motor rotation speed
+    signed short right_rear_rpm {0}; //! left motor rotation speed
     signed short max_rpm_ {4000}; //! max motor rotation speed
     MotorCommand() = default;
     MotorCommand& operator=(const MotorCommand& command) = default;
