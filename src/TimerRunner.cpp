@@ -38,7 +38,6 @@
 #include <ncurses.h>
 #include "Motor.hpp"
 #include "Data.hpp"
-#include "Logger.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -53,13 +52,12 @@ int main()
         cout << "log file name:" << endl;
         cin >> file_name;
         file_name = file_name + ".mlog";
-        Logger logger(file_name);
 
         /*! set up MoonRaker */
         short left_rpm(0), right_rpm(0);
         Motor motor;
         MotorData left, right;
-        MotorCommand command(0, 0);
+        MotorCommand command(0, 0, 0, 0);
         cout << "Input left RPM:" << endl;
         cin >> left_rpm;
         cout << "Input right RPM:" << endl;
@@ -88,9 +86,9 @@ int main()
 
                 auto current_time = std::chrono::high_resolution_clock::now();
                 auto ellapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
-                command.set(0,0);
-                if(ellapsed_time > 5.0)  command.set(left_rpm, right_rpm);
-                if(ellapsed_time > 35.0) command.set(0, 0);
+                command.set(0,0, 0, 0);
+                if(ellapsed_time > 5.0)  command.set(left_rpm, left_rpm, right_rpm, right_rpm);
+                if(ellapsed_time > 35.0) command.set(0, 0, 0, 0);
                 if(ellapsed_time > 40.0) break;
 
                 /*! send command and get data */
@@ -102,7 +100,6 @@ int main()
                         printw("Error !!");
                         attroff(COLOR_PAIR(2));
                 }
-                logger.log(command, left, right);
 
                 /*! show data to console */
                 move(6, 0);

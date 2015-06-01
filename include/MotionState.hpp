@@ -38,30 +38,23 @@
 #include "Command.hpp"
 #include "Data.hpp"
 
+class WheelState
+{
+public:
+  rpm;
+  torque;
+};
 /*! @class Motor
  *  @brief handles serial communication between motor
 */
-class MoonRaker
+class RoverState
 {
-    Motor motor_;
-    Logger logger_;
 public:
-    MoonRaker(std::string filename)
-      : logger_(filename)
-    {
-      return;
-    }
-
-    ~MoonRaker()
-    {
-      motor_.halt();
-      return;
-    }
-
-    run(const Command& command)
-    {
-      try{
-        motor_.work(command, left_data, right_data);
-      }
-    }
+  start;
+  now;
+  WheelState left_front;
+  WheelState left_rear;
+  WheelState right_front;
+  WheelState right_rear;
+  //Quaternion quat; //! implement someday
 };

@@ -39,7 +39,6 @@
 #include <ncurses.h>
 #include "Motor.hpp"
 #include "Data.hpp"
-#include "Logger.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -54,7 +53,6 @@ int main()
         cout << "log file name:" << endl;
         cin >> file_name;
         file_name = file_name + ".mlog";
-        Logger logger(file_name);
 
         /*! set up MoonRaker */
         int norm_rpm(0);
@@ -112,7 +110,6 @@ int main()
                         printw("Error !!");
                         attroff(COLOR_PAIR(2));
                 }
-                logger.log(command, left, right);
 
                 /*! show data to console */
                 move(6, 0);

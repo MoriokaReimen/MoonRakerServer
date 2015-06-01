@@ -40,24 +40,26 @@
 
 TEST(CommandTest, Construct)
 {
-    MotorCommand command(100, -120);
+    MotorCommand command(100, 90, -120, -180);
+
+    EXPECT_EQ(100, command.left_front_rpm);
+    EXPECT_EQ(90, command.left_rear_rpm);
+    EXPECT_EQ(-120, command.right_front_rpm);
+    EXPECT_EQ(-180, command.right_rear_rpm);
+}
+
+TEST(CommandTest, SetRPM)
+{
+    MotorCommand command(100, -120, 0, 0);
+    command.set(100, 90, -120, -180);
 
     EXPECT_EQ(100, command.left_front_rpm);
     EXPECT_EQ(-120, command.right_front_rpm);
 }
 
-TEST(CommandTest, SetRPM)
-{
-    MotorCommand command(100, -120);
-    command.set(2000, 3000);
-
-    EXPECT_EQ(2000, command.left_front_rpm);
-    EXPECT_EQ(3000, command.right_front_rpm);
-}
-
 TEST(CommandTest, ToByteArray)
 {
-    MotorCommand command(100, -120);
+    MotorCommand command(100, 0, -120, 0);
     CommandBytes command_bytesA = command.toByteArray();
     char* binary = reinterpret_cast<char *>(&command_bytesA);
 
@@ -86,10 +88,10 @@ TEST(CommandTest, FromByteArray)
 
 TEST(CommandTest, COPY)
 {
-    MotorCommand commanda(100, -120);
+    MotorCommand commanda(100, 0, -120, 0);
     MotorCommand commandb;
     commandb = commanda;
-    commanda.set(120, 100);
+    commanda.set(120, 0, 100, 0);
 
     EXPECT_EQ(100, commandb.left_front_rpm);
     EXPECT_EQ(-120, commandb.right_front_rpm);
