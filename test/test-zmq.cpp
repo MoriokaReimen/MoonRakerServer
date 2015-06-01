@@ -50,8 +50,8 @@ TEST(ZMQServerTest, ReceiveCommand)
     MotorCommand command_send(100, 2800);
     client.sendCommand(command_send);
     MotorCommand command_recv = server.getCommand();
-    EXPECT_EQ(100, command_recv.left_rpm);
-    EXPECT_EQ(2800, command_recv.right_rpm);
+    EXPECT_EQ(100, command_recv.left_front_rpm);
+    EXPECT_EQ(2800, command_recv.right_front_rpm);
 }
 
 TEST(ZMQServerTest, SendData)
