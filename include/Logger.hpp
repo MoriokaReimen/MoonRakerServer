@@ -37,8 +37,8 @@ Filename:    Logger.hpp
 #include <string>
 #include <fstream>
 #include <chrono>
-#include "data.hpp"
-#include "command.hpp"
+#include "Data.hpp"
+#include "Command.hpp"
 
 /*! @class Logger
  *  @brief handles log routine

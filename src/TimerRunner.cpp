@@ -36,8 +36,8 @@
 #include <iostream>
 #include <cstdio>
 #include <ncurses.h>
-#include "motor.hpp"
-#include "data.hpp"
+#include "Motor.hpp"
+#include "Data.hpp"
 #include "Logger.hpp"
 #include <string>
 using std::cout;

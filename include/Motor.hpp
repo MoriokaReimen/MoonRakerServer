@@ -1,6 +1,6 @@
 /*!
 -----------------------------------------------------------------------------
-@file    motor.hpp
+@file    Motor.hpp
 ----------------------------------------------------------------------------
          @@
        @@@@@@
@@ -35,8 +35,8 @@
 */
 #pragma once
 #include "BoostComPort.hpp"
-#include "command.hpp"
-#include "data.hpp"
+#include "Command.hpp"
+#include "Data.hpp"
 #include <stdexcept>
 #include <cstring>
 #include <thread>

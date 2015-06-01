@@ -34,7 +34,7 @@
 -----------------------------------------------------------------------------
 */
 #include <gtest/gtest.h>
-#include "data.hpp"
+#include "Data.hpp"
 #include <portable_endian.h>
 
 TEST(DataTest, ToByteArray)

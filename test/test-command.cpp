@@ -35,7 +35,7 @@
 */
 #include <gtest/gtest.h>
 
-#include "command.hpp"
+#include "Command.hpp"
 #include <portable_endian.h>
 
 TEST(CommandTest, Construct)
