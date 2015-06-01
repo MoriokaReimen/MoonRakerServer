@@ -41,9 +41,10 @@ using std::abs;
  * @param[in] left left motr rotation velocity in rpm
  * @param[in] right left motr rotation velocity in rpm
  */
-MotorCommand::MotorCommand(const signed short& left, const signed short& right)
+MotorCommand::MotorCommand(const signed short& left_front, const signed short& left_rear,
+    const signed short& right_front, const signed short& right_rear)
 {
-  this->set(left, right);
+  this->set(left_front, left_rear, right_front, right_rear);
 }
 
 /*!
@@ -61,15 +62,17 @@ MotorCommand::MotorCommand(const CommandBytes& command)
  * @param[in] left left motr rotation velocity in rpm
  * @param[in] right left motr rotation velocity in rpm
  */
-void MotorCommand::set(const signed short& left, const signed short& right)
+void MotorCommand::set(const signed short& left_front, const signed short& left_rear,
+    const signed short& right_front, const signed short& right_rear)
 {
-        if(abs(left) > max_rpm_ || abs(right) > max_rpm_)
+        if(abs(left_front) > max_rpm_ || abs(left_rear) > max_rpm_
+            || abs(right_front) > max_rpm_ || abs(right_rear) > max_rpm_)
                 throw std::range_error("rpm is over max rpm");
 
-        this->left_front_rpm  = left;
-        this->left_rear_rpm  = left;
-        this->right_front_rpm = right;
-        this->right_rear_rpm = right;
+        this->left_front_rpm  = left_front;
+        this->left_rear_rpm  = left_rear;
+        this->right_front_rpm = right_front;
+        this->right_rear_rpm = right_rear;
         return;
 }
 
@@ -79,9 +82,11 @@ void MotorCommand::set(const signed short& left, const signed short& right)
  */
 void MotorCommand::set(const CommandBytes& command)
 {
-        signed short left = static_cast<int16_t>(be16toh(command.left_front_rpm));
-        signed short right = static_cast<int16_t>(be16toh(command.right_front_rpm));
-        this->set(left, right);
+        signed short left_front = static_cast<int16_t>(be16toh(command.left_front_rpm));
+        signed short left_rear = static_cast<int16_t>(be16toh(command.left_rear_rpm));
+        signed short right_front = static_cast<int16_t>(be16toh(command.right_front_rpm));
+        signed short right_rear = static_cast<int16_t>(be16toh(command.right_rear_rpm));
+        this->set(left_front, left_rear, right_front, right_rear);
         return;
 }
 
@@ -97,16 +102,4 @@ CommandBytes MotorCommand::toByteArray() const
         command.right_front_rpm = htobe16(this->right_front_rpm);
         command.right_rear_rpm = htobe16(this->right_rear_rpm);
         return command;
-}
-
-/*!
- * @brief get Target speed from device id L/R
- * @param[in] device id L/R
- * @return left/right target speed
- */
-short MotorCommand::getTargetSpeed(const std::string& device_id) const
-{
-        if(device_id == "R") return this->right_front_rpm;
-        if(device_id == "L") return this->left_rear_rpm;
-        return 0;
 }

@@ -61,7 +61,7 @@ int main()
         Motor motor;
         MotorData left, right;
         int left_rpm(0), right_rpm(0);
-        MotorCommand command(0, 0);
+        MotorCommand command(0, 0, 0, 0);
         cout << "Input Nominal RPM (-5 to +5):" << endl;
         cin >> norm_rpm;
 
@@ -89,7 +89,8 @@ int main()
                 if(ch == 's') left_rpm = right_rpm = 0;
 
                 /* gear ratio */
-                command.set(left_rpm * GEAR_RATIO, right_rpm * GEAR_RATIO);
+                command.set(left_rpm * GEAR_RATIO, left_rpm * GEAR_RATIO,
+                    right_rpm * GEAR_RATIO, right_rpm * GEAR_RATIO);
 
                 /*! send command and get data */
                 try {

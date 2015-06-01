@@ -118,7 +118,6 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
  */
 void Motor::halt()
 {
-        this->sendCommand(MotorCommand(0, 0));
-        this->sendCommand(MotorCommand(0, 0));
+        this->sendCommand(MotorCommand(0, 0, 0, 0));
         return;
 }
