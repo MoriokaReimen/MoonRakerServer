@@ -48,17 +48,17 @@ const double PI = 3.14159265359;
  */
 Logger::Logger(const std::string& file_name)
 {
-  file_.open(file_name);
-  file_ << "Time[ms]" << ","
-        << "LF RPM"  << ","
-        << "LR RPM"  << ","
-        << "RF RPM"  << ","
-        << "RR RPM"  << ","
-        << "LF torque" << ","
-        << "LR torque" << ","
-        << "RF torque" << ","
-        << "RR torque" << std::endl;
-  return;
+    file_.open(file_name);
+    file_ << "Time[ms]" << ","
+          << "LF RPM"  << ","
+          << "LR RPM"  << ","
+          << "RF RPM"  << ","
+          << "RR RPM"  << ","
+          << "LF torque" << ","
+          << "LR torque" << ","
+          << "RF torque" << ","
+          << "RR torque" << std::endl;
+    return;
 }
 
 /*!
@@ -66,9 +66,9 @@ Logger::Logger(const std::string& file_name)
  */
 Logger::~Logger()
 {
-        file_.close();
+    file_.close();
 
-        return;
+    return;
 }
 
 /*!
@@ -78,15 +78,15 @@ Logger::~Logger()
  */
 void Logger::log(const RoverState& data)
 {
-  file_ << data.time << ","
-        << data.left_front.rpm << ","
-        << data.left_rear.rpm << ","
-        << data.right_front.rpm << ","
-        << data.right_rear.rpm << ","
-        << data.left_front.torque << ","
-        << data.left_rear.torque << ","
-        << data.right_front.torque << ","
-        << data.right_rear.torque << std::endl;
+    file_ << data.time << ","
+          << data.left_front.rpm << ","
+          << data.left_rear.rpm << ","
+          << data.right_front.rpm << ","
+          << data.right_rear.rpm << ","
+          << data.left_front.torque << ","
+          << data.left_rear.torque << ","
+          << data.right_front.torque << ","
+          << data.right_rear.torque << std::endl;
 
-  return;
+    return;
 }
