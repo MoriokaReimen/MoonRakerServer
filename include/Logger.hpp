@@ -37,8 +37,7 @@ Filename:    Logger.hpp
 #include <string>
 #include <fstream>
 #include <chrono>
-#include "Data.hpp"
-#include "Command.hpp"
+#include "RoverState.hpp"
 
 /*! @class Logger
  *  @brief handles log routine
@@ -49,6 +48,5 @@ class Logger
 public:
     Logger(const std::string& filne_name);
     ~Logger();
-    bool log(const MotorCommand& command, const MotorData& data);
-    bool log(const MotorCommand& command, const MotorData& left, const MotorData& right);
+    void log(const RoverState& data);
 };

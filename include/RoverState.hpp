@@ -55,7 +55,7 @@ class RoverState
   const double PI{3.14159265359};
 public:
   void set(const MotorData& left, const MotorData& right);
-  long long now{0};
+  long long time{0};
   WheelState left_front;
   WheelState left_rear;
   WheelState right_front;

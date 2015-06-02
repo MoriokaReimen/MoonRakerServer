@@ -53,7 +53,7 @@ void RoverState::set(const MotorData& left, const MotorData& right)
   this->right_rear.torque = right.rear_current * TORQUE_CONSTANT;
 
   /* set time */
-  this->now = std::chrono::duration_cast<std::chrono::milliseconds>
+  this->time = std::chrono::duration_cast<std::chrono::milliseconds>
     (std::chrono::system_clock::now().time_since_epoch()).count();
 
   return;

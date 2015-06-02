@@ -48,8 +48,17 @@ const double PI = 3.14159265359;
  */
 Logger::Logger(const std::string& file_name)
 {
-        file_.open(file_name);
-        return;
+  file_.open(file_name);
+  file_ << "Time[ms]" << ","
+        << "LF RPM"  << ","
+        << "LR RPM"  << ","
+        << "RF RPM"  << ","
+        << "RR RPM"  << ","
+        << "LF torque" << ","
+        << "LR torque" << ","
+        << "RF torque" << ","
+        << "RR torque" << std::endl;
+  return;
 }
 
 /*!
@@ -67,40 +76,17 @@ Logger::~Logger()
  * @param[in] command sended to motor
  * @param[in] data from motor
  */
-bool Logger::log(const MotorCommand& command, const MotorData& data)
+void Logger::log(const RoverState& data)
 {
-        long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::string device = data.device;
+  file_ << data.time << ","
+        << data.left_front.rpm << ","
+        << data.left_rear.rpm << ","
+        << data.right_front.rpm << ","
+        << data.right_rear.rpm << ","
+        << data.left_front.torque << ","
+        << data.left_rear.torque << ","
+        << data.right_front.torque << ","
+        << data.right_rear.torque << std::endl;
 
-        /*! calculate torque [mNm] */
-        auto back_torque = MOTOR::TORQUE_CONSTANT * data.front_current;
-        auto front_torque = MOTOR::TORQUE_CONSTANT * data.rear_current;
-
-        /*! calculate power [mW] */
-        auto back_power = (back_torque * (data.rear_rpm / MOTOR::GEAR_RATIO)) * 2 * MOTOR::PI / 60;
-        auto front_power = (front_torque * (data.front_rpm / MOTOR::GEAR_RATIO)) * 2 * MOTOR::PI / 60;
-
-        file_ << device << ":" //! device id 'L' or 'R'
-              << now / 1000 << "," << (now % 1000) * 1000 << ";" //! rover pc board time in [ms]
-              << now / 1000 << "," << (now % 1000) * 1000 << ";" //! rover pc board time in [ms]
-              << data.time << ";" //! motor controler's time
-              << command.getTargetSpeed(device) << "," << data.front_rpm << "," << data.rear_rpm << ";"
-              << back_torque << ","<< front_torque << ";"
-              << back_power << ","<< front_power << ";"
-              << data.battery_v << std::endl;
-
-        return true;
-}
-
-/*!
- * @brief function to log data
- * @param[in] command sended to motor
- * @param[in] data from left motor
- * @param[in] data from right motor
- */
-bool Logger::log(const MotorCommand& command, const MotorData& left, const MotorData& right)
-{
-        this -> log(command, left);
-        this -> log(command, right);
-        return true;
+  return;
 }
