@@ -39,6 +39,8 @@
 #include <ncurses.h>
 #include "Motor.hpp"
 #include "Data.hpp"
+#include "RoverState.hpp"
+#include "Logger.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -48,11 +50,13 @@ const int GEAR_RATIO = 690;
 
 int main()
 {
+        RoverState rover;
         /*! set up log file */
         std::string file_name;
         cout << "log file name:" << endl;
         cin >> file_name;
         file_name = file_name + ".mlog";
+        Logger logger(file_name);
 
         /*! set up MoonRaker */
         int norm_rpm(0);
@@ -110,6 +114,8 @@ int main()
                         printw("Error !!");
                         attroff(COLOR_PAIR(2));
                 }
+                rover.set(left, right);
+                logger.log(rover);
 
                 /*! show data to console */
                 move(6, 0);
