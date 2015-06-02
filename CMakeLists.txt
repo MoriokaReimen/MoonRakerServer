@@ -13,7 +13,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 #set(CMAKE_C_COMPILER "i686-linux-gnu-gcc")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -m32")
 set(CMAKE_C_FLAGS "-std=c++11 -Wall -m32")
-set(SRC src/Command.cpp src/Data.cpp src/Motor.cpp src/BoostComPort.cpp)
+set(SRC src/Command.cpp src/Data.cpp src/Motor.cpp src/BoostComPort.cpp src/RoverState.cpp)
 
 add_executable(TheSimple.exe src/SimpleMain.cpp  ${SRC})
 target_link_libraries(TheSimple.exe pthread curses c m boost_system rt)

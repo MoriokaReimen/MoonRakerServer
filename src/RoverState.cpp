@@ -1,6 +1,6 @@
 /*!
 -----------------------------------------------------------------------------
-@file    MoonRaker.hpp
+@file    RoverState.cpp
 ----------------------------------------------------------------------------
          @@
        @@@@@@
@@ -30,40 +30,15 @@
           %%%%%
            %%%
 -----------------------------------------------------------------------------
-@brief MoonRaker facade class
+@brief hold rover state class
 -----------------------------------------------------------------------------
 */
-#pragma once
-#include "Data.hpp"
-#include <chrono>
+#include "RoverState.hpp"
 
-class WheelState
-{
-public:
-  double rpm{0};
-  double current{0};
-};
-
-/*! @class Motor
- *  @brief handles serial communication between motor
+/*! @function set
+ *  @brief set Rover state with Motordata
 */
-class RoverState
-{
-  const double GEAR_RATIO = 690.0f;
-  const double GEAR_EFFICIENCY = 0.49f;
-  const double TORQUE_CONSTANT = 0.00902f * GEAR_RATIO * GEAR_EFFICIENCY; //! in [mNm/mA]
-  const double PI = 3.14159265359;
-public:
-  void set(const MotorData& left, const MotorData& right);
-  long long now{0};
-  WheelState left_front;
-  WheelState left_rear;
-  WheelState right_front;
-  WheelState right_rear;
-  //Quaternion quat; implement someday
-};
-
-void set(const MotorData& left, const MotorData& right)
+void RoverState::set(const MotorData& left, const MotorData& right)
 {
   /* set rpm */
   this->left_front.rpm = left.front_rpm / GEAR_RATIO;
