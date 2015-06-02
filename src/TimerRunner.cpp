@@ -38,6 +38,8 @@
 #include <ncurses.h>
 #include "Motor.hpp"
 #include "Data.hpp"
+#include "Logger.hpp"
+#include "RoverState.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -47,25 +49,34 @@ const short GEAR_RATIO = 690;
 
 int main()
 {
+        RoverState rover;
         /*! set up log file */
         std::string file_name;
         cout << "log file name:" << endl;
         cin >> file_name;
         file_name = file_name + ".mlog";
+        Logger logger(file_name);
 
         /*! set up MoonRaker */
-        short left_rpm(0), right_rpm(0);
+        short left_front_rpm(0), left_rear_rpm(0);
+        short right_front_rpm(0), right_rear_rpm(0);
         Motor motor;
         MotorData left, right;
         MotorCommand command(0, 0, 0, 0);
-        cout << "Input left RPM:" << endl;
-        cin >> left_rpm;
-        cout << "Input right RPM:" << endl;
-        cin >> right_rpm;
+        cout << "Input left front RPM:" << endl;
+        cin >> left_front_rpm;
+        cout << "Input left rear RPM:" << endl;
+        cin >> left_rear_rpm;
+        cout << "Input right front RPM:" << endl;
+        cin >> right_front_rpm;
+        cout << "Input right rear RPM:" << endl;
+        cin >> right_rear_rpm;
 
         /* refer gear reduction */
-        left_rpm *= GEAR_RATIO;
-        right_rpm *= GEAR_RATIO;
+        left_front_rpm *= GEAR_RATIO;
+        left_rear_rpm *= GEAR_RATIO;
+        right_front_rpm *= GEAR_RATIO;
+        right_rear_rpm *= GEAR_RATIO;
 
         /*! set up curses*/
         int ch = 0;
@@ -87,7 +98,7 @@ int main()
                 auto current_time = std::chrono::high_resolution_clock::now();
                 auto ellapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
                 command.set(0,0, 0, 0);
-                if(ellapsed_time > 5.0)  command.set(left_rpm, left_rpm, right_rpm, right_rpm);
+                if(ellapsed_time > 5.0)  command.set(left_front_rpm, left_rear_rpm, right_front_rpm, right_rear_rpm);
                 if(ellapsed_time > 35.0) command.set(0, 0, 0, 0);
                 if(ellapsed_time > 40.0) break;
 
@@ -100,6 +111,9 @@ int main()
                         printw("Error !!");
                         attroff(COLOR_PAIR(2));
                 }
+
+                rover.set(left, right);
+                logger.log(rover);
 
                 /*! show data to console */
                 move(6, 0);
