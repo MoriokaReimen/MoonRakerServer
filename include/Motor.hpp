@@ -51,11 +51,11 @@ class Motor
 {
     BoostComPort serial;
 
-    int sendCommand(const MotorCommand& command);
-    MotorData getData();
 public:
     Motor();
     ~Motor() = default;
     bool work(const MotorCommand& command, MotorData& left, MotorData& right);
     void halt();
+    int sendCommand(const MotorCommand& command);
+    MotorData getData();
 };

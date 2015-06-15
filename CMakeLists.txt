@@ -21,8 +21,11 @@ target_link_libraries(TheSimple.exe pthread curses c m boost_system rt)
 add_executable(TimerRunner.exe src/TimerRunner.cpp ${SRC})
 target_link_libraries(TimerRunner.exe pthread curses c m boost_system rt)
 
+
 enable_testing()
 add_executable(test.exe test/test-data.cpp test/test-command.cpp ${SRC})
 target_link_libraries(test.exe gtest gtest_main pthread rt boost_system)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 
+add_executable(TestSerial.exe test/test-serial.cpp ${SRC})
+target_link_libraries(TestSerial.exe pthread curses c m boost_system rt)
