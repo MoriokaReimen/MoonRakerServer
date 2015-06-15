@@ -42,7 +42,7 @@ using std::runtime_error;
  */
 Motor::Motor()
 {
-    serial.open("/dev/ttyS0", 115200);
+    serial.open("/dev/ttyS0", 38400);
 }
 
 
