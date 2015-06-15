@@ -48,8 +48,8 @@ using std::string;
 struct DataBytes {
     const uint16_t header = 0x75AA; //! Header bytes
     uint8_t device = 0x00; //! Source device (0x11 = left, 0x12 = right)
-    int16_t rear_current = 0; //! rear Current
-    int16_t front_current = 0; //! front Current
+    uint16_t rear_current = 0; //! rear Current
+    uint16_t front_current = 0; //! front Current
     int16_t rear_rpm = 0; //! rear Motor RPM
     int16_t front_rpm = 0; //! front Motor RPM
     uint16_t battery_v = 0;        //! Battery Level milliVolts
@@ -62,8 +62,8 @@ struct DataBytes {
 struct DataBytes {
     const uint16_t header = 0xAA75; //! Header bytes
     uint8_t device = 0x00; //! Source device (0x11 = left, 0x12 = right)
-    int16_t rear_current = 0; //! rear Current
-    int16_t front_current = 0; //! front Current
+    uint16_t rear_current = 0; //! rear Current
+    uint16_t front_current = 0; //! front Current
     int16_t rear_rpm = 0; //! rear Motor RPM
     int16_t front_rpm = 0; //! front Motor RPM
     uint16_t battery_v = 0;        //! Battery Level milliVolts

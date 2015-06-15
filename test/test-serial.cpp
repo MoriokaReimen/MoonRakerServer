@@ -74,7 +74,7 @@ int main()
                 {
                   left_rpm = 1, right_rpm = 1;
                   /* gear ratio */
-                  command.set(690, -690, 100, 100);
+                  command.set(3000, -3000, 3000, -3000);
                   motor.sendCommand(command);
                   //std::this_thread::sleep_for(interval);
                   try { data = motor.getData(); } catch(...) {} }
