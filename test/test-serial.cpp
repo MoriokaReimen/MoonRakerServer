@@ -50,8 +50,8 @@ const short GEAR_RATIO = 690;
 int main()
 {
         /*! initialize sleep function */
-        std::chrono::milliseconds interval(5);
-        MotorData data;
+        constexpr std::chrono::milliseconds interval(5);
+        MotorData left, right;
         /*! set up Motor */
         short left_rpm = 0, right_rpm = 0;
         Motor motor;
@@ -70,34 +70,48 @@ int main()
             ch = 0;
                 /* get input from consoler and cope it */
                 ch = getch();
+                if(ch == '1')
+                {
+                  command.set(3000, 0, 0, 0);
+                }
+                if(ch == '2')
+                {
+                  command.set(0, 3000, 0, 0);
+                }
+                if(ch == '3')
+                {
+                  command.set(0, 0, 3000, 0);
+                }
+                if(ch == '4')
+                {
+                  command.set(0, 0, 0, 3000);
+                }
                 if(ch == 'k')
                 {
-                  left_rpm = 1, right_rpm = 1;
-                  /* gear ratio */
-                  command.set(3000, -3000, 3000, -3000);
-                  motor.sendCommand(command);
-                  //std::this_thread::sleep_for(interval);
-                  try { data = motor.getData(); } catch(...) {} }
+                  command.set(3000, 3000, 3000, 3000);
+                }
                 if(ch == 's')
                 {
                   /* gear ratio */
                   command.set(0, 0, 0, 0);
-                  motor.sendCommand(command);
-        //std::this_thread::sleep_for(interval);
-                  try {
-                  data = motor.getData();
-                  } catch(...) {}
                 }
                 if(ch == 'q') break;
+                motor.sendCommand(command);
+                try {
+                    left = motor.getData();
+                    std::this_thread::sleep_for(interval);
+                    right = motor.getData();
+                } catch(...){}
 
                 /* show rpm */
-                mvprintw(1, 0, "L:%5d", left_rpm * GEAR_RATIO);
-                mvprintw(2, 0, "R:%5d", right_rpm * GEAR_RATIO);
-
-                mvprintw(4, 0, "Front RPM:%5d", data.front_rpm);
-                mvprintw(5, 0, "Front Current:%5d", data.front_current);
-                mvprintw(6, 0, "Rear RPM:%5d", data.rear_rpm);
-                mvprintw(7, 0, "Rear Current:%5d", data.rear_current);
+                move(7, 0);
+                printw("%1s%15d%15d%15d%15d",
+                       left.device.c_str(), left.rear_current, left.front_current,
+                       left.rear_rpm, left.front_rpm);
+                move(8, 0);
+                printw("%1s%15d%15d%15d%15d",
+                       right.device.c_str(), right.rear_current, right.front_current,
+                       right.rear_rpm, right.front_rpm);
                 refresh();
         }
 
