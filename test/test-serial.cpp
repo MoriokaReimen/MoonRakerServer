@@ -50,7 +50,7 @@ const short GEAR_RATIO = 690;
 int main()
 {
         /*! initialize sleep function */
-        constexpr std::chrono::milliseconds interval(5);
+        constexpr std::chrono::milliseconds interval(10);
         MotorData left, right;
         /*! set up Motor */
         short left_rpm = 0, right_rpm = 0;
@@ -99,7 +99,6 @@ int main()
                 motor.sendCommand(command);
                 try {
                     left = motor.getData();
-                    std::this_thread::sleep_for(interval);
                     right = motor.getData();
                 } catch(...){}
 

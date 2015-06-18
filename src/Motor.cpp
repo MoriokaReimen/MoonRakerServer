@@ -53,7 +53,7 @@ Motor::Motor()
 int Motor::sendCommand(const MotorCommand& command)
 {
     CommandBytes bytes {command.toByteArray()};
-    unsigned char buffer[sizeof(bytes)];
+    unsigned char buffer[25];
     memcpy(buffer, &bytes, sizeof(bytes));
     serial.write(buffer, sizeof(bytes));
     return EXIT_SUCCESS;
@@ -67,10 +67,10 @@ int Motor::sendCommand(const MotorCommand& command)
 MotorData Motor::getData()
 {
     DataBytes bytes;
-    unsigned char buffer[25];
+    unsigned char buffer[40];
 
     /*! read 19 bytes from serial */
-    serial.read(buffer, sizeof(bytes), true, sizeof(bytes));
+    serial.read(buffer, 25, true, 10);
 
     /*! Detect Headers and footers */
     for (int i = 0; i < 25; ++i) {
