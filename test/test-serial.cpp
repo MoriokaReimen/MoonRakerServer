@@ -96,23 +96,23 @@ int main()
                   command.set(0, 0, 0, 0);
                 }
                 if(ch == 'q') break;
-                try {
-                    motor.sendRightCommand(command);
-                    right = motor.getData();
-                } catch(...) {
-                    try {
-                        motor.sendRightCommand(command);
-                        right = motor.getData();
-                    } catch(...){}
+
+                while(true)
+                {
+                  try {
+                      motor.sendRightCommand(command);
+                      right = motor.getData();
+                      break;
+                  } catch(const runtime_error& e){}
                 }
-                try {
+
+                while(true)
+                {
+                  try {
                     motor.sendLeftCommand(command);
                     left = motor.getData();
-                } catch(...) {
-                    try {
-                        motor.sendLeftCommand(command);
-                        left = motor.getData();
-                    } catch(...){}
+                      break;
+                  } catch(const runtime_error& e){}
                 }
 
                 /* show rpm */

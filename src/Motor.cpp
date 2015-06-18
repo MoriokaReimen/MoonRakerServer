@@ -106,15 +106,28 @@ MotorData Motor::getData()
  */
 bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 {
-    /*! send command  to Left V10*/
-    this->sendLeftCommand(command);
-    /*! get left motor data */
-    left = this->getData();
 
-    /*! send command  to Right V10*/
-    this->sendRightCommand(command);
-    /*! get right motor data */
-    right = this ->getData();
+    while(true)
+    {
+      try {
+            /*! send command  to Right V10*/
+            this->sendRightCommand(command);
+            /*! get right motor data */
+            right = this->getData();
+            break;
+      } catch(const runtime_error& e){}
+    }
+
+    while(true)
+    {
+      try {
+            /*! send command  to Left V10*/
+            this->sendLeftCommand(command);
+            /*! get left motor data */
+            left = this->getData();
+            break;
+      } catch(const runtime_error& e){}
+    }
 
     /*! clear serial port buffer */
     serial.clear();
