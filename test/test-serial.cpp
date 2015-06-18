@@ -97,11 +97,23 @@ int main()
                 }
                 if(ch == 'q') break;
                 try {
-                    motor.sendLeftCommand(command);
-                    left = motor.getData();
                     motor.sendRightCommand(command);
                     right = motor.getData();
-                } catch(...){}
+                } catch(...) {
+                    try {
+                        motor.sendRightCommand(command);
+                        right = motor.getData();
+                    } catch(...){}
+                }
+                try {
+                    motor.sendLeftCommand(command);
+                    left = motor.getData();
+                } catch(...) {
+                    try {
+                        motor.sendLeftCommand(command);
+                        left = motor.getData();
+                    } catch(...){}
+                }
 
                 /* show rpm */
                 move(7, 0);
