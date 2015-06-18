@@ -47,17 +47,31 @@ Motor::Motor()
 
 
 /*!
- * @brief send command to the motor
+ * @brief send command to left V10
  * @param[in] command command for the motor
  */
-int Motor::sendCommand(const MotorCommand& command)
+int Motor::sendLeftCommand(const MotorCommand& command)
 {
-    CommandBytes bytes {command.toByteArray()};
+    CommandBytes bytes {command.toLeftByteArray()};
     unsigned char buffer[25];
     memcpy(buffer, &bytes, sizeof(bytes));
     serial.write(buffer, sizeof(bytes));
     return EXIT_SUCCESS;
 }
+
+/*!
+ * @brief send command to right V10
+ * @param[in] command command for the motor
+ */
+int Motor::sendRightCommand(const MotorCommand& command)
+{
+    CommandBytes bytes {command.toRightByteArray()};
+    unsigned char buffer[25];
+    memcpy(buffer, &bytes, sizeof(bytes));
+    serial.write(buffer, sizeof(bytes));
+    return EXIT_SUCCESS;
+}
+
 /*!
  * @brief get data from the motor
  * @return data as MotorData class
@@ -70,7 +84,7 @@ MotorData Motor::getData()
     unsigned char buffer[40];
 
     /*! read 19 bytes from serial */
-    serial.read(buffer, 25, true, 10);
+    serial.read(buffer, 25, true, 5);
 
     /*! Detect Headers and footers */
     for (int i = 0; i < 25; ++i) {
@@ -92,20 +106,14 @@ MotorData Motor::getData()
  */
 bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 {
-    /*! initialize sleep function */
-    std::chrono::milliseconds interval(50);
-
-    std::this_thread::sleep_for(interval);
-    /*! send command */
-    this->sendCommand(command);
-    //std::this_thread::sleep_for(interval);
-
+    /*! send command  to Left V10*/
+    this->sendLeftCommand(command);
     /*! get left motor data */
-    serial.poll();
     left = this->getData();
 
+    /*! send command  to Right V10*/
+    this->sendRightCommand(command);
     /*! get right motor data */
-    serial.poll();
     right = this ->getData();
 
     /*! clear serial port buffer */
@@ -118,6 +126,6 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
  */
 void Motor::halt()
 {
-    this->sendCommand(MotorCommand(0, 0, 0, 0));
+    this->sendLeftCommand(MotorCommand(0, 0, 0, 0));
     return;
 }

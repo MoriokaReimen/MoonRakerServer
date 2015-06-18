@@ -96,9 +96,10 @@ int main()
                   command.set(0, 0, 0, 0);
                 }
                 if(ch == 'q') break;
-                motor.sendCommand(command);
                 try {
+                    motor.sendLeftCommand(command);
                     left = motor.getData();
+                    motor.sendRightCommand(command);
                     right = motor.getData();
                 } catch(...){}
 

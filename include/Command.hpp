@@ -47,7 +47,8 @@
 struct CommandBytes {
     const uint16_t header = 0x75aa; //! Header byte
     const uint8_t device = 0x13; //! Source device 0x13 = PCBoard
-    const int16_t reserved = 0x00;
+    uint8_t target; //! target device 0x22 = R V10 0x21 = L V10
+    const int8_t reserved = 0x00;
     //(0x11 = left, 0x12 = right)
     int16_t left_front_rpm = 0;        //! Left Motor RPM Byte
     int16_t left_rear_rpm = 0;        //! Left Motor RPM Byte
@@ -61,7 +62,8 @@ struct CommandBytes {
 struct CommandBytes {
     const uint16_t header = 0xaa75; //! Header byte
     const uint8_t device = 0x13; //! Source device 0x13 = PCBoard(0x11 = left, 0x12 = right)
-    const int16_t reserved = 0x00;
+    uint8_t target; //! target device 0x22 = R V10 0x21 = L V10
+    const int8_t reserved = 0x00;
     int16_t left_front_rpm = 0;        //! Left Motor RPM Byte
     int16_t left_rear_rpm = 0;        //! Left Motor RPM Byte
     int16_t right_front_rpm = 0;        //! Left Motor RPM Byte
@@ -92,5 +94,6 @@ public:
     void set(const signed short& left_front,  const signed short& left_rear,
              const signed short& right_front, const signed short& right_rear);
     void set(const CommandBytes& command);
-    CommandBytes toByteArray() const;
+    CommandBytes toLeftByteArray() const;
+    CommandBytes toRightByteArray() const;
 };

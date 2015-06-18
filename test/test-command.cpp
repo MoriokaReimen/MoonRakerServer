@@ -60,7 +60,7 @@ TEST(CommandTest, SetRPM)
 TEST(CommandTest, ToByteArray)
 {
     MotorCommand command(100, 0, -120, 0);
-    CommandBytes command_bytesA = command.toByteArray();
+    CommandBytes command_bytesA = command.toLeftByteArray();
     char* binary = reinterpret_cast<char *>(&command_bytesA);
 
     EXPECT_EQ(15, sizeof(command_bytesA));
@@ -69,7 +69,7 @@ TEST(CommandTest, ToByteArray)
     EXPECT_EQ('\x75', binary[0]);
     EXPECT_EQ('\xAA', binary[1]);
     EXPECT_EQ('\x13', binary[2]);
-    EXPECT_EQ('\x00', binary[3]);
+    EXPECT_EQ('\x21', binary[3]);
     EXPECT_EQ('\x00', binary[4]);
     EXPECT_EQ('\x75', binary[13]);
     EXPECT_EQ('\xFF', binary[14]);

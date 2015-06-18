@@ -56,6 +56,7 @@ public:
     ~Motor() = default;
     bool work(const MotorCommand& command, MotorData& left, MotorData& right);
     void halt();
-    int sendCommand(const MotorCommand& command);
+    int sendLeftCommand(const MotorCommand& command);
+    int sendRightCommand(const MotorCommand& command);
     MotorData getData();
 };
