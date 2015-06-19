@@ -33,7 +33,7 @@
 @brief IMU manipulation class
 -----------------------------------------------------------------------------
 */
-#include "IMU.hpp"
+#include "IMU/IMU.hpp"
 
 /*!
  * @brief Attach handler do nothing
