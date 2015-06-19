@@ -34,6 +34,7 @@
 -----------------------------------------------------------------------------
 */
 #pragma once
+#include "Math3D/Math3D.hpp"
 #include "Data.hpp"
 #include <chrono>
 
@@ -67,10 +68,11 @@ class RoverState
     };
 public:
     void set(const MotorData& left, const MotorData& right);
+    void set(const MotorData& left, const MotorData& right, const Math3D::Quaternion& quat);
     long long time {0};
     WheelState left_front;
     WheelState left_rear;
     WheelState right_front;
     WheelState right_rear;
-    //Quaternion quat; implement someday
+    Math3D::Quaternion quat;
 };
