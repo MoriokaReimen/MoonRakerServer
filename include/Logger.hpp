@@ -38,6 +38,7 @@ Filename:    Logger.hpp
 #include <fstream>
 #include <chrono>
 #include "RoverState.hpp"
+#include "Math3D/Math3D.hpp"
 
 /*! @class Logger
  *  @brief handles log routine

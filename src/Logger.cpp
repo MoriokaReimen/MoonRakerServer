@@ -57,7 +57,11 @@ Logger::Logger(const std::string& file_name)
           << "LF torque" << ","
           << "LR torque" << ","
           << "RF torque" << ","
-          << "RR torque" << std::endl;
+          << "RR torque" << ","
+          << "Roll" << ","
+          << "Pitch" << ","
+          << "Yaw" << std::endl;
+    file_.precision(5);
     return;
 }
 
@@ -78,6 +82,8 @@ Logger::~Logger()
  */
 void Logger::log(const RoverState& data)
 {
+  Math3D::Degree roll{0}, pitch{0}, yaw{0};
+  data.quat.toRPY(roll, pitch, yaw);
     file_ << data.time << ","
           << data.left_front.rpm << ","
           << data.left_rear.rpm << ","
@@ -86,7 +92,10 @@ void Logger::log(const RoverState& data)
           << data.left_front.torque << ","
           << data.left_rear.torque << ","
           << data.right_front.torque << ","
-          << data.right_rear.torque << std::endl;
+          << data.right_rear.torque << ","
+          << roll << ","
+          << pitch << ","
+          << yaw << std::endl;
 
     return;
 }
