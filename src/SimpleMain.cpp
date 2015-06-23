@@ -69,6 +69,7 @@ int main()
     cin >> norm_rpm;
 
     /*! set up IMU */
+    Math3D::Degree roll, pitch, yaw;
     cout << "Initialize IMU...";
     IMU imu;
     imu.calibrate();
@@ -123,6 +124,10 @@ int main()
         logger.log(rover);
 
         /*! show data to console */
+        rover.quat.toRPY(roll, pitch, yaw);
+        move(5, 0);
+        printw("Roll:%15d Pitch:%15d Yaw:%15d", roll, pitch, yaw);
+
         move(6, 0);
         printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 

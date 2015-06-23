@@ -40,6 +40,7 @@
 #include "Data.hpp"
 #include "Logger.hpp"
 #include "RoverState.hpp"
+#include "IMU.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -78,6 +79,13 @@ int main()
     right_front_rpm *= GEAR_RATIO;
     right_rear_rpm *= GEAR_RATIO;
 
+    /*! set up IMU */
+    Math3D::Degree roll, pitch, yaw;
+    cout << "Initialize IMU...";
+    IMU imu;
+    imu.calibrate();
+    cout << "done" << std::endl;
+
     /*! set up curses*/
     int ch = 0;
     int line = 0;
@@ -112,10 +120,14 @@ int main()
             attroff(COLOR_PAIR(2));
         }
 
-        rover.set(left, right);
+        rover.set(left, right, imu.getQuat());
         logger.log(rover);
 
         /*! show data to console */
+        rover.quat.toRPY(roll, pitch, yaw);
+        move(5, 0);
+        printw("Roll:%15d Pitch:%15d Yaw:%15d", roll, pitch, yaw);
+
         move(6, 0);
         printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
 
