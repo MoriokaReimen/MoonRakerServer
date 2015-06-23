@@ -41,6 +41,7 @@
 #include "Data.hpp"
 #include "RoverState.hpp"
 #include "Logger.hpp"
+#include "IMU.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -66,6 +67,12 @@ int main()
     MotorCommand command(0, 0, 0, 0);
     cout << "Input Nominal RPM (-5 to +5):" << endl;
     cin >> norm_rpm;
+
+    /*! set up IMU */
+    cout << "Initialize IMU...";
+    IMU imu;
+    imu.calibrate();
+    cout << "done" << std::endl;
 
     /*! set up curses*/
     int ch = 0;
@@ -112,7 +119,7 @@ int main()
             printw("Error !!");
             attroff(COLOR_PAIR(2));
         }
-        rover.set(left, right);
+        rover.set(left, right, imu.getQuat());
         logger.log(rover);
 
         /*! show data to console */
