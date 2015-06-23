@@ -126,7 +126,7 @@ int main()
         /*! show data to console */
         rover.quat.toRPY(roll, pitch, yaw);
         move(5, 0);
-        printw("Roll:%15d Pitch:%15d Yaw:%15d", roll, pitch, yaw);
+        printw("Roll:%5f Pitch:%5f Yaw:%5f", roll, pitch, yaw);
 
         move(6, 0);
         printw("%1s%15s%15s%15s%15s","Device", "Rear Current", "Front Current", "Rear RPM", "Front RPM");
