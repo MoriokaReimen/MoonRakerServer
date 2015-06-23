@@ -106,27 +106,36 @@ MotorData Motor::getData()
  */
 bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 {
+  int lcount{3}, rcount{3};
 
     while(true)
     {
+            --lcount;
       try {
             /*! send command  to Right V10*/
             this->sendRightCommand(command);
             /*! get right motor data */
             right = this->getData();
             break;
-      } catch(const runtime_error& e){}
+      } catch(const runtime_error& e){
+        if(lcount < 0)
+        throw std::runtime_error("No Signal From Right");
+      }
     }
 
     while(true)
     {
+            --rcount;
       try {
             /*! send command  to Left V10*/
             this->sendLeftCommand(command);
             /*! get left motor data */
             left = this->getData();
             break;
-      } catch(const runtime_error& e){}
+      } catch(const runtime_error& e){
+        if(rcount < 0)
+        throw std::runtime_error("No Signal From Left");
+      }
     }
 
     /*! clear serial port buffer */
@@ -139,6 +148,7 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
  */
 void Motor::halt()
 {
-    this->sendLeftCommand(MotorCommand(0, 0, 0, 0));
+    MotorData left, right;
+    this->work(MotorCommand(0, 0, 0, 0), left, right);
     return;
 }
