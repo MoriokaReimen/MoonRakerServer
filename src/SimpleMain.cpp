@@ -70,10 +70,8 @@ int main()
 
     /*! set up IMU */
     Math3D::Degree roll, pitch, yaw;
-    cout << "Initialize IMU...";
     IMU imu;
     imu.calibrate();
-    cout << "done" << std::endl;
 
     /*! set up curses*/
     int ch = 0;

@@ -45,21 +45,17 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-const short GEAR_RATIO = 690;
-
 int main()
 {
         /*! initialize sleep function */
         constexpr std::chrono::milliseconds interval(10);
         MotorData left, right;
         /*! set up Motor */
-        short left_rpm = 0, right_rpm = 0;
         Motor motor;
         MotorCommand command;
 
         /*! set up curses*/
         int ch = 0;
-        int old_ch = 0;
         initscr();
         cbreak();
         noecho();

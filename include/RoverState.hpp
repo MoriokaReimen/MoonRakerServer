@@ -50,22 +50,18 @@ public:
 */
 class RoverState
 {
-    const double GEAR_RATIO
+    static constexpr double GEAR_RATIO
     {
         690.0f
     };
-    const double GEAR_EFFICIENCY
+    static constexpr double GEAR_EFFICIENCY
     {
         0.49f
     };
-    const double TORQUE_CONSTANT
+    static constexpr double TORQUE_CONSTANT
     {
         0.00902f * GEAR_RATIO * GEAR_EFFICIENCY
     }; //! in [mNm/mA]
-    const double PI
-    {
-        3.14159265359
-    };
 public:
     void set(const MotorData& left, const MotorData& right);
     void set(const MotorData& left, const MotorData& right, const Math3D::Quaternion& quat);

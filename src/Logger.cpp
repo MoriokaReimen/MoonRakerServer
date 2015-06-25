@@ -34,14 +34,6 @@ Filename:    Logger.cpp
 */
 #include "Logger.hpp"
 
-namespace MOTOR
-{
-constexpr double GEAR_RATIO = 690.0f;
-constexpr double GEAR_EFFICIENCY = 0.49f;
-constexpr double TORQUE_CONSTANT = 0.00902f * GEAR_RATIO * GEAR_EFFICIENCY; //! in [mNm/mA]
-constexpr double PI = 3.14159265359;
-};
-
 /*!
  * @brief Constructor for Logger class
  * @param[in] file name to logging
