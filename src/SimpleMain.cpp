@@ -47,7 +47,7 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-const int GEAR_RATIO = 690;
+constexpr int GEAR_RATIO = 690;
 
 int main()
 {

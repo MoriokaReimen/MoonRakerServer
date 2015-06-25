@@ -46,7 +46,7 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-const short GEAR_RATIO = 690;
+constexpr short GEAR_RATIO = 690;
 
 int main()
 {
