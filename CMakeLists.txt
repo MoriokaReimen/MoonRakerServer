@@ -5,18 +5,21 @@ add_subdirectory(test)
 add_subdirectory(include)
 INCLUDE_DIRECTORIES("/usr/include" "/usr/local/include" "${CMAKE_BINARY_DIR}/include" "${CMAKE_BINARY_DIR}/include/Math3D" "${CMAKE_BINARY_DIR}/include/IMU")
 set(CMAKE_LIBRARY_PATH "/usr/lib/" "/usr/local/lib" "${CMAKE_BINARY_DIR}/lib")
-# LINK_DIRECTORIES("/opt/cross/lib")
+
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+
 set(CMAKE_CXX_COMPILER "clang++")
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 set(CMAKE_C_FLAGS "-Wall")
+
 set(MOON_SRC src/Command.cpp src/Data.cpp src/Motor.cpp src/BoostComPort.cpp src/RoverState.cpp src/Logger.cpp)
 set(MATH3D_SRC src/Math3D/Degree.cpp src/Math3D/Quaternion.cpp src/Math3D/RotateFunc.cpp src/Math3D/Vector3.cpp)
 set(IMU_SRC src/IMU/IMU.cpp)
-set(SRC ${MATH3D_SRC} ${IMU_SRC} ${MOON_SRC})
+set(SOCKET_SRC src/Socket/UDP.cpp)
+set(SRC ${MATH3D_SRC} ${IMU_SRC} ${MOON_SRC} ${SOCKET_SRC})
 
 add_executable(TheSimple.exe src/SimpleMain.cpp  ${SRC})
 target_link_libraries(TheSimple.exe pthread curses c m boost_system rt phidget21)
