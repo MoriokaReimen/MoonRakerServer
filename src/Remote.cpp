@@ -51,7 +51,7 @@ public:
 
   void sendCommand(const MotorCommand& command)
   {
-    CommandBytes bytes {command.toRemoteByteArray()};
+    CommandBytes bytes {command.toByteArray()};
     unsigned char buffer[25];
     memcpy(buffer, &bytes, sizeof(bytes));
     this->write(buffer, sizeof(bytes) + 2);
@@ -60,6 +60,10 @@ public:
 
   void sendData(const RoverState& data);
   {
+    auto bytes = data.toByteArray();
+    unsigned char buffer[50];
+    memcpy(buffer, &bytes, sizeof(bytes));
+    this->write(buffer, sizeof(bytes) + 2);
     return;
   }
 
@@ -82,5 +86,22 @@ public:
     throw runtime_error("Broken data"); //! data is broken
   }
 
-  RoverState getData();
+  RoverState getData()
+  {
+    StateBytes bytes;
+    unsigned char buffer[80];
+
+    /*! read 19 bytes from serial */
+    this->read(buffer, 50);
+
+    /*! Detect Headers and footers */
+    for (int i = 0; i < 50; ++i) {
+        if ( (buffer[i + 1]== 0xAA) && (buffer[i+sizeof(StateBytes) - 2] == 0x75) ) {
+            //! motor data array
+            memcpy(&bytes, &buffer[i], sizeof(bytes));
+            return RoverState(bytes);
+        }
+    }
+    throw runtime_error("Broken data"); //! data is broken
+  }
 };
