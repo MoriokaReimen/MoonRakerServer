@@ -62,6 +62,29 @@ void RoverState::set(const MotorData& left, const MotorData& right, const Math3D
     return;
 }
 
+void RoverState::set(const StateBytes& bytes)
+{
+    /* set rpm */
+    this->left_front.rpm = bytes.left_front_rpm;
+    this->left_rear.rpm = bytes.left_rear_rpm;
+    this->right_front.rpm = bytes.right_front_rpm;
+    this->right_rear.rpm = bytes.right_rear_rpm;
+
+    /* set torque */
+    this->left_front.torque = bytes.left_front_torque;
+    this->left_rear.torque = bytes.left_rear_torque;
+    this->right_front.torque = bytes.right_front_torque;
+    this->right_rear.torque = bytes.right_rear_torque;
+
+    /* set Attitude */
+    this->quat.fromRPY(bytes.roll, bytes.pitch, bytes.yaw);
+
+    /* set time */
+    this->time = bytes.time;
+
+  return;
+}
+
 void RoverState::set(const MotorData& left, const MotorData& right)
 {
     /* set rpm */

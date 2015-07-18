@@ -101,6 +101,7 @@ class RoverState
 public:
     void set(const MotorData& left, const MotorData& right);
     void set(const MotorData& left, const MotorData& right, const Math3D::Quaternion& quat);
+    void set(const StateBytes& bytes);
     StateBytes toStateBytes() const;
     long long time {0};
     WheelState left_front;
