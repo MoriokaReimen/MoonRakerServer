@@ -99,10 +99,12 @@ class RoverState
     static constexpr double GEAR_EFFICIENCY{0.49f};
     static constexpr double TORQUE_CONSTANT{0.00902f * GEAR_RATIO * GEAR_EFFICIENCY}; //! in [mNm/mA]
 public:
+    inline RoverState() {};
+    RoverState(const StateBytes& bytes);
     void set(const MotorData& left, const MotorData& right);
     void set(const MotorData& left, const MotorData& right, const Math3D::Quaternion& quat);
     void set(const StateBytes& bytes);
-    StateBytes toStateBytes() const;
+    StateBytes toByteArray() const;
     long long time {0};
     WheelState left_front;
     WheelState left_rear;

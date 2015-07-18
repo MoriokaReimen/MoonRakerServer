@@ -33,75 +33,67 @@
 @brief Simple Console for controling MoonRaker
 -----------------------------------------------------------------------------
 */
-#include "Command.hpp"
-#include "RoverState.hpp"
-#include "Socket/UDP.hpp"
-#include <cstring>
+#include "Remote.hpp"
 
-class Remote : private UDP
+Remote::Remote(const std::string& address)
+  : UDP(2015)
 {
-public:
+  this->setTarget(address, 2015);
+  return;
+}
 
-  Remote(const std::string& address)
-    : UDP(2015)
-  {
-    this->setTarget(address, 2015);
-    return;
+void Remote::sendCommand(const MotorCommand& command)
+{
+  CommandBytes bytes {command.toRemoteByteArray()};
+  unsigned char buffer[25];
+  memcpy(buffer, &bytes, sizeof(bytes));
+  this->write(buffer, sizeof(bytes) + 2);
+  return;
+}
+
+void Remote::sendData(const RoverState& data)
+{
+  auto bytes = data.toByteArray();
+  unsigned char buffer[50];
+  memcpy(buffer, &bytes, sizeof(bytes));
+  this->write(buffer, sizeof(bytes) + 2);
+  return;
+}
+
+MotorCommand Remote::getCommand()
+{
+  CommandBytes bytes;
+  unsigned char buffer[40];
+
+  /*! read 19 bytes from serial */
+  this->read(buffer, 25);
+
+  /*! Detect Headers and footers */
+  for (int i = 0; i < 25; ++i) {
+      if ( (buffer[i + 1]== 0xAA) && (buffer[i+sizeof(CommandBytes) - 2] == 0x75) ) {
+          //! motor data array
+          memcpy(&bytes, &buffer[i], sizeof(bytes));
+          return MotorCommand(bytes);
+      }
   }
+  throw std::runtime_error("Broken data"); //! data is broken
+}
 
-  void sendCommand(const MotorCommand& command)
-  {
-    CommandBytes bytes {command.toByteArray()};
-    unsigned char buffer[25];
-    memcpy(buffer, &bytes, sizeof(bytes));
-    this->write(buffer, sizeof(bytes) + 2);
-    return;
+RoverState Remote::getData()
+{
+  StateBytes bytes;
+  unsigned char buffer[80];
+
+  /*! read 19 bytes from serial */
+  this->read(buffer, 50);
+
+  /*! Detect Headers and footers */
+  for (int i = 0; i < 50; ++i) {
+      if ( (buffer[i + 1]== 0xAA) && (buffer[i+sizeof(StateBytes) - 2] == 0x75) ) {
+          //! motor data array
+          memcpy(&bytes, &buffer[i], sizeof(bytes));
+          return RoverState(bytes);
+      }
   }
-
-  void sendData(const RoverState& data);
-  {
-    auto bytes = data.toByteArray();
-    unsigned char buffer[50];
-    memcpy(buffer, &bytes, sizeof(bytes));
-    this->write(buffer, sizeof(bytes) + 2);
-    return;
-  }
-
-  MotorCommand getCommand()
-  {
-    CommandBytes bytes;
-    unsigned char buffer[40];
-
-    /*! read 19 bytes from serial */
-    this->read(buffer, 25);
-
-    /*! Detect Headers and footers */
-    for (int i = 0; i < 25; ++i) {
-        if ( (buffer[i + 1]== 0xAA) && (buffer[i+sizeof(CommandBytes) - 2] == 0x75) ) {
-            //! motor data array
-            memcpy(&bytes, &buffer[i], sizeof(bytes));
-            return MotorCommand(bytes);
-        }
-    }
-    throw runtime_error("Broken data"); //! data is broken
-  }
-
-  RoverState getData()
-  {
-    StateBytes bytes;
-    unsigned char buffer[80];
-
-    /*! read 19 bytes from serial */
-    this->read(buffer, 50);
-
-    /*! Detect Headers and footers */
-    for (int i = 0; i < 50; ++i) {
-        if ( (buffer[i + 1]== 0xAA) && (buffer[i+sizeof(StateBytes) - 2] == 0x75) ) {
-            //! motor data array
-            memcpy(&bytes, &buffer[i], sizeof(bytes));
-            return RoverState(bytes);
-        }
-    }
-    throw runtime_error("Broken data"); //! data is broken
-  }
-};
+  throw std::runtime_error("Broken data"); //! data is broken
+}

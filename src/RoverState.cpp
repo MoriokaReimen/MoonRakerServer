@@ -35,6 +35,11 @@
 */
 #include "RoverState.hpp"
 
+RoverState::RoverState(const StateBytes& bytes)
+{
+  this->set(bytes);
+}
+
 /*! @function set
  *  @brief set Rover state with Motordata
 */
@@ -106,7 +111,7 @@ void RoverState::set(const MotorData& left, const MotorData& right)
     return;
 }
 
-StateBytes RoverState::toStateBytes() const
+StateBytes RoverState::toByteArray() const
 {
   StateBytes bytes;
   bytes.time = this->time;
