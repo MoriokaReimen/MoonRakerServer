@@ -37,6 +37,7 @@
 #include "Math3D/Math3D.hpp"
 #include "Data.hpp"
 #include <chrono>
+#include <cstring>
 
 class WheelState
 {
@@ -50,21 +51,13 @@ public:
 */
 class RoverState
 {
-    static constexpr double GEAR_RATIO
-    {
-        690.0f
-    };
-    static constexpr double GEAR_EFFICIENCY
-    {
-        0.49f
-    };
-    static constexpr double TORQUE_CONSTANT
-    {
-        0.00902f * GEAR_RATIO * GEAR_EFFICIENCY
-    }; //! in [mNm/mA]
+    static constexpr double GEAR_RATIO{690.0f};
+    static constexpr double GEAR_EFFICIENCY{0.49f};
+    static constexpr double TORQUE_CONSTANT{0.00902f * GEAR_RATIO * GEAR_EFFICIENCY}; //! in [mNm/mA]
 public:
     void set(const MotorData& left, const MotorData& right);
     void set(const MotorData& left, const MotorData& right, const Math3D::Quaternion& quat);
+    std::string toString() const;
     long long time {0};
     WheelState left_front;
     WheelState left_rear;

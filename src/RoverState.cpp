@@ -82,3 +82,9 @@ void RoverState::set(const MotorData& left, const MotorData& right)
 
     return;
 }
+
+std::string RoverState::toString() const
+{
+  std::string bytes;
+  return bytes;
+}
