@@ -83,8 +83,26 @@ void RoverState::set(const MotorData& left, const MotorData& right)
     return;
 }
 
-std::string RoverState::toString() const
+StateBytes RoverState::toStateBytes() const
 {
-  std::string bytes;
+  StateBytes bytes;
+  bytes.time = this->time;
+
+  Math3D::Degree roll, pitch, yaw;
+  this->quat.toRPY(roll, pitch, yaw);
+  bytes.roll = roll.val;
+  bytes.pitch = pitch.val;
+  bytes.yaw = yaw.val;
+
+  bytes.left_front_rpm = this->left_front.rpm;
+  bytes.left_rear_rpm = this->left_rear.rpm;
+  bytes.right_front_rpm = this->right_front.rpm;
+  bytes.right_rear_rpm = this->right_rear.rpm;
+
+  bytes.left_front_torque = this->left_front.torque;
+  bytes.left_rear_torque = this->left_rear.torque;
+  bytes.right_front_torque = this->right_front.torque;
+  bytes.right_rear_torque = this->right_rear.torque;
+
   return bytes;
 }
