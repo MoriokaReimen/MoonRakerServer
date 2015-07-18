@@ -96,4 +96,5 @@ public:
     void set(const CommandBytes& command);
     CommandBytes toLeftByteArray() const;
     CommandBytes toRightByteArray() const;
+    CommandBytes toRemoteByteArray() const;
 };

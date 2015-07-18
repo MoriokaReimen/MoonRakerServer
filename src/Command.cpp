@@ -91,7 +91,7 @@ void MotorCommand::set(const CommandBytes& command)
 }
 
 /*!
- * @brief generate Bytes array of command
+ * @brief generate Bytes array of command for left motor
  * @return bytes array of command
  */
 CommandBytes MotorCommand::toLeftByteArray() const
@@ -105,10 +105,29 @@ CommandBytes MotorCommand::toLeftByteArray() const
     return command;
 }
 
+/*!
+ * @brief generate Bytes array of command for Right motor
+ * @return bytes array of command
+ */
 CommandBytes MotorCommand::toRightByteArray() const
 {
     CommandBytes command;
     command.target = 0x22;
+    command.left_front_rpm = htobe16(this->left_front_rpm);
+    command.left_rear_rpm = htobe16(this->left_rear_rpm);
+    command.right_front_rpm = htobe16(this->right_front_rpm);
+    command.right_rear_rpm = htobe16(this->right_rear_rpm);
+    return command;
+}
+
+/*!
+ * @brief generate Bytes array of command for Remote PC
+ * @return bytes array of command
+ */
+CommandBytes MotorCommand::toRemoteByteArray() const
+{
+    CommandBytes command;
+    command.target = 0x30;
     command.left_front_rpm = htobe16(this->left_front_rpm);
     command.left_rear_rpm = htobe16(this->left_rear_rpm);
     command.right_front_rpm = htobe16(this->right_front_rpm);
