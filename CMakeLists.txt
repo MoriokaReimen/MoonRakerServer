@@ -27,6 +27,8 @@ target_link_libraries(TheSimple.exe pthread curses c m boost_system rt phidget21
 add_executable(TimerRunner.exe src/TimerRunner.cpp ${SRC})
 target_link_libraries(TimerRunner.exe pthread curses c m boost_system rt phidget21)
 
+add_executable(SimpleServer.exe src/SimpleServer.cpp  ${SRC})
+target_link_libraries(SimpleServer.exe pthread curses c m boost_system rt phidget21)
 
 enable_testing()
 add_executable(test.exe test/test-data.cpp test/test-command.cpp ${SRC})
