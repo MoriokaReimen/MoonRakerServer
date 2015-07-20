@@ -39,13 +39,16 @@ Remote::Remote(const std::string& address)
   : UDP(2015)
 {
   this->setTarget(address, 2015);
+  worker_thread_ = std::thread(&Remote::doTask_, this);
   return;
 }
 
 void Remote::sendCommand(const MotorCommand& command)
 {
   std::string serialized = command.serialize();
+  this->socket_mutex_.lock();
   this->write(serialized);
+  this->socket_mutex_.unlock();
   return;
 }
 
@@ -60,20 +63,10 @@ void Remote::sendData(const RoverState& data)
 
 MotorCommand Remote::getCommand()
 {
-  /*! read from udp */
-  std::string message = this->read();
-
-  /*! Detect Headers "$" and footers ";" */
-  size_t first{0}, last{0};
-  first = message.find_first_of("$");
-  last = message.find_first_of(";");
-  auto buff = message.substr(first + 1, last - first - 1);
-  /* check data */
-  if(std::count(buff.begin(), buff.end(),',') != 3)
-  {
-    throw std::runtime_error("Broken UDP Command"); //! message is broken
-  }
-  MotorCommand command(buff);
+  MotorCommand command;
+  this->command_mutex_.lock();
+  command = this->command_;
+  this->command_mutex_.unlock();
   return command;
 }
 
@@ -94,4 +87,30 @@ RoverState Remote::getData()
       }
   }
   throw std::runtime_error("Broken data"); //! data is broken
+}
+
+void Remote::doTask_()
+{
+  while(true)
+  {
+    /*! read from udp */
+    this->socket_mutex_.lock();
+    std::string message = this->read();
+    this->socket_mutex_.unlock();
+
+    /*! Detect Headers "$" and footers ";" */
+    size_t first{0}, last{0};
+    first = message.find_last_of("$");
+    last = message.find_last_of(";");
+    auto buff = message.substr(first + 1, last - first - 1);
+    /* check data */
+    if(std::count(buff.begin(), buff.end(),',') != 3)
+    {
+      throw std::runtime_error("Broken UDP Command"); //! message is broken
+    }
+    MotorCommand command(buff);
+    this->command_mutex_.lock();
+    this->command_ = command;
+    this->command_mutex_.unlock();
+  }
 }

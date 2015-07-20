@@ -40,11 +40,17 @@
 #include <cstring>
 #include <algorithm>
 #include <exception>
+#include <thread>
+#include <mutex>
 
 class Remote : private UDP
 {
+  std::mutex command_mutex_;
+  std::mutex socket_mutex_;
+  std::thread worker_thread_;
+  void doTask_();
+  MotorCommand command_;
 public:
-
   Remote(const std::string& address);
   void sendCommand(const MotorCommand& command);
   void sendData(const RoverState& data);
