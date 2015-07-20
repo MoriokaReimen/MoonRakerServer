@@ -68,8 +68,8 @@ MotorCommand Remote::getCommand()
 
   /*! Detect Headers "$" and footers ";" */
   size_t first{0}, last{0};
-  first = message.find_last_of("$");
-  last = message.find_last_of(";");
+  first = message.find_first_of("$");
+  last = message.find_first_of(";");
   auto buff = message.substr(first + 1, last - first - 1);
   /* check data */
   if(std::count(buff.begin(), buff.end(),',') != 3)
