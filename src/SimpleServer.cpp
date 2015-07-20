@@ -78,26 +78,34 @@ int main()
     timeout(0);
 
     /*! set up UDP */
-    Remote remote("192.168.11.2");
+    Remote remote("192.168.11.12");
 
     while (true) {
         /* get Command from UDP */
         for(int i = 0; i < 3; ++i)
         {
           try {
-            command = remote.getCommand();
-            break;
-          } catch(...) {}
+              command = remote.getCommand();
+              break;
+          } catch(...) {
+              move(2, 0);
+              attron(COLOR_PAIR(2));
+              printw("UDP Error !!");
+              attroff(COLOR_PAIR(2));
+          }
         }
 
         /*! send command and get data from serial*/
-        try {
-          motor.work(command, left, right);
-        } catch(...) {
-            move(1, 0);
-            attron(COLOR_PAIR(2));
-            printw("Error !!");
-            attroff(COLOR_PAIR(2));
+        for(int i = 0; i < 3; ++i)
+        {
+          try {
+            motor.work(command, left, right);
+          } catch(...) {
+              move(1, 0);
+              attron(COLOR_PAIR(2));
+              printw("Serial Error !!");
+              attroff(COLOR_PAIR(2));
+          }
         }
 
         rover.set(left, right, imu.getQuat());

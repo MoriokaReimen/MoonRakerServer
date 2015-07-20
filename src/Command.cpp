@@ -165,7 +165,7 @@ std::string MotorCommand::serialize() const
     std::to_string(this->left_front_rpm) + "," +
     std::to_string(this->left_rear_rpm)  + "," +
     std::to_string(this->right_front_rpm) + "," +
-    std::to_string(this->right_rear_rpm) +";\n";
+    std::to_string(this->right_rear_rpm) +";";
 
     return serialized;
 }

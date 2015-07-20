@@ -73,7 +73,9 @@ MotorCommand Remote::getCommand()
   auto buff = message.substr(first + 1, last - first - 1);
   /* check data */
   if(std::count(buff.begin(), buff.end(),',') != 3)
+  {
     throw std::runtime_error("Broken UDP Command"); //! message is broken
+  }
   MotorCommand command(buff);
   return command;
 }
