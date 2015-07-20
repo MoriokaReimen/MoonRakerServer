@@ -41,6 +41,8 @@
 #include "Logger.hpp"
 #include "Remote.hpp"
 #include <string>
+#include <thread>
+#include <chrono>
 using std::cout;
 using std::cin;
 using std::endl;
@@ -81,6 +83,7 @@ int main()
     timeout(0);
 
     while (true) {
+        std::this_thread::sleep_for(std::chrono::microseconds(10000)); // wait 10 ms
 
         /* get input from consoler and cope it */
         ch = getch();
