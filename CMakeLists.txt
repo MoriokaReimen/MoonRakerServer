@@ -41,3 +41,5 @@ add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 add_executable(TestSerial.exe test/test-serial.cpp ${SRC})
 target_link_libraries(TestSerial.exe pthread curses c m boost_system rt phidget21)
 
+add_executable(test-udp.exe test/test-udp.cpp  ${SRC})
+target_link_libraries(test-udp.exe pthread curses c m boost_system rt phidget21)
