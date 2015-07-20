@@ -99,18 +99,23 @@ int main()
         remote.sendCommand(command);
 
         /*! get Data trial 3 times */
-        for(int i = 0; i < 3; ++i)
+        /* for(int i = 0; i < 3; ++i)
         {
           try {
             rover = remote.getData();
             break;
           } catch(...){}
-        }
+        } */
 
         logger.log(rover);
 
         /*! show data to console */
         rover.quat.toRPY(roll, pitch, yaw);
+
+        move(1, 0);
+        printw("LF:%5d LR:%5d RF:%5d RR:%5d",
+            command.left_front_rpm, command.left_rear_rpm,
+            command.left_front_rpm, command.left_rear_rpm);
 
         move(5, 0);
         printw("Roll:%5f Pitch:%5f Yaw:%5f", roll, pitch, yaw);

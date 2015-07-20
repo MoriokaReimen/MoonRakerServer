@@ -63,6 +63,9 @@ MotorCommand Remote::getCommand()
   /*! read from udp */
   std::string message = this->read();
 
+  /* debugging code */
+  std::cout << message << std::endl;
+
   /*! Detect Headers "$" and footers ";" */
   size_t first{0}, last{0};
   first = message.find_last_of("$");

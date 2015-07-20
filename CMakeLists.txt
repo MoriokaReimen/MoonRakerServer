@@ -10,8 +10,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-set(CMAKE_CXX_COMPILER "clang++")
-set(CMAKE_C_COMPILER "clang")
+# set(CMAKE_CXX_COMPILER "clang++")
+# set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 set(CMAKE_C_FLAGS "-Wall")
 
@@ -43,3 +43,6 @@ target_link_libraries(TestSerial.exe pthread curses c m boost_system rt phidget2
 
 add_executable(test-udp.exe test/test-udp.cpp  ${SRC})
 target_link_libraries(test-udp.exe pthread curses c m boost_system rt phidget21)
+
+add_executable(test-udp2.exe test/test-udp2.cpp  ${SRC})
+target_link_libraries(test-udp2.exe pthread curses c m boost_system rt phidget21)
