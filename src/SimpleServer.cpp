@@ -102,7 +102,7 @@ int main()
 
         rover.set(left, right, imu.getQuat());
         logger.log(rover);
-        remote.sendData(rover);
+        // remote.sendData(rover);
 
         /*! show data to console */
         rover.quat.toRPY(roll, pitch, yaw);

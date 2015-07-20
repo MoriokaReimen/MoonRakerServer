@@ -37,6 +37,8 @@
 #include <stdexcept>
 #include <cmath>
 #include <portable_endian.h>
+#include <string>
+#include <sstream>
 
 /*!
  * @struct CommandBytes
@@ -94,7 +96,8 @@ public:
     void set(const signed short& left_front,  const signed short& left_rear,
              const signed short& right_front, const signed short& right_rear);
     void set(const CommandBytes& command);
+    void set(const std::string& serialized);
     CommandBytes toLeftByteArray() const;
     CommandBytes toRightByteArray() const;
-    CommandBytes toRemoteByteArray() const;
+    std::string serialize() const;
 };
