@@ -88,6 +88,7 @@ public:
     signed short right_rear_rpm {0}; //! left motor rotation speed
     signed short max_rpm_ {4000}; //! max motor rotation speed
     MotorCommand() = default;
+    MotorCommand(const std::string& serialized);
     MotorCommand& operator=(const MotorCommand& command) = default;
 
     MotorCommand(const signed short& left_front, const signed short& left_rear,

@@ -44,10 +44,8 @@ Remote::Remote(const std::string& address)
 
 void Remote::sendCommand(const MotorCommand& command)
 {
-  CommandBytes bytes {command.toRemoteByteArray()};
-  unsigned char buffer[25];
-  memcpy(buffer, &bytes, sizeof(bytes));
-  this->write(buffer, sizeof(bytes) + 2);
+  std::string serialized = command.serialize();
+  this->write(serialized);
   return;
 }
 
@@ -62,21 +60,19 @@ void Remote::sendData(const RoverState& data)
 
 MotorCommand Remote::getCommand()
 {
-  CommandBytes bytes;
-  unsigned char buffer[40];
+  /*! read from udp */
+  std::string message = this->read();
 
-  /*! read 19 bytes from serial */
-  this->read(buffer, 25);
-
-  /*! Detect Headers and footers */
-  for (int i = 0; i < 25; ++i) {
-      if ( (buffer[i + 1]== 0xAA) && (buffer[i+sizeof(CommandBytes) - 2] == 0x75) ) {
-          //! motor data array
-          memcpy(&bytes, &buffer[i], sizeof(bytes));
-          return MotorCommand(bytes);
-      }
-  }
-  throw std::runtime_error("Broken data"); //! data is broken
+  /*! Detect Headers "$" and footers ";" */
+  size_t first{0}, last{0};
+  first = message.find_last_of("$");
+  last = message.find_last_of(";");
+  auto buff = message.substr(first, last - first);
+  /* check data */
+  if(std::count(buff.begin(), buff.end(),',') != 3)
+    throw std::runtime_error("Broken UDP Command"); //! message is broken
+  MotorCommand command(buff);
+  return command;
 }
 
 RoverState Remote::getData()

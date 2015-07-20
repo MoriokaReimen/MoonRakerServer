@@ -38,6 +38,7 @@
 #include "RoverState.hpp"
 #include "Socket/UDP.hpp"
 #include <cstring>
+#include <algorithm>
 #include <exception>
 
 class Remote : private UDP

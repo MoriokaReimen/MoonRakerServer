@@ -58,6 +58,16 @@ MotorCommand::MotorCommand(const CommandBytes& command)
 }
 
 /*!
+ * @brief Constructor for MotorCommand class
+ * @param[in] serialized data of command
+ */
+MotorCommand::MotorCommand(const std::string& serialized)
+{
+    this->set(serialized);
+    return;
+}
+
+/*!
  * @brief set internal variables
  * @param[in] left left motr rotation velocity in rpm
  * @param[in] right left motr rotation velocity in rpm
@@ -155,7 +165,7 @@ std::string MotorCommand::serialize() const
     std::to_string(this->left_front_rpm) + "," +
     std::to_string(this->left_rear_rpm)  + "," +
     std::to_string(this->right_front_rpm) + "," +
-    std::to_string(this->right_rear_rpm) +";";
+    std::to_string(this->right_rear_rpm) +";\n";
 
     return serialized;
 }
