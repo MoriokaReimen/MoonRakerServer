@@ -91,7 +91,14 @@ int main()
         }
 
         /*! send command and get data from serial*/
-        motor.work(command, left, right);
+        try {
+          motor.work(command, left, right);
+        } catch(...) {
+            move(1, 0);
+            attron(COLOR_PAIR(2));
+            printw("Error !!");
+            attroff(COLOR_PAIR(2));
+        }
 
         rover.set(left, right, imu.getQuat());
         logger.log(rover);
