@@ -44,7 +44,7 @@ class UDP
     boost::asio::io_service io_service_;
     udp::socket socket_;
     udp::endpoint target_;
-    static constexpr int MAX_LENGTH{100};
+    static constexpr int MAX_LENGTH{1024};
 public:
     UDP(const int& port);
     ~UDP();
