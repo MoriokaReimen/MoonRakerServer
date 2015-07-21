@@ -42,7 +42,6 @@
 #include <exception>
 #include <thread>
 #include <mutex>
-#include <cereal/archives/portable_binary.hpp>
 
 class RemoteClient : private UDP
 {

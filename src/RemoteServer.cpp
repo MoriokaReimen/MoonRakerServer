@@ -110,7 +110,7 @@ void RemoteServer::doTask_()
     auto last = message.find_last_of(';');
 
     /* check received data */
-    if(first == std::string::nopos || last == std::string::nopos)
+    if(first == std::string::npos || last == std::string::npos)
         continue;
 
     if(first > last) continue;

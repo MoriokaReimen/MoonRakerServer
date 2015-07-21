@@ -133,7 +133,7 @@ std::string MotorCommand::serialize() const
     serialized += std::to_string(this->right_front_rpm) + ",";
     serialized += std::to_string(this->right_rear_rpm) + ";";
 
-    return command;
+    return serialized;
 }
 
 /*!
@@ -141,22 +141,22 @@ std::string MotorCommand::serialize() const
  */
 void MotorCommand::deserialize(const std::string& serialized)
 {
-    auto first = message.find_last_of('$');
-    auto last = message.find_last_of(';');
+    auto first = serialized.find_last_of('$');
+    auto last = serialized.find_last_of(';');
     /* remove "$" and ";"; */
-    auto buff = message.substr(first + 1, last - first - 1);
+    auto buff = serialized.substr(first + 1, last - first - 1);
 
     std::stringstream ss(buff);
     std::string element;
 
     std::getline(ss, element, ',');
-    this->left_front_rpm = std::to_string(element);
+    this->left_front_rpm = std::stoi(element);
     std::getline(ss, element, ',');
-    this->left_rear_rpm = std::to_string(element);
+    this->left_rear_rpm = std::stoi(element);
     std::getline(ss, element, ',');
-    this->right_front_rpm = std::to_string(element);
+    this->right_front_rpm = std::stoi(element);
     std::getline(ss, element, ',');
-    this->right_rear_rpm = std::to_string(element);
+    this->right_rear_rpm = std::stoi(element);
 
     return;
 }

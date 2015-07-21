@@ -39,7 +39,6 @@
 #include <portable_endian.h>
 #include <string>
 #include <sstream>
-#include <cereal/archives/portable_binary.hpp>
 
 /*!
  * @struct CommandBytes

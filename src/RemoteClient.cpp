@@ -52,12 +52,7 @@ RemoteClient::~RemoteClient()
 
 void RemoteClient::sendCommand(const MotorCommand& command)
 {
-  std::ostringstream ss;
-  cereal::PortableBinaryOutputArchive oarchive(ss);
-  oarchive(command);
-  std::string serialized;
-  serialized = ss.str();
-  serialized = "$" + serialized +";";
+  std::string serialized = command.serialize();
   this->socket_mutex_.lock();
   this->write(serialized);
   this->socket_mutex_.unlock();
@@ -111,21 +106,19 @@ void RemoteClient::doTask_()
     this->socket_mutex_.unlock();
 
     /*! Detect Headers '$' and footers ';' */
-    size_t first{0}, last{0};
-    first = message.find_last_of('$');
-    last = message.find_last_of(';');
+    auto first = message.find_last_of('$');
+    auto last = message.find_last_of(';');
 
     /* check received data */
-    if(first == std::string::npos || last == std::string::npos) continue;
+    if(first == std::string::npos || last == std::string::npos)
+        continue;
+
     if(first > last) continue;
-    auto buff = message.substr(first + 1, last - first - 1);
+
+    auto serialized = message.substr(first, last - first);
+
     MotorCommand command;
-    if(!buff.empty())
-    {
-      std::istringstream ss(buff);
-      cereal::PortableBinaryInputArchive iarchive(ss);
-      iarchive(command);
-    }
+    command.deserialize(serialized);
 
     this->command_mutex_.lock();
     this->command_ = command;
