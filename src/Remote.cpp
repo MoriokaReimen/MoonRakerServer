@@ -114,6 +114,10 @@ void Remote::doTask_()
     size_t first{0}, last{0};
     first = message.find_last_of("$");
     last = message.find_last_of(";");
+
+    /* check received data */
+    if(first == std::string::npos || last == std::string::npos) continue;
+    if(first > last) continue;
     auto buff = message.substr(first + 1, last - first - 1);
 
     std::stringstream ss;
