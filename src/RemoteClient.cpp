@@ -59,41 +59,13 @@ void RemoteClient::sendCommand(const MotorCommand& command)
   return;
 }
 
-void RemoteClient::sendData(const RoverState& data)
-{
-  auto bytes = data.toByteArray();
-  unsigned char buffer[50];
-  memcpy(buffer, &bytes, sizeof(bytes));
-  this->write(buffer, sizeof(bytes) + 2);
-  return;
-}
-
-MotorCommand RemoteClient::getCommand()
-{
-  MotorCommand command;
-  this->command_mutex_.lock();
-  command = this->command_;
-  this->command_mutex_.unlock();
-  return command;
-}
-
 RoverState RemoteClient::getData()
 {
-  StateBytes bytes;
-  unsigned char buffer[80];
-
-  /*! read 19 bytes from serial */
-  this->read(buffer, 50);
-
-  /*! Detect Headers and footers */
-  for (int i = 0; i < 50; ++i) {
-      if ( (buffer[i + 1]== 0xAA) && (buffer[i+sizeof(StateBytes) - 2] == 0x75) ) {
-          //! motor data array
-          memcpy(&bytes, &buffer[i], sizeof(bytes));
-          return RoverState(bytes);
-      }
-  }
-  throw std::runtime_error("Broken data"); //! data is broken
+  RoverState state;
+  this->state_mutex_.lock();
+  state = this->state_;
+  this->state_mutex_.unlock();
+  return state;
 }
 
 void RemoteClient::doTask_()
@@ -117,12 +89,12 @@ void RemoteClient::doTask_()
 
     auto serialized = message.substr(first, last - first);
 
-    MotorCommand command;
-    command.deserialize(serialized);
+    RoverState state;
+    state.deserialize(serialized);
 
-    this->command_mutex_.lock();
-    this->command_ = command;
-    this->command_mutex_.unlock();
+    this->state_mutex_.lock();
+    this->state_ = state;
+    this->state_mutex_.unlock();
 
     if(isEnd_) return;
   }

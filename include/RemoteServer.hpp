@@ -54,8 +54,6 @@ class RemoteServer : private UDP
 public:
   RemoteServer(const std::string& address);
   ~RemoteServer();
-  void sendCommand(const MotorCommand& command);
   void sendData(const RoverState& data);
   MotorCommand getCommand();
-  RoverState getData();
 };

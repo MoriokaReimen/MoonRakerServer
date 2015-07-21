@@ -45,17 +45,15 @@
 
 class RemoteClient : private UDP
 {
-  std::mutex command_mutex_;
+  std::mutex state_mutex_;
   std::mutex socket_mutex_;
   std::thread worker_thread_;
   void doTask_();
-  MotorCommand command_;
+  RoverState state_;
   bool isEnd_{false};
 public:
   RemoteClient(const std::string& address);
   ~RemoteClient();
   void sendCommand(const MotorCommand& command);
-  void sendData(const RoverState& data);
-  MotorCommand getCommand();
   RoverState getData();
 };
