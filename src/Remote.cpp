@@ -119,11 +119,15 @@ void Remote::doTask_()
     if(first == std::string::npos || last == std::string::npos) continue;
     if(first > last) continue;
     auto buff = message.substr(first + 1, last - first - 1);
-
-    std::istringstream ss(buff);
-    cereal::PortableBinaryInputArchive iarchive(ss);
     MotorCommand command;
-    iarchive(command);
+    if(!buff.empty())
+    {
+      std::istringstream ss(buff);
+      cereal::PortableBinaryInputArchive iarchive(ss);
+      iarchive(command);
+    }
+
+
 
     this->command_mutex_.lock();
     this->command_ = command;
