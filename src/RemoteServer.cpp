@@ -116,16 +116,13 @@ void RemoteServer::doTask_()
     last = message.find_last_of(';');
 
     /* check received data */
-    // if(first == std::string::npos || last == std::string::npos) continue;
-    //if(first > last) continue;
     auto buff = message.substr(first + 1, last - first - 1);
     MotorCommand command;
-    if(!buff.empty())
-    {
-      std::istringstream ss(buff);
-      cereal::PortableBinaryInputArchive iarchive(ss);
+    std::istringstream ss(buff);
+    cereal::PortableBinaryInputArchive iarchive(ss);
+    try {
       iarchive(command);
-    }
+    } catch(...) {command.set(0, 0, 0, 0);}
 
     this->command_mutex_.lock();
     this->command_ = command;

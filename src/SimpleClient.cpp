@@ -93,6 +93,7 @@ int main()
         if(ch == 'h') left_rpm = - norm_rpm, right_rpm = norm_rpm;
         if(ch == 'l') left_rpm = norm_rpm, right_rpm = - norm_rpm;
         if(ch == 's') left_rpm = right_rpm = 0;
+        if(ch == 'p') left_rpm = 0, right_rpm = - norm_rpm;
 
         /* gear ratio */
         command.set(left_rpm * GEAR_RATIO, left_rpm * GEAR_RATIO,
