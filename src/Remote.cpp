@@ -52,7 +52,7 @@ Remote::~Remote()
 
 void Remote::sendCommand(const MotorCommand& command)
 {
-  std::stringstream ss;
+  std::stringstream ss(std::stringstream::binary);
   cereal::PortableBinaryOutputArchive oarchive(ss);
   oarchive(command);
   std::string serialized;
@@ -120,7 +120,7 @@ void Remote::doTask_()
     if(first > last) continue;
     auto buff = message.substr(first + 1, last - first - 1);
 
-    std::stringstream ss;
+    std::stringstream ss(std::stringstream::binary);
     ss << buff;
     cereal::PortableBinaryInputArchive iarchive(ss);
     MotorCommand command;
