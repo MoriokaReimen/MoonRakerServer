@@ -43,9 +43,21 @@ Remote::Remote(const std::string& address)
   return;
 }
 
+Remote::~Remote()
+{
+  this->isEnd_ = true;
+  worker_thread_.join();
+  return;
+}
+
 void Remote::sendCommand(const MotorCommand& command)
 {
-  std::string serialized = command.serialize();
+  std::stringstream ss;
+  cereal::PortableBinaryOutputArchive oarchive(ss);
+  oarchive(command);
+  std::string serialized;
+  ss >> serialized;
+  serialized = "$" + serialized +";";
   this->socket_mutex_.lock();
   this->write(serialized);
   this->socket_mutex_.unlock();
@@ -103,14 +115,17 @@ void Remote::doTask_()
     first = message.find_last_of("$");
     last = message.find_last_of(";");
     auto buff = message.substr(first + 1, last - first - 1);
-    /* check data */
-    if(std::count(buff.begin(), buff.end(),',') != 3)
-    {
-      throw std::runtime_error("Broken UDP Command"); //! message is broken
-    }
-    MotorCommand command(buff);
+
+    std::stringstream ss;
+    ss << buff;
+    cereal::PortableBinaryInputArchive iarchive(ss);
+    MotorCommand command;
+    iarchive(command);
+
     this->command_mutex_.lock();
     this->command_ = command;
     this->command_mutex_.unlock();
+
+    if(isEnd_) return;
   }
 }

@@ -58,16 +58,6 @@ MotorCommand::MotorCommand(const CommandBytes& command)
 }
 
 /*!
- * @brief Constructor for MotorCommand class
- * @param[in] serialized data of command
- */
-MotorCommand::MotorCommand(const std::string& serialized)
-{
-    this->set(serialized);
-    return;
-}
-
-/*!
  * @brief set internal variables
  * @param[in] left left motr rotation velocity in rpm
  * @param[in] right left motr rotation velocity in rpm
@@ -101,30 +91,6 @@ void MotorCommand::set(const CommandBytes& command)
 }
 
 /*!
- * @brief set internal variables
- * @param[in] serialized motorcommand
- */
-void MotorCommand::set(const std::string& serialized)
-{
-  std::stringstream stream(serialized.c_str());
-  std::string buff;
-
-  std::getline(stream, buff, ',');
-  this->left_front_rpm = std::stoi(buff);
-
-  std::getline(stream, buff, ',');
-  this->left_rear_rpm = std::stoi(buff);
-
-  std::getline(stream, buff, ',');
-  this->right_front_rpm = std::stoi(buff);
-
-  std::getline(stream, buff, ',');
-  this->right_rear_rpm = std::stoi(buff);
-
-  return;
-}
-
-/*!
  * @brief generate Bytes array of command for left motor
  * @return bytes array of command
  */
@@ -152,20 +118,4 @@ CommandBytes MotorCommand::toRightByteArray() const
     command.right_front_rpm = htobe16(this->right_front_rpm);
     command.right_rear_rpm = htobe16(this->right_rear_rpm);
     return command;
-}
-
-/*!
- * @brief generate Bytes array of command for Remote PC
- * @return bytes array of command
- */
-std::string MotorCommand::serialize() const
-{
-  std::string serialized;
-    serialized = "$" +
-    std::to_string(this->left_front_rpm) + "," +
-    std::to_string(this->left_rear_rpm)  + "," +
-    std::to_string(this->right_front_rpm) + "," +
-    std::to_string(this->right_rear_rpm) +";";
-
-    return serialized;
 }

@@ -42,6 +42,7 @@
 #include <exception>
 #include <thread>
 #include <mutex>
+#include <cereal/archives/portable_binary.hpp>
 
 class Remote : private UDP
 {
@@ -50,8 +51,10 @@ class Remote : private UDP
   std::thread worker_thread_;
   void doTask_();
   MotorCommand command_;
+  bool isEnd_{false};
 public:
   Remote(const std::string& address);
+  ~Remote();
   void sendCommand(const MotorCommand& command);
   void sendData(const RoverState& data);
   MotorCommand getCommand();

@@ -39,6 +39,7 @@
 #include <portable_endian.h>
 #include <string>
 #include <sstream>
+#include <cereal/archives/portable_binary.hpp>
 
 /*!
  * @struct CommandBytes
@@ -88,7 +89,6 @@ public:
     signed short right_rear_rpm {0}; //! left motor rotation speed
     signed short max_rpm_ {4000}; //! max motor rotation speed
     MotorCommand() = default;
-    MotorCommand(const std::string& serialized);
     MotorCommand& operator=(const MotorCommand& command) = default;
 
     MotorCommand(const signed short& left_front, const signed short& left_rear,
@@ -97,8 +97,11 @@ public:
     void set(const signed short& left_front,  const signed short& left_rear,
              const signed short& right_front, const signed short& right_rear);
     void set(const CommandBytes& command);
-    void set(const std::string& serialized);
     CommandBytes toLeftByteArray() const;
     CommandBytes toRightByteArray() const;
-    std::string serialize() const;
+    template <typename Archive>
+    void serialize(Archive & archive)
+    {
+      archive( this->left_front_rpm, this->left_rear_rpm, this->right_front_rpm, this->right_rear_rpm);
+    }
 };
