@@ -38,6 +38,7 @@
 #include "Data.hpp"
 #include <chrono>
 #include <cstring>
+#include <sstream>
 
 /*!
  * @struct StateBytes
@@ -111,4 +112,6 @@ public:
     WheelState right_front;
     WheelState right_rear;
     Math3D::Quaternion quat;
+    std::string serialize() const;
+    void deserialize(const std::string& serialized);
 };

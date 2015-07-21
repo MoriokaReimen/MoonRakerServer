@@ -134,3 +134,81 @@ StateBytes RoverState::toByteArray() const
 
   return bytes;
 }
+
+/*!
+ * @brief serialize command for udp
+ * @return serialized command in std::string
+ */
+std::string RoverState::serialize() const
+{
+    std::string serialized;
+
+    Math3D::Degree roll, pitch, yaw;
+    this->quat.toRPY(roll, pitch, yaw);
+
+    serialized += "$";
+    serialized += std::to_string(this->time) + ",";
+    serialized += std::to_string(roll.val) + ",";
+    serialized += std::to_string(pitch.val) + ",";
+    serialized += std::to_string(yaw.val) + ",";
+
+    serialized += std::to_string(this->left_front.rpm) + ",";
+    serialized += std::to_string(this->left_rear.rpm) + ",";
+    serialized += std::to_string(this->right_front.rpm) + ",";
+    serialized += std::to_string(this->right_rear.rpm) + ",";
+
+    serialized += std::to_string(this->left_front.torque) + ",";
+    serialized += std::to_string(this->left_rear.torque) + ",";
+    serialized += std::to_string(this->right_front.torque) + ",";
+    serialized += std::to_string(this->right_rear.torque) + ";";
+
+    return serialized;
+}
+
+/*!
+ * @brief deserialize command from udp received data
+ */
+void RoverState::deserialize(const std::string& serialized)
+{
+    Math3D::Degree roll, pitch, yaw;
+
+    auto first = serialized.find_last_of('$');
+    auto last = serialized.find_last_of(';');
+    /* remove "$" and ";"; */
+    auto buff = serialized.substr(first + 1, last - first - 1);
+
+    std::stringstream ss(buff);
+    std::string element;
+
+    std::getline(ss, element, ',');
+    this->time = std::stoll(element);
+
+    std::getline(ss, element, ',');
+    roll.val = std::stod(element);
+    std::getline(ss, element, ',');
+    pitch.val = std::stod(element);
+    std::getline(ss, element, ',');
+    yaw.val = std::stod(element);
+    this->quat.fromRPY(roll, pitch, yaw);
+
+
+    std::getline(ss, element, ',');
+    this->left_front.rpm = std::stod(element);
+    std::getline(ss, element, ',');
+    this->left_rear.rpm = std::stod(element);
+    std::getline(ss, element, ',');
+    this->right_front.rpm = std::stod(element);
+    std::getline(ss, element, ',');
+    this->right_rear.rpm = std::stod(element);
+
+    std::getline(ss, element, ',');
+    this->left_front.torque = std::stod(element);
+    std::getline(ss, element, ',');
+    this->left_rear.torque = std::stod(element);
+    std::getline(ss, element, ',');
+    this->right_front.torque = std::stod(element);
+    std::getline(ss, element, ',');
+    this->right_rear.torque = std::stod(element);
+
+    return;
+}
