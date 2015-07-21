@@ -52,11 +52,11 @@ Remote::~Remote()
 
 void Remote::sendCommand(const MotorCommand& command)
 {
-  std::stringstream ss(std::stringstream::binary);
+  std::ostringstream ss;
   cereal::PortableBinaryOutputArchive oarchive(ss);
   oarchive(command);
   std::string serialized;
-  ss >> serialized;
+  serialized = ss.str();
   serialized = "$" + serialized +";";
   this->socket_mutex_.lock();
   this->write(serialized);
@@ -120,8 +120,7 @@ void Remote::doTask_()
     if(first > last) continue;
     auto buff = message.substr(first + 1, last - first - 1);
 
-    std::stringstream ss(std::stringstream::binary);
-    ss << buff;
+    std::istringstream ss(buff);
     cereal::PortableBinaryInputArchive iarchive(ss);
     MotorCommand command;
     iarchive(command);
