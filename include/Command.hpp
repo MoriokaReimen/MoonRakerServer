@@ -99,9 +99,6 @@ public:
     void set(const CommandBytes& command);
     CommandBytes toLeftByteArray() const;
     CommandBytes toRightByteArray() const;
-    template <typename Archive>
-    void serialize(Archive & archive)
-    {
-      archive( this->left_front_rpm, this->left_rear_rpm, this->right_front_rpm, this->right_rear_rpm);
-    }
+    std::string serialize() const;
+    void deserialize(const std::string& serialized);
 };

@@ -119,3 +119,44 @@ CommandBytes MotorCommand::toRightByteArray() const
     command.right_rear_rpm = htobe16(this->right_rear_rpm);
     return command;
 }
+
+/*!
+ * @brief serialize command for udp
+ * @return serialized command in std::string
+ */
+std::string MotorCommand::serialize() const
+{
+    std::string serialized;
+    serialized += "$";
+    serialized += std::to_string(this->left_front_rpm) + ",";
+    serialized += std::to_string(this->left_rear_rpm) + ",";
+    serialized += std::to_string(this->right_front_rpm) + ",";
+    serialized += std::to_string(this->right_rear_rpm) + ";";
+
+    return command;
+}
+
+/*!
+ * @brief deserialize command for udp
+ */
+void MotorCommand::deserialize(const std::string& serialized)
+{
+    auto first = message.find_last_of('$');
+    auto last = message.find_last_of(';');
+    /* remove "$" and ";"; */
+    auto buff = message.substr(first + 1, last - first - 1);
+
+    std::stringstream ss(buff);
+    std::string element;
+
+    std::getline(ss, element, ',');
+    this->left_front_rpm = std::to_string(element);
+    std::getline(ss, element, ',');
+    this->left_rear_rpm = std::to_string(element);
+    std::getline(ss, element, ',');
+    this->right_front_rpm = std::to_string(element);
+    std::getline(ss, element, ',');
+    this->right_rear_rpm = std::to_string(element);
+
+    return;
+}
