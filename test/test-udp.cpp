@@ -42,7 +42,7 @@
 #include "RoverState.hpp"
 #include "Logger.hpp"
 #include "IMU.hpp"
-#include "Remote.hpp"
+#include "RemoteServer.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -57,7 +57,7 @@ int main()
     MotorCommand command(0, 0, 0, 0);
 
     /*! set up log file */
-    Logger logger("Remote.mlog");
+    Logger logger("RemoteServer.mlog");
 
     /*! set up IMU */
     Math3D::Degree roll, pitch, yaw;
@@ -76,7 +76,7 @@ int main()
     timeout(0);
 
     /*! set up UDP */
-    Remote remote("192.168.11.2");
+    RemoteServer remote("192.168.11.2");
 
     while (true) {
         /* get Command from UDP */

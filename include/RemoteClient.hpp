@@ -1,6 +1,6 @@
 /*!
 -----------------------------------------------------------------------------
-@file    Remote.hpp
+@file    RemoteClient.hpp
 ----------------------------------------------------------------------------
          @@
        @@@@@@
@@ -44,7 +44,7 @@
 #include <mutex>
 #include <cereal/archives/portable_binary.hpp>
 
-class Remote : private UDP
+class RemoteClient : private UDP
 {
   std::mutex command_mutex_;
   std::mutex socket_mutex_;
@@ -53,8 +53,8 @@ class Remote : private UDP
   MotorCommand command_;
   bool isEnd_{false};
 public:
-  Remote(const std::string& address);
-  ~Remote();
+  RemoteClient(const std::string& address);
+  ~RemoteClient();
   void sendCommand(const MotorCommand& command);
   void sendData(const RoverState& data);
   MotorCommand getCommand();

@@ -42,7 +42,7 @@
 #include "RoverState.hpp"
 #include "Logger.hpp"
 #include "IMU.hpp"
-#include "Remote.hpp"
+#include "RemoteServer.hpp"
 #include <string>
 using std::cout;
 using std::cin;
@@ -78,7 +78,7 @@ int main()
     timeout(0);
 
     /*! set up UDP */
-    Remote remote("192.168.11.12");
+    RemoteServer remote("192.168.11.12");
 
     while (true) {
         /* get Command from UDP */

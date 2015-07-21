@@ -1,6 +1,6 @@
 /*!
 -----------------------------------------------------------------------------
-@file    SimpleServer.cpp
+@file    RemoteServer.hpp
 ----------------------------------------------------------------------------
          @@
        @@@@@@
@@ -30,36 +30,33 @@
           %%%%%
            %%%
 -----------------------------------------------------------------------------
-@brief Simple Server control EM from remote PC using UDP
+@brief Simple Console for controling MoonRaker
 -----------------------------------------------------------------------------
 */
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <ncurses.h>
-#include "Motor.hpp"
-#include "Data.hpp"
+#pragma once
+#include "Command.hpp"
 #include "RoverState.hpp"
-#include "Logger.hpp"
-#include "IMU.hpp"
-#include "RemoteServer.hpp"
-#include <string>
-using std::cout;
-using std::cin;
-using std::endl;
+#include "Socket/UDP.hpp"
+#include <cstring>
+#include <algorithm>
+#include <exception>
+#include <thread>
+#include <mutex>
+#include <cereal/archives/portable_binary.hpp>
 
-int main()
+class RemoteServer : private UDP
 {
-    /*! set up UDP */
-    RemoteServer remote("192.168.11.2");
-
-    while (true) {
-      try{
-        remote.getCommand();
-      } catch(...)
-      {
-      }
-    }
-
-    return 0;
-}
+  std::mutex command_mutex_;
+  std::mutex socket_mutex_;
+  std::thread worker_thread_;
+  void doTask_();
+  MotorCommand command_;
+  bool isEnd_{false};
+public:
+  RemoteServer(const std::string& address);
+  ~RemoteServer();
+  void sendCommand(const MotorCommand& command);
+  void sendData(const RoverState& data);
+  MotorCommand getCommand();
+  RoverState getData();
+};

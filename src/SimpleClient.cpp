@@ -39,7 +39,7 @@
 #include <ncurses.h>
 #include "RoverState.hpp"
 #include "Logger.hpp"
-#include "Remote.hpp"
+#include "RemoteClient.hpp"
 #include <string>
 #include <thread>
 #include <chrono>
@@ -59,7 +59,7 @@ int main()
     Logger logger(file_name);
 
     /*! set up MoonRaker */
-    Remote remote("192.168.11.99");
+    RemoteClient remote("192.168.11.99");
     RoverState rover;
     MotorCommand command(0, 0, 0, 0);
     int norm_rpm(0);

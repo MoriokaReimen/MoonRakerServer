@@ -1,6 +1,6 @@
 /*!
 -----------------------------------------------------------------------------
-@file    Remote.cpp
+@file    RemoteServer.cpp
 ----------------------------------------------------------------------------
          @@
        @@@@@@
@@ -33,24 +33,24 @@
 @brief Simple Console for controling MoonRaker
 -----------------------------------------------------------------------------
 */
-#include "Remote.hpp"
+#include "RemoteServer.hpp"
 
-Remote::Remote(const std::string& address)
+RemoteServer::RemoteServer(const std::string& address)
   : UDP(2015)
 {
   this->setTarget(address, 2015);
-  worker_thread_ = std::thread(&Remote::doTask_, this);
+  worker_thread_ = std::thread(&RemoteServer::doTask_, this);
   return;
 }
 
-Remote::~Remote()
+RemoteServer::~RemoteServer()
 {
   this->isEnd_ = true;
   worker_thread_.join();
   return;
 }
 
-void Remote::sendCommand(const MotorCommand& command)
+void RemoteServer::sendCommand(const MotorCommand& command)
 {
   std::ostringstream ss;
   cereal::PortableBinaryOutputArchive oarchive(ss);
@@ -64,7 +64,7 @@ void Remote::sendCommand(const MotorCommand& command)
   return;
 }
 
-void Remote::sendData(const RoverState& data)
+void RemoteServer::sendData(const RoverState& data)
 {
   auto bytes = data.toByteArray();
   unsigned char buffer[50];
@@ -73,7 +73,7 @@ void Remote::sendData(const RoverState& data)
   return;
 }
 
-MotorCommand Remote::getCommand()
+MotorCommand RemoteServer::getCommand()
 {
   MotorCommand command;
   this->command_mutex_.lock();
@@ -82,7 +82,7 @@ MotorCommand Remote::getCommand()
   return command;
 }
 
-RoverState Remote::getData()
+RoverState RemoteServer::getData()
 {
   StateBytes bytes;
   unsigned char buffer[80];
@@ -101,7 +101,7 @@ RoverState Remote::getData()
   throw std::runtime_error("Broken data"); //! data is broken
 }
 
-void Remote::doTask_()
+void RemoteServer::doTask_()
 {
   while(true)
   {
@@ -110,14 +110,14 @@ void Remote::doTask_()
     std::string message = this->read();
     this->socket_mutex_.unlock();
 
-    /*! Detect Headers "$" and footers ";" */
+    /*! Detect Headers '$' and footers ';' */
     size_t first{0}, last{0};
-    first = message.find_last_of("$");
-    last = message.find_last_of(";");
+    first = message.find_last_of('$');
+    last = message.find_last_of(';');
 
     /* check received data */
-    if(first == std::string::npos || last == std::string::npos) continue;
-    if(first > last) continue;
+    // if(first == std::string::npos || last == std::string::npos) continue;
+    //if(first > last) continue;
     auto buff = message.substr(first + 1, last - first - 1);
     MotorCommand command;
     if(!buff.empty())
@@ -126,8 +126,6 @@ void Remote::doTask_()
       cereal::PortableBinaryInputArchive iarchive(ss);
       iarchive(command);
     }
-
-
 
     this->command_mutex_.lock();
     this->command_ = command;
