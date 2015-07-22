@@ -3,6 +3,7 @@
 GamePad::GamePad()
 {
   GamepadInit();
+  GamepadSetRumble(GAMEPAD_0, 0.25f, 0.25f);
   return;
 }
 
