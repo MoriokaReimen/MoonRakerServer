@@ -10,6 +10,16 @@ C++ app for MoonRaker-EM.
 * boost library1.48
  boost system for serial/udp communication
 
+* ncurses
+
+* cmake
+
+* gtest
+  [you can download gtest here](https://code.google.com/p/googletest)
+
+* libphidget
+  [you can download libphidget here](www.phidgets.com/docs/OS_-_Linux)
+
 ## BUILD
 at the same directory of README.md
 
