@@ -39,7 +39,7 @@ RemoteClient::RemoteClient(const std::string& address)
   : UDP(2015)
 {
   this->setTarget(address, 2015);
-  //worker_thread_ = std::thread(&RemoteClient::doTask_, this);
+  worker_thread_ = std::thread(&RemoteClient::doTask_, this);
   return;
 }
 
@@ -73,9 +73,9 @@ void RemoteClient::doTask_()
   while(true)
   {
     /*! read from udp */
-    this->socket_mutex_.lock();
+    // this->socket_mutex_.lock();
     std::string message = this->read();
-    this->socket_mutex_.unlock();
+    // this->socket_mutex_.unlock();
 
     /*! Detect Headers '$' and footers ';' */
     auto first = message.find_last_of('$');
