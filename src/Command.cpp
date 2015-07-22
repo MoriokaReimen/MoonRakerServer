@@ -41,6 +41,16 @@ using std::abs;
  * @param[in] left left motr rotation velocity in rpm
  * @param[in] right left motr rotation velocity in rpm
  */
+MotorCommand::MotorCommand(const signed short& left, const signed short& right)
+{
+    this->set(left, right);
+}
+
+/*!
+ * @brief Constructor for MotorCommand class
+ * @param[in] left left motr rotation velocity in rpm
+ * @param[in] right left motr rotation velocity in rpm
+ */
 MotorCommand::MotorCommand(const signed short& left_front, const signed short& left_rear,
                            const signed short& right_front, const signed short& right_rear)
 {
@@ -73,6 +83,23 @@ void MotorCommand::set(const signed short& left_front, const signed short& left_
     this->left_rear_rpm  = left_rear;
     this->right_front_rpm = right_front;
     this->right_rear_rpm = right_rear;
+    return;
+}
+
+/*!
+ * @brief set internal variables
+ * @param[in] left left motr rotation velocity in rpm
+ * @param[in] right left motr rotation velocity in rpm
+ */
+void MotorCommand::set(const signed short& left, const signed short& right)
+{
+    if(abs(left) > max_rpm_ || abs(right) > max_rpm_)
+        throw std::range_error("rpm is over max rpm");
+
+    this->left_front_rpm  = left;
+    this->left_rear_rpm  = left;
+    this->right_front_rpm = right;
+    this->right_rear_rpm = right;
     return;
 }
 

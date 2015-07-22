@@ -90,9 +90,11 @@ public:
     MotorCommand() = default;
     MotorCommand& operator=(const MotorCommand& command) = default;
 
+    MotorCommand(const signed short& left, const signed short& right);
     MotorCommand(const signed short& left_front, const signed short& left_rear,
                  const signed short& right_front, const signed short& right_rear);
     MotorCommand(const CommandBytes& command);
+    void set(const signed short& left, const signed short& right);
     void set(const signed short& left_front,  const signed short& left_rear,
              const signed short& right_front, const signed short& right_rear);
     void set(const CommandBytes& command);

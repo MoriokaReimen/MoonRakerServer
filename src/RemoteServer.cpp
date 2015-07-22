@@ -45,8 +45,6 @@ RemoteServer::RemoteServer(const std::string& address)
 
 RemoteServer::~RemoteServer()
 {
-  this->isEnd_ = true;
-  worker_thread_.join();
   return;
 }
 
@@ -92,7 +90,5 @@ void RemoteServer::doTask_()
       std::lock_guard<std::mutex> lock(command_mutex_);
       this->command_ = command;
     }
-
-    if(isEnd_) return;
   }
 }

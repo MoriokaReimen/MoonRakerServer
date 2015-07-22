@@ -45,8 +45,6 @@ RemoteClient::RemoteClient(const std::string& address)
 
 RemoteClient::~RemoteClient()
 {
-  this->isEnd_ = true;
-  worker_thread_.join();
   return;
 }
 
@@ -92,6 +90,5 @@ void RemoteClient::doTask_()
       this->state_ = state;
     }
 
-    if(isEnd_) return;
   }
 }

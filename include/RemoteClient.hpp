@@ -43,7 +43,7 @@
 #include <thread>
 #include <mutex>
 
-class RemoteClient : private UDP
+class RemoteClient : public UDP
 {
   std::mutex state_mutex_;
   std::mutex socket_mutex_;

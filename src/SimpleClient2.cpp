@@ -1,6 +1,6 @@
 /*!
 -----------------------------------------------------------------------------
-@file    SimpleClient.cpp
+@file    SimpleClient2.cpp
 ----------------------------------------------------------------------------
          @@
        @@@@@@
@@ -30,7 +30,7 @@
           %%%%%
            %%%
 -----------------------------------------------------------------------------
-@brief Simple Console for controling MoonRaker
+@brief Simple Console with gamepad for controling MoonRaker
 -----------------------------------------------------------------------------
 */
 #include <iostream>
@@ -40,6 +40,7 @@
 #include "RoverState.hpp"
 #include "Logger.hpp"
 #include "RemoteClient.hpp"
+#include "GamePad.hpp"
 #include <string>
 #include <thread>
 #include <chrono>
@@ -72,7 +73,6 @@ int main()
 
     /*! set up curses*/
     int ch = 0;
-    int line = 0;
     initscr();
     cbreak();
     noecho();
@@ -82,20 +82,20 @@ int main()
     init_pair(2, COLOR_RED, COLOR_BLACK);
     timeout(0);
 
+    /*! set up gamepad */
+    GamePad game;
+
+
     while (true) {
         /* get input from consoler and cope it */
         ch = getch();
         if(ch == 'q') break;
-        if(ch == 'k') left_rpm = norm_rpm, right_rpm = norm_rpm;
-        if(ch == 'j') left_rpm = - norm_rpm, right_rpm = - norm_rpm;
-        if(ch == 'h') left_rpm = - norm_rpm, right_rpm = norm_rpm;
-        if(ch == 'l') left_rpm = norm_rpm, right_rpm = - norm_rpm;
-        if(ch == 's') left_rpm = right_rpm = 0;
-        if(ch == 'p') left_rpm = 0, right_rpm = - norm_rpm;
+        game.update();
+        left_rpm = norm_rpm * game.getLeftStickVal();
+        right_rpm = norm_rpm * game.getRightStickVal();
 
         /* gear ratio */
-        command.set(left_rpm * GEAR_RATIO, left_rpm * GEAR_RATIO,
-                    right_rpm * GEAR_RATIO, right_rpm * GEAR_RATIO);
+        command.set(left_rpm * GEAR_RATIO, right_rpm * GEAR_RATIO);
 
         /*! send command*/
         remote.sendCommand(command);
@@ -135,12 +135,10 @@ int main()
         attroff(COLOR_PAIR(1));
 
         printw("press (q) to quit");
-        line++;
-        if(line > 10) line = 0;
+
         refresh();
     }
 
-    remote.close();
     endwin();
 
     return 0;
