@@ -116,8 +116,8 @@ int main()
 
         move(1, 0);
         printw("LF:%5d LR:%5d RF:%5d RR:%5d",
-            command.left_front_rpm, command.left_rear_rpm,
-            command.left_front_rpm, command.left_rear_rpm);
+            command.left_front_rpm, command.right_rear_rpm,
+            command.left_front_rpm, command.right_rear_rpm);
 
         move(5, 0);
         printw("Roll:%5f Pitch:%5f Yaw:%5f", roll, pitch, yaw);
