@@ -82,6 +82,8 @@ int main()
 
     while (true) {
         /* get Command from UDP */
+          move(2, 0);
+          clrtoeol();
         for(int i = 0; i < 3; ++i)
         {
           try {
@@ -96,6 +98,8 @@ int main()
         }
 
         /*! send command and get data from serial*/
+        move(1, 0);
+        clrtoeol();
         for(int i = 0; i < 3; ++i)
         {
           try {
