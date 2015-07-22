@@ -45,6 +45,8 @@ RemoteClient::RemoteClient(const std::string& address)
 
 RemoteClient::~RemoteClient()
 {
+  this->worker_thread_.detach();
+  this->close();
   return;
 }
 

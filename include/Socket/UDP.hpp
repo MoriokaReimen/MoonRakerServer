@@ -47,7 +47,7 @@ class UDP
     static constexpr int MAX_LENGTH{1024};
 public:
     UDP(const int& port);
-    ~UDP();
+    virtual ~UDP();
     void setTarget(const std::string& address, const int& port);
     bool isOpen() const;
     void close();

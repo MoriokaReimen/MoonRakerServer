@@ -45,6 +45,8 @@ RemoteServer::RemoteServer(const std::string& address)
 
 RemoteServer::~RemoteServer()
 {
+  this->worker_thread_.detach();
+  this->close();
   return;
 }
 
