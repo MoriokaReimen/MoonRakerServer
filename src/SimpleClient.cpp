@@ -103,13 +103,13 @@ int main()
         remote.sendCommand(command);
 
         /*! get Data trial 3 times */
-        /* for(int i = 0; i < 3; ++i)
+        for(int i = 0; i < 3; ++i)
         {
           try {
             rover = remote.getData();
             break;
           } catch(...){}
-        } */
+        }
 
         logger.log(rover);
 

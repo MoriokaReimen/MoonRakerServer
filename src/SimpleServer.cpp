@@ -113,6 +113,7 @@ int main()
         }
 
         rover.set(left, right, imu.getQuat());
+        remote.sendData(rover);
         logger.log(rover);
         // remote.sendData(rover);
 
