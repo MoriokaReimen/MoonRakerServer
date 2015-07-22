@@ -118,8 +118,9 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
             right = this->getData();
             break;
       } catch(const runtime_error& e){
-        if(lcount < 0)
-        throw std::runtime_error("No Signal From Right");
+          std::this_thread::sleep_for(std::chrono::microseconds(1000));
+          if(lcount < 0)
+          throw std::runtime_error("No Signal From Right");
       }
     }
 
@@ -133,8 +134,9 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
             left = this->getData();
             break;
       } catch(const runtime_error& e){
-        if(rcount < 0)
-        throw std::runtime_error("No Signal From Left");
+          std::this_thread::sleep_for(std::chrono::microseconds(1000));
+          if(rcount < 0)
+          throw std::runtime_error("No Signal From Left");
       }
     }
 
