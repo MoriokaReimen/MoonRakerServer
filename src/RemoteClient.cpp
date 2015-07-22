@@ -53,18 +53,15 @@ RemoteClient::~RemoteClient()
 void RemoteClient::sendCommand(const MotorCommand& command)
 {
   std::string serialized = command.serialize();
-  this->socket_mutex_.lock();
   this->write(serialized);
-  this->socket_mutex_.unlock();
   return;
 }
 
 RoverState RemoteClient::getData()
 {
   RoverState state;
-  this->state_mutex_.lock();
+  std::lock_guard<std::mutex> lock(state_mutex_);
   state = this->state_;
-  this->state_mutex_.unlock();
   return state;
 }
 
@@ -73,9 +70,7 @@ void RemoteClient::doTask_()
   while(true)
   {
     /*! read from udp */
-    // this->socket_mutex_.lock();
     std::string message = this->read();
-    // this->socket_mutex_.unlock();
 
     /*! Detect Headers '$' and footers ';' */
     auto first = message.find_last_of('$');
@@ -92,9 +87,10 @@ void RemoteClient::doTask_()
     RoverState state;
     state.deserialize(serialized);
 
-    this->state_mutex_.lock();
-    this->state_ = state;
-    this->state_mutex_.unlock();
+    {
+      std::lock_guard<std::mutex> lock(state_mutex_);
+      this->state_ = state;
+    }
 
     if(isEnd_) return;
   }

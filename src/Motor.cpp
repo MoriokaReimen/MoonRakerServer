@@ -106,7 +106,7 @@ MotorData Motor::getData()
  */
 bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 {
-  int lcount{3}, rcount{3};
+  int lcount{5}, rcount{5};
 
     while(true)
     {

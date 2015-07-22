@@ -83,8 +83,6 @@ int main()
     timeout(0);
 
     while (true) {
-        std::this_thread::sleep_for(std::chrono::microseconds(10000)); // wait 10 ms
-
         /* get input from consoler and cope it */
         ch = getch();
         if(ch == 'q') break;
@@ -131,7 +129,7 @@ int main()
 
         move(7, 0);
         attron(COLOR_PAIR(1));
-        printw("%15d%15d%15d%15d",
+        printw("%15f%15f%15f%15f",
                rover.left_front.rpm,  rover.left_rear.rpm,
                rover.right_front.rpm, rover.right_rear.rpm);
         attroff(COLOR_PAIR(1));
