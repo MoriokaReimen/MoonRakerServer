@@ -91,6 +91,9 @@ int main()
         ch = getch();
         if(ch == 'q') break;
 
+        /* slow down cycle */
+        std::this_thread::sleep_for(std::chrono::microseconds(10000));
+
         game.update();
         left_rpm = norm_rpm * game.getLeftStickVal();
         right_rpm = norm_rpm * game.getRightStickVal();

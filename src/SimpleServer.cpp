@@ -59,7 +59,10 @@ int main()
     MotorCommand command(0, 0, 0, 0);
 
     /*! set up log file */
-    Logger logger("Remote.mlog");
+    std::string file_name;
+    cout << "Input Log File Name:" << endl;
+    cin >> file_name;
+    Logger logger(file_name);
 
     /*! set up IMU */
     Math3D::Degree roll, pitch, yaw;

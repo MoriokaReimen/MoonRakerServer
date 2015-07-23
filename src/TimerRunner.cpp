@@ -50,7 +50,6 @@ constexpr short GEAR_RATIO = 690;
 
 int main()
 {
-    RoverState rover;
     /*! set up log file */
     std::string file_name;
     cout << "log file name:" << endl;
@@ -59,25 +58,20 @@ int main()
     Logger logger(file_name);
 
     /*! set up MoonRaker */
-    short left_front_rpm(0), left_rear_rpm(0);
-    short right_front_rpm(0), right_rear_rpm(0);
+    RoverState rover;
+    MotorData left_data, right_data;
+    short left_rpm(0), right_rpm(0);
     Motor motor;
-    MotorData left, right;
     MotorCommand command(0, 0, 0, 0);
-    cout << "Input left front RPM:" << endl;
-    cin >> left_front_rpm;
-    cout << "Input left rear RPM:" << endl;
-    cin >> left_rear_rpm;
-    cout << "Input right front RPM:" << endl;
-    cin >> right_front_rpm;
-    cout << "Input right rear RPM:" << endl;
-    cin >> right_rear_rpm;
+
+    cout << "Input left RPM:" << endl;
+    cin >> left_rpm;
+    cout << "Input left RPM:" << endl;
+    cin >> right_rpm;
 
     /* refer gear reduction */
-    left_front_rpm *= GEAR_RATIO;
-    left_rear_rpm *= GEAR_RATIO;
-    right_front_rpm *= GEAR_RATIO;
-    right_rear_rpm *= GEAR_RATIO;
+    left_rpm *= GEAR_RATIO;
+    right_rpm *= GEAR_RATIO;
 
     /*! set up IMU */
     Math3D::Degree roll, pitch, yaw;
@@ -105,14 +99,14 @@ int main()
 
         auto current_time = std::chrono::high_resolution_clock::now();
         auto ellapsed_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
-        command.set(0,0, 0, 0);
-        if(ellapsed_time > 5.0)  command.set(left_front_rpm, left_rear_rpm, right_front_rpm, right_rear_rpm);
-        if(ellapsed_time > 35.0) command.set(0, 0, 0, 0);
-        if(ellapsed_time > 40.0) break;
+        command.set(0,0);
+        if(ellapsed_time > 5.0)  command.set(left_rpm, right_rpm);
+        if(ellapsed_time > 65.0) command.set(0, 0);
+        if(ellapsed_time > 70.0) break;
 
         /*! send command and get data */
         try {
-            motor.work(command, left, right);
+            motor.work(command, left_data, right_data);
         } catch(...) {
             move(1, 0);
             attron(COLOR_PAIR(2));
@@ -120,7 +114,7 @@ int main()
             attroff(COLOR_PAIR(2));
         }
 
-        rover.set(left, right, imu.getQuat());
+        rover.set(left_data, right_data, imu.getQuat());
         logger.log(rover);
 
         /*! show data to console */
@@ -134,26 +128,26 @@ int main()
         move(7, 0);
         attron(COLOR_PAIR(1));
         printw("%1s%15d%15d%15d%15d",
-               left.device.c_str(), left.rear_current, left.front_current,
-               left.rear_rpm, left.front_rpm);
+               left_data.device.c_str(), left_data.rear_current, left_data.front_current,
+               left_data.rear_rpm, left_data.front_rpm);
         attroff(COLOR_PAIR(1));
 
         move(8, 0);
         attron(COLOR_PAIR(1));
         printw("%1s%15d%15d%15d%15d",
-               right.device.c_str(), right.rear_current, right.front_current,
-               right.rear_rpm, right.front_rpm);
+               right_data.device.c_str(), right_data.rear_current, right_data.front_current,
+               right_data.rear_rpm, right_data.front_rpm);
         attroff(COLOR_PAIR(1));
 
         move(9 + line, 0);
         printw("%1s%15d%15d%15d%15d",
-               left.device.c_str(), left.rear_current, left.front_current,
-               left.rear_rpm, left.front_rpm);
+               left_data.device.c_str(), left_data.rear_current, left_data.front_current,
+               left_data.rear_rpm, left_data.front_rpm);
 
         move(21 + line, 0);
         printw("%1s%15d%15d%15d%15d",
-               right.device.c_str(), right.rear_current, right.front_current,
-               right.rear_rpm, right.front_rpm);
+               right_data.device.c_str(), right_data.rear_current, right_data.front_current,
+               right_data.rear_rpm, right_data.front_rpm);
 
         move(4, 0);
         printw("press (q) to quit");
@@ -163,7 +157,13 @@ int main()
     }
 
     /*! stop motor and clean up curses */
-    motor.halt();
+    for(int i = 0; i < 3; ++i)
+    {
+      try {
+        motor.halt();
+        break;
+      } catch(...) { }
+    }
     endwin();
 
     return 0;

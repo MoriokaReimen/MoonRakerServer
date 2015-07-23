@@ -93,6 +93,9 @@ int main()
         if(ch == 's') left_rpm = right_rpm = 0;
         if(ch == 'p') left_rpm = 0, right_rpm = - norm_rpm;
 
+        /* slow down cycle */
+        std::this_thread::sleep_for(std::chrono::microseconds(10000));
+
         /* gear ratio */
         command.set(left_rpm * GEAR_RATIO, left_rpm * GEAR_RATIO,
                     right_rpm * GEAR_RATIO, right_rpm * GEAR_RATIO);
