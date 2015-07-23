@@ -23,12 +23,12 @@ float GamePad::getLeftStickVal() const
 {
   float x,y;
   GamepadStickNormXY(GAMEPAD_0, STICK_LEFT, &x, &y);
-  return std::floor(y + 0.5);
+  return std::round(y);
 }
 
 float GamePad::getRightStickVal() const
 {
   float x,y;
   GamepadStickNormXY(GAMEPAD_0, STICK_RIGHT, &x, &y);
-  return std::floor(y + 0.5);
+  return std::round(y);
 }
