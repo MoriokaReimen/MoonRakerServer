@@ -90,6 +90,7 @@ int main()
         /* get input from consoler and cope it */
         ch = getch();
         if(ch == 'q') break;
+
         game.update();
         left_rpm = norm_rpm * game.getLeftStickVal();
         right_rpm = norm_rpm * game.getRightStickVal();

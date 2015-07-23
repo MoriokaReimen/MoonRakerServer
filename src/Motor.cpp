@@ -114,6 +114,7 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
       try {
             /*! send command  to Right V10*/
             this->sendRightCommand(command);
+            std::this_thread::sleep_for(std::chrono::microseconds(1000));
             /*! get right motor data */
             right = this->getData();
             break;
@@ -124,12 +125,15 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
       }
     }
 
+    std::this_thread::sleep_for(std::chrono::microseconds(1000));
+
     while(true)
     {
             --rcount;
       try {
             /*! send command  to Left V10*/
             this->sendLeftCommand(command);
+            std::this_thread::sleep_for(std::chrono::microseconds(1000));
             /*! get left motor data */
             left = this->getData();
             break;

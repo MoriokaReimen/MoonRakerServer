@@ -81,6 +81,9 @@ int main()
     RemoteServer remote("192.168.11.12");
 
     while (true) {
+        auto ch = getch();
+        if(ch == 'q') break;
+
         /* get Command from UDP */
           move(2, 0);
           clrtoeol();
@@ -112,10 +115,10 @@ int main()
           }
         }
 
+        // remote.sendData(rover);
         rover.set(left, right, imu.getQuat());
         remote.sendData(rover);
         logger.log(rover);
-        // remote.sendData(rover);
 
         /*! show data to console */
         rover.quat.toRPY(roll, pitch, yaw);

@@ -22,31 +22,33 @@ set(SOCKET_SRC src/Socket/UDP.cpp)
 set(GAMEPAD_SRC src/gamepad.c src/GamePad.cpp)
 set(SRC ${MATH3D_SRC} ${IMU_SRC} ${MOON_SRC} ${SOCKET_SRC} ${GAMEPAD_SRC})
 
-add_executable(TheSimple.exe src/SimpleMain.cpp  ${SRC})
-target_link_libraries(TheSimple.exe pthread curses c m boost_system rt phidget21 udev)
+add_library(moonraker STATIC ${SRC})
 
-add_executable(TimerRunner.exe src/TimerRunner.cpp ${SRC})
-target_link_libraries(TimerRunner.exe pthread curses c m boost_system rt phidget21 udev)
+add_executable(TheSimple.exe src/SimpleMain.cpp)
+target_link_libraries(TheSimple.exe moonraker pthread curses c m boost_system rt phidget21 udev)
 
-add_executable(SimpleServer.exe src/SimpleServer.cpp  ${SRC})
-target_link_libraries(SimpleServer.exe pthread curses c m boost_system rt phidget21 udev)
+add_executable(TimerRunner.exe src/TimerRunner.cpp)
+target_link_libraries(TimerRunner.exe moonraker pthread curses c m boost_system rt phidget21 udev)
 
-add_executable(SimpleClient.exe src/SimpleClient.cpp  ${SRC})
-target_link_libraries(SimpleClient.exe pthread curses c m boost_system rt phidget21 udev)
+add_executable(SimpleServer.exe src/SimpleServer.cpp)
+target_link_libraries(SimpleServer.exe moonraker pthread curses c m boost_system rt phidget21 udev)
 
-add_executable(SimpleClient2.exe src/SimpleClient2.cpp  ${SRC})
-target_link_libraries(SimpleClient2.exe pthread curses c m boost_system rt phidget21 udev)
+add_executable(SimpleClient.exe src/SimpleClient.cpp)
+target_link_libraries(SimpleClient.exe moonraker pthread curses c m boost_system rt phidget21 udev)
+
+add_executable(SimpleClient2.exe src/SimpleClient2.cpp)
+target_link_libraries(SimpleClient2.exe moonraker pthread curses c m boost_system rt phidget21 udev)
 
 enable_testing()
-add_executable(test.exe test/test-data.cpp test/test-command.cpp ${SRC})
-target_link_libraries(test.exe gtest gtest_main pthread rt boost_system phidget21 udev)
+add_executable(test.exe test/test-data.cpp test/test-command.cpp)
+target_link_libraries(test.exe moonraker gtest gtest_main pthread rt boost_system phidget21 udev)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 
-add_executable(TestSerial.exe test/test-serial.cpp ${SRC})
-target_link_libraries(TestSerial.exe pthread curses c m boost_system rt phidget21 udev)
+add_executable(TestSerial.exe test/test-serial.cpp)
+target_link_libraries(TestSerial.exe moonraker pthread curses c m boost_system rt phidget21 udev)
 
-add_executable(test-udp.exe test/test-udp.cpp  ${SRC})
-target_link_libraries(test-udp.exe pthread curses c m boost_system rt phidget21 udev)
+add_executable(test-udp.exe test/test-udp.cpp)
+target_link_libraries(test-udp.exe moonraker pthread curses c m boost_system rt phidget21 udev)
 
-add_executable(test-udp2.exe test/test-udp2.cpp  ${SRC})
-target_link_libraries(test-udp2.exe pthread curses c m boost_system rt phidget21 udev)
+add_executable(test-udp2.exe test/test-udp2.cpp)
+target_link_libraries(test-udp2.exe moonraker pthread curses c m boost_system rt phidget21 udev)
