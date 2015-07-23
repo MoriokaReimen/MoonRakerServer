@@ -11,5 +11,6 @@ CMakeFiles
 bin/main
 Testing/
 *.exe
+*.mlog
 
 

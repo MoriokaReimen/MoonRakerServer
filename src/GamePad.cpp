@@ -7,6 +7,12 @@ GamePad::GamePad()
   return;
 }
 
+GamePad::~GamePad()
+{
+  GamepadShutdown();
+  return;
+}
+
 void GamePad::update()
 {
   GamepadUpdate();
@@ -15,14 +21,14 @@ void GamePad::update()
 
 float GamePad::getLeftStickVal() const
 {
-  float lx,ly;
-  GamepadStickNormXY(GAMEPAD_0, STICK_LEFT, &lx, &ly);
-  return ly;
+  float length;
+  length = GamepadStickLength(GAMEPAD_0, STICK_LEFT);
+  return std::round(length);
 }
 
 float GamePad::getRightStickVal() const
 {
-  float rx,ry;
-  GamepadStickNormXY(GAMEPAD_0, STICK_RIGHT, &rx, &ry);
-  return ry;
+  float length;
+  length = GamepadStickLength(GAMEPAD_0, STICK_RIGHT);
+  return std::round(length);
 }
