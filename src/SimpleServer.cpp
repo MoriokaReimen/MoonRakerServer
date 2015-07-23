@@ -78,7 +78,7 @@ int main()
     timeout(0);
 
     /*! set up UDP */
-    RemoteServer remote("192.168.11.12");
+    RemoteServer remote("192.168.11.4");
 
     while (true) {
         auto ch = getch();
@@ -107,6 +107,7 @@ int main()
         {
           try {
             motor.work(command, left, right);
+            break;
           } catch(...) {
               move(1, 0);
               attron(COLOR_PAIR(2));
@@ -160,7 +161,13 @@ int main()
     }
 
     /*! stop motor and clean up curses */
-    motor.halt();
+    for(int i = 0; i < 3; ++i)
+    {
+      try {
+        motor.halt();
+        break;
+      } catch(...) { }
+    }
     endwin();
 
     return 0;
