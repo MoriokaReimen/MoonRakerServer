@@ -1,5 +1,43 @@
+/*!
+-----------------------------------------------------------------------------
+@file    GamePad.cpp
+----------------------------------------------------------------------------
+         @@
+       @@@@@@
+      @```@@@@
+     @`  `@@@@@@
+   @@`   `@@@@@@@@
+  @@`    `@@@@@@@@@           Tohoku University
+  @` `   `@@@@@@@@@       SPACE ROBOTICS LABORATORY
+  @`` ## `@@@@@@@@@    http://www.astro.mech.tohoku.ac.jp/
+  @` #..#`@@@@@@@@@        Planetary Robotics Group
+  @` #..#`@@@@@@@@@
+  @` ### `@@@@@@@@@          Professor Kazuya Yoshida
+  @` ###``@@@@@@@@@      Associate Professor Keiji Nagatani
+   @### ``@@@@@@@@
+   ###  ` @@@@@@@
+  ###  @  @@@@@                 Creation Date:
+ ###    @@@@@               @date July. 24. 2015
+ /-\     @@
+|   |      %%                      Authors:
+ \-/##    %%%%%             @author Kei Nakata
+   #### %%%                  menschenjager.mark.neun@gmail.com
+     ###%%       *
+      ##%%     *****
+       #%%      ***
+        %%     *   *
+         %%
+          %%%%%
+           %%%
+-----------------------------------------------------------------------------
+@brief gamepad wrapper class
+-----------------------------------------------------------------------------
+*/
 #include "GamePad.hpp"
 
+/*!
+ * @brief Constructor for MotorData class
+ */
 GamePad::GamePad()
 {
   GamepadInit();
@@ -7,18 +45,28 @@ GamePad::GamePad()
   return;
 }
 
+/*!
+ * @brief Destructor for MotorData class
+ */
 GamePad::~GamePad()
 {
   GamepadShutdown();
   return;
 }
 
+/*!
+ * @brief call this function before every extractin gamepad state
+ */
 void GamePad::update()
 {
   GamepadUpdate();
   return;
 }
 
+/*!
+ * @brief get left stick state
+ * @return value 1 or 0 or -1
+ */
 float GamePad::getLeftStickVal() const
 {
   float x,y;
@@ -26,6 +74,10 @@ float GamePad::getLeftStickVal() const
   return std::round(y);
 }
 
+/*!
+ * @brief get right stick state
+ * @return value 1 or 0 or -1
+ */
 float GamePad::getRightStickVal() const
 {
   float x,y;

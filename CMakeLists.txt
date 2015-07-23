@@ -40,7 +40,7 @@ add_executable(SimpleClient2.exe src/SimpleClient2.cpp)
 target_link_libraries(SimpleClient2.exe moonraker pthread curses c m boost_system rt phidget21 udev)
 
 enable_testing()
-add_executable(test.exe test/test-data.cpp test/test-command.cpp)
+add_executable(test.exe test/test-command.cpp test/test-data.cpp test/test-degree.cpp test/test-quaternion.cpp test/test-rotatefunc.cpp test/test-socket.cpp test/test-vector3.cpp)
 target_link_libraries(test.exe moonraker gtest gtest_main pthread rt boost_system phidget21 udev)
 add_test(NAME "UnitTest" COMMAND "./bin/test.exe")
 
@@ -52,3 +52,4 @@ target_link_libraries(test-udp.exe moonraker pthread curses c m boost_system rt 
 
 add_executable(test-udp2.exe test/test-udp2.cpp)
 target_link_libraries(test-udp2.exe moonraker pthread curses c m boost_system rt phidget21 udev)
+
