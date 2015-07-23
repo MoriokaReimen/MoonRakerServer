@@ -23,12 +23,12 @@ float GamePad::getLeftStickVal() const
 {
   float length;
   length = GamepadStickLength(GAMEPAD_0, STICK_LEFT);
-  return std::round(length);
+  return std::floor(length + 0.5);
 }
 
 float GamePad::getRightStickVal() const
 {
   float length;
   length = GamepadStickLength(GAMEPAD_0, STICK_RIGHT);
-  return std::round(length);
+  return std::floor(length + 0.5);
 }
