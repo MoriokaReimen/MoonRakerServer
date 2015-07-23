@@ -21,14 +21,14 @@ void GamePad::update()
 
 float GamePad::getLeftStickVal() const
 {
-  float length;
-  length = GamepadStickLength(GAMEPAD_0, STICK_LEFT);
-  return std::floor(length + 0.5);
+  float x,y;
+  GamepadStickNormXY(GAMEPAD_0, STICK_LEFT, &x, &y);
+  return std::floor(y + 0.5);
 }
 
 float GamePad::getRightStickVal() const
 {
-  float length;
-  length = GamepadStickLength(GAMEPAD_0, STICK_RIGHT);
-  return std::floor(length + 0.5);
+  float x,y;
+  GamepadStickNormXY(GAMEPAD_0, STICK_RIGHT, &x, &y);
+  return std::floor(y + 0.5);
 }

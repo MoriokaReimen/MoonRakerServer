@@ -135,6 +135,7 @@ int main()
                rover.right_front.rpm, rover.right_rear.rpm);
         attroff(COLOR_PAIR(1));
 
+        move(4, 0);
         printw("press (q) to quit");
 
         refresh();
