@@ -51,6 +51,8 @@ private:
     boost::asio::serial_port serialPort;
     boost::system::error_code ec;
     boost::system::error_code lastError;
+    std::string port_;
+    int baud_;
 
 public:
     BoostComPort();
@@ -65,6 +67,7 @@ public:
     void poll();
     void clearBuffers();
     boost::system::error_code& getLastError();
+    void reset();
 };
 
 #endif /* BOOSTCOMPORT_HPP_ */

@@ -46,6 +46,8 @@ BoostComPort::~BoostComPort()
  */
 int BoostComPort::open(std::string port, int baud)
 {
+  this->port_ = port;
+  this->baud_ = baud;
     try {
         if(serialPort.is_open())
             close();
@@ -221,4 +223,21 @@ void BoostComPort::poll()
 void BoostComPort::clearBuffers()
 {
     currentContent=0;
+}
+
+void BoostComPort::reset()
+{
+  serialPort.cancel();
+  try {
+      if(serialPort.is_open())
+          close();
+      serialPort.open(port_);
+      boost::asio::serial_port_base::baud_rate baudRate(baud_);
+      serialPort.set_option(baudRate);
+      io_service.reset();
+      serialPort.async_read_some(boost::asio::buffer(eventBuffer, EVENTBUFFER_SIZE), boost::bind(&BoostComPort::onPortRead, this, _1, _2));
+  } catch(...) {
+  }
+
+  return;
 }
