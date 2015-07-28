@@ -53,7 +53,6 @@ int BoostComPort::open(std::string port, int baud)
         boost::asio::serial_port_base::baud_rate baudRate(baud);
         serialPort.set_option(baudRate);
         io_service.reset();
-        this->worker_thread_ = std::thread(boost::bind(&boost::asio::io_service::run, &io_service));
         serialPort.async_read_some(boost::asio::buffer(eventBuffer, EVENTBUFFER_SIZE), boost::bind(&BoostComPort::onPortRead, this, _1, _2));
         clear();
         return 0;
@@ -88,12 +87,14 @@ boost::system::error_code& BoostComPort::getLastError()
  */
 int BoostComPort::close()
 {
+    //serialPort.cancel();  // make shure all pending operations are stopped
     boost::system::error_code ec;
     serialPort.close(ec);
     if(ec) {
         currentContent=0;
         return -1;
     }
+    //io_service.reset();  // don't know why this is needed but without it's not working
     currentContent=0;
     return 0;
 }

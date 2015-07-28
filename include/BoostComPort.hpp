@@ -22,12 +22,9 @@ along with BoostComPort.  If not, see <http://www.gnu.org/licenses/>.
 #define BOOSTCOMPORT_HPP_
 
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <string>
 #include <iostream>
 #include <boost/timer.hpp>
-#include <thread>
-#include <functional>
 
 #define BUFFER_SIZE 1000000
 #define EVENTBUFFER_SIZE 1000000
@@ -54,7 +51,6 @@ private:
     boost::asio::serial_port serialPort;
     boost::system::error_code ec;
     boost::system::error_code lastError;
-    thread worker_thread_;
 
 public:
     BoostComPort();
