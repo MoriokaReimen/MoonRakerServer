@@ -72,7 +72,7 @@ int main()
     /*! set up curses*/
     int line = 0;
     initscr();
-    cbreak();
+    nocbreak();
     noecho();
     curs_set(2);
     start_color();
@@ -119,7 +119,6 @@ int main()
           }
         }
 
-        // remote.sendData(rover);
         rover.set(left, right, imu.getQuat());
         remote.sendData(rover);
         logger.log(rover);
@@ -164,13 +163,7 @@ int main()
     }
 
     /*! stop motor and clean up curses */
-    for(int i = 0; i < 3; ++i)
-    {
-      try {
-        motor.halt();
-        break;
-      } catch(...) { }
-    }
+    motor.halt();
     endwin();
 
     return 0;
