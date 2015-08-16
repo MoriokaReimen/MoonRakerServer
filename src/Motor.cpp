@@ -84,7 +84,7 @@ MotorData Motor::getData()
     unsigned char buffer[40];
 
     /*! read 19 bytes from serial */
-    serial.read(buffer, 25, true, 10);
+    serial.read(buffer, 20, true, 20);
 
     /*! Detect Headers and footers */
     for (int i = 0; i < 25; ++i) {
