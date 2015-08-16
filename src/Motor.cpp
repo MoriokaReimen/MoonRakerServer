@@ -155,6 +155,13 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 void Motor::halt()
 {
     MotorData left, right;
-    this->work(MotorCommand(0, 0, 0, 0), left, right);
+    while(true)
+    {
+      try {
+        this->work(MotorCommand(0, 0, 0, 0), left, right);
+        break
+      } catch(...) {}
+    }
+
     return;
 }
