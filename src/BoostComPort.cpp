@@ -54,7 +54,7 @@ int BoostComPort::open(std::string port, int baud)
         serialPort.open(port);
         boost::asio::serial_port_base::baud_rate baudRate(baud);
         serialPort.set_option(baudRate);
-        serialPort.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::hardware));
+        serialPort.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
         serialPort.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
         io_service.reset();
         serialPort.async_read_some(boost::asio::buffer(eventBuffer, EVENTBUFFER_SIZE), boost::bind(&BoostComPort::onPortRead, this, _1, _2));
