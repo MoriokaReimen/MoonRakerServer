@@ -84,8 +84,8 @@ int main()
     RemoteServer remote("192.168.11.4");
 
     while (true) {
-        //auto ch = getch();
-        //if(ch == 'q') break;
+        auto ch = getch();
+        if(ch == 'q') break;
 
         /* get Command from UDP */
           move(2, 0);
