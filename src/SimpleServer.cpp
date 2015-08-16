@@ -72,7 +72,7 @@ int main()
     /*! set up curses*/
     int line = 0;
     initscr();
-    nocbreak();
+    cbreak();
     noecho();
     curs_set(2);
     start_color();
@@ -84,8 +84,8 @@ int main()
     RemoteServer remote("192.168.11.4");
 
     while (true) {
-        auto ch = getch();
-        if(ch == 'q') break;
+        //auto ch = getch();
+        //if(ch == 'q') break;
 
         /* get Command from UDP */
           move(2, 0);
