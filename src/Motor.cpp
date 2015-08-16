@@ -159,7 +159,7 @@ void Motor::halt()
     {
       try {
         this->work(MotorCommand(0, 0, 0, 0), left, right);
-        break
+        break;
       } catch(...) {}
     }
 
