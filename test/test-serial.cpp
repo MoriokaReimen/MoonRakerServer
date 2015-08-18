@@ -48,11 +48,11 @@ using std::endl;
 int main()
 {
         /*! initialize sleep function */
-        constexpr std::chrono::milliseconds interval(10);
+        constexpr std::chrono::milliseconds interval(30);
         MotorData left, right;
         /*! set up Motor */
         Motor motor;
-        MotorCommand command;
+        MotorCommand command(2000, 2000);
 
         /*! set up curses*/
         int ch = 0;
@@ -68,23 +68,23 @@ int main()
                 ch = getch();
                 if(ch == '1')
                 {
-                  command.set(3000, 0, 0, 0);
+                  command.set(2000, 0, 0, 0);
                 }
                 if(ch == '2')
                 {
-                  command.set(0, 3000, 0, 0);
+                  command.set(0, 2000, 0, 0);
                 }
                 if(ch == '3')
                 {
-                  command.set(0, 0, 3000, 0);
+                  command.set(0, 0, 2000, 0);
                 }
                 if(ch == '4')
                 {
-                  command.set(0, 0, 0, 3000);
+                  command.set(0, 0, 0, 2000);
                 }
                 if(ch == 'k')
                 {
-                  command.set(3000, 3000, 3000, 3000);
+                  command.set(2000, 2000, 2000, 2000);
                 }
                 if(ch == 's')
                 {
@@ -93,22 +93,19 @@ int main()
                 }
                 if(ch == 'q') break;
 
-                while(true)
-                {
-                  try {
-                      motor.sendRightCommand(command);
-                      right = motor.getData();
-                      break;
-                  } catch(const runtime_error& e){}
-                }
+                move(2, 0); clrtoeol();
 
                 while(true)
                 {
                   try {
                     motor.sendLeftCommand(command);
+                    std::this_thread::sleep_for(interval);
                     left = motor.getData();
-                      break;
-                  } catch(const runtime_error& e){}
+                    break;
+                  } catch(const runtime_error& e){
+                    move(2, 0);
+                    printw("Error");
+                  }
                 }
 
                 /* show rpm */
@@ -123,9 +120,9 @@ int main()
                 refresh();
         }
 
+        endwin();
         /*! stop motor and clean up curses */
         motor.halt();
-        endwin();
 
         return 0;
 }
