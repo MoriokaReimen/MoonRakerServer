@@ -105,7 +105,7 @@ int main()
             motor.work(command, left, right);
             move(1, 0);
             clrtoeol();
-        } catch(const range_error& error) {
+        } catch(const std::range_error& error) {
             motor.halt();
             attron(COLOR_PAIR(2));
             printw("norm_rpm: %d", norm_rpm);

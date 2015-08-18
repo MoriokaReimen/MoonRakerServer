@@ -15,7 +15,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 set(CMAKE_C_FLAGS "-Wall")
 
-set(MOON_SRC src/Command.cpp src/Data.cpp src/Motor.cpp src/BoostComPort.cpp src/RoverState.cpp src/Logger.cpp src/RemoteServer.cpp src/RemoteClient.cpp)
+set(MOON_SRC src/Command.cpp src/Data.cpp src/Motor.cpp src/Serial.cpp src/rs232.c src/RoverState.cpp src/Logger.cpp src/RemoteServer.cpp src/RemoteClient.cpp)
 set(MATH3D_SRC src/Math3D/Degree.cpp src/Math3D/Quaternion.cpp src/Math3D/RotateFunc.cpp src/Math3D/Vector3.cpp)
 set(IMU_SRC src/IMU/IMU.cpp)
 set(SOCKET_SRC src/Socket/UDP.cpp)

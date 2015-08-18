@@ -34,7 +34,7 @@
 -----------------------------------------------------------------------------
 */
 #pragma once
-#include "BoostComPort.hpp"
+#include "Serial.hpp"
 #include "Command.hpp"
 #include "Data.hpp"
 #include <stdexcept>
@@ -49,7 +49,7 @@ using bit8 = unsigned char;
 */
 class Motor
 {
-    BoostComPort serial;
+    Serial serial;
 
 public:
     Motor();
