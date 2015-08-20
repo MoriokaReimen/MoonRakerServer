@@ -101,7 +101,7 @@ int main()
                 while(true)
                 {
                   try {
-                    motor.sendLeftCommand(command);
+                    motor.sendRightCommand(command);
                     std::this_thread::sleep_for(intervalb);
                     left = motor.getData();
                     // std::this_thread::sleep_for(intervalb);

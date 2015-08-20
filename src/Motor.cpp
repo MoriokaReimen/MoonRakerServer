@@ -106,7 +106,8 @@ MotorData Motor::getData()
  */
 bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
 {
-  int lcount{15}, rcount{15};
+  int lcount{3}, rcount{3};
+  constexpr std::chrono::milliseconds interval(20);
 
     while(true)
     {
@@ -114,6 +115,7 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
       try {
             /*! send command  to Right V10*/
             this->sendRightCommand(command);
+            std::this_thread::sleep_for(interval);
             /*! get right motor data */
             right = this->getData();
             break;
@@ -129,6 +131,7 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
       try {
             /*! send command  to Left V10*/
             this->sendLeftCommand(command);
+            std::this_thread::sleep_for(interval);
             /*! get left motor data */
             left = this->getData();
             break;
