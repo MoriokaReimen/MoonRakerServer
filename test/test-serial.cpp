@@ -48,7 +48,8 @@ using std::endl;
 int main()
 {
         /*! initialize sleep function */
-        constexpr std::chrono::milliseconds interval(30);
+        constexpr std::chrono::milliseconds intervala(1000);
+        constexpr std::chrono::milliseconds intervalb(20);
         MotorData left, right;
         /*! set up Motor */
         Motor motor;
@@ -94,17 +95,23 @@ int main()
                 if(ch == 'q') break;
 
                 move(2, 0); clrtoeol();
+                move(3, 0); clrtoeol();
+                int c = 1;
 
                 while(true)
                 {
                   try {
                     motor.sendLeftCommand(command);
-                    std::this_thread::sleep_for(interval);
+                    std::this_thread::sleep_for(intervalb);
                     left = motor.getData();
+                    // std::this_thread::sleep_for(intervalb);
                     break;
                   } catch(const runtime_error& e){
-                    move(2, 0);
-                    printw("Error");
+                    c++;
+                      move(2, 0);
+                      printw("Error");
+                      move(3, 0);
+                      printw("Trial Time: %d", c);
                   }
                 }
 
@@ -121,8 +128,6 @@ int main()
         }
 
         endwin();
-        /*! stop motor and clean up curses */
-        motor.halt();
 
         return 0;
 }

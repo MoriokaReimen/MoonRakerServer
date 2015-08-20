@@ -17,7 +17,7 @@ Serial::~Serial()
 bool Serial::open(int port, int baud)
 {
   this->port_ = port;
-  OpenComport(port, baud);
+  OpenComport(this->port_, baud);
 
   return true;
 }
