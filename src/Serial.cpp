@@ -42,3 +42,10 @@ size_t Serial::read(unsigned char* data, size_t size)
   size_t read_size = PollComport(this->port_, data, size);
   return read_size;
 }
+
+size_t Serial::flash()
+{
+  unsigned char buff[50];
+  auto flash_size = PollComport(this->port_, buff, sizeof(buff));
+  return flash_size;
+}

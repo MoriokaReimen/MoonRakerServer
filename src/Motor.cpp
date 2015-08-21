@@ -124,6 +124,7 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
           throw std::runtime_error("No Signal From Right");
       }
     }
+    serial.flash();
 
     while(true)
     {
@@ -140,6 +141,8 @@ bool Motor::work(const MotorCommand& command, MotorData& left, MotorData& right)
           throw std::runtime_error("No Signal From Left");
       }
     }
+
+    serial.flash();
 
     return true;
 }

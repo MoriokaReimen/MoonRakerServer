@@ -17,4 +17,5 @@ public:
   bool close();
   size_t write(unsigned char* Data, size_t size);
   size_t read(unsigned char* data, size_t size);
+  size_t flash();
 };
